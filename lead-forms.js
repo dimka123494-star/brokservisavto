@@ -7,7 +7,7 @@
    ============================================================================ */
 (function () {
   const CONFIG = {
-    SUPABASE_URL: "https://rhduokjaawmorcyiuviy.supabase.co/rest/v1/",        // <-- сюди Project URL, напр. https://abcdxyz.supabase.co
+    SUPABASE_URL: "https://rhduokjaawmorcyiuviy.supabase.co",        // <-- сюди Project URL, напр. https://abcdxyz.supabase.co
     SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg",   // <-- сюди anon public key
     TELEGRAM: "https://t.me/Dimakrykun95",
     PHONE: "+380981722342",
