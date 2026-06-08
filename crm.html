@@ -200,6 +200,10 @@ const uah = n => (Number(n)||0).toLocaleString("uk-UA")+" грн";
 const usd = n => "$"+(Number(n)||0).toLocaleString("uk-UA");
 const fdate = ts => new Date(ts).toLocaleDateString("uk-UA",{day:"2-digit",month:"short",year:"2-digit"});
 
+/* спільні елементи форм (на верхньому рівні, щоб не перестворювались і не збивали фокус) */
+const F = ({l,children,full}) => <label className={"f"+(full?" full":"")}><span>{l}</span>{children}</label>;
+const I = ({l,v}) => <div className="info"><span className="l">{l}</span><span className="v">{v}</span></div>;
+
 /* ============================ APP / AUTH ============================ */
 function App(){
   const [session,setSession]=useState(undefined);
@@ -449,8 +453,6 @@ function Card({lead,cfg,onClose,updateLead,delLead}){
   const save=()=>{const ch=[];if(f.stage!==lead.stage)ch.push("етап → "+f.stage);const m1=cfg.managers.find(m=>m.id===f.manager_id);const m0=cfg.managers.find(m=>m.id===lead.manager_id);if(f.manager_id!==lead.manager_id)ch.push("менеджер → "+(m1?m1.name:"—"));updateLead(lead.id,{name:f.name,phone:f.phone,email:f.email,city:f.city,client_type:f.client_type,service:f.service,car_brand:f.car_brand,car_model:f.car_model,car_year:+f.car_year||null,vin:f.vin,mileage:+f.mileage||null,origin:f.origin,car_budget:+f.car_budget||null,fee:+f.fee||null,source:f.source,stage:f.stage,manager_id:f.manager_id,notes:f.notes},"Картку оновлено"+(ch.length?": "+ch.join(", "):""));setEdit(false);};
   const addC=()=>{if(!c.trim())return;updateLead(lead.id,{},"💬 "+c.trim());setC("");};
   const st=cfg.stages.find(s=>s.name===lead.stage);
-  const I=({l,v})=><div className="info"><span className="l">{l}</span><span className="v">{v}</span></div>;
-  const F=({l,children,full})=><label className={"f"+(full?" full":"")}><span>{l}</span>{children}</label>;
   return <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
     <div className="sh"><div><div className="ttl">{lead.name}</div><div className="muted small">{lead.service} · {fdate(lead.created_at)} · {lead.source}</div></div>
       <div style={{display:"flex",gap:7}}>{!edit&&<button className="x" onClick={()=>setEdit(true)}>✎</button>}<button className="x" onClick={()=>{if(confirm("Видалити лід?"))delLead(lead.id);}}>🗑</button><button className="x" onClick={onClose}>×</button></div></div>
@@ -499,7 +501,6 @@ function Card({lead,cfg,onClose,updateLead,delLead}){
 function AddLead({cfg,onClose,addLead}){
   const [f,setF]=useState({name:"",phone:"",email:"",city:"",client_type:"Фіз. особа",service:"Підбір авто",car_brand:"",car_model:"",car_year:"",vin:"",origin:"США",car_budget:"",fee:"",source:"CRM",manager_id:"",stage:cfg.stages[0].name});
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
-  const F=({l,children,full})=><label className={"f"+(full?" full":"")}><span>{l}</span>{children}</label>;
   const submit=()=>{if(!f.name.trim()){alert("Вкажіть ім'я");return;}addLead({...f,car_year:+f.car_year||null,car_budget:+f.car_budget||null,fee:+f.fee||null});};
   return <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
     <div className="sh"><div className="ttl">Новий лід</div><button className="x" onClick={onClose}>×</button></div>
