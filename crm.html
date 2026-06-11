@@ -148,6 +148,25 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#f7f9fc}
 .tl .d{width:9px;height:9px;border-radius:50%;background:var(--acc);margin-top:5px;flex-shrink:0;box-shadow:0 0 0 3px #2563eb22}
 .tl li p{font-size:13px;font-weight:500}.tl li time{font-size:11px;color:var(--muted)}
 .x{width:34px;height:34px;border-radius:9px;background:#f1f4f8;display:grid;place-items:center;font-size:18px}
+/* нагадування + причини відмов */
+.overlay.c{justify-content:center;align-items:center;padding:18px}
+.modal{width:440px;max-width:100%;background:#fff;border-radius:18px;padding:22px;box-shadow:0 30px 80px #0d172666;max-height:90vh;overflow-y:auto}
+.modal h3{font-family:'Archivo';font-size:18px;margin-bottom:5px}
+.modal .sub{font-size:13px;color:var(--muted);margin-bottom:14px}
+.rlist{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.rlist button{text-align:left;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-size:13.5px;font-weight:600}
+.rlist button.sel{border-color:var(--acc);background:#eff5ff;color:#1d4ed8}
+.modal textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;font-size:13.5px;resize:vertical;background:#fff}
+.kc.od{border-color:#dc2626;box-shadow:inset 3px 0 0 #dc2626}
+.na{font-size:11.5px;margin-top:6px;font-weight:600;display:flex;align-items:center;gap:5px}
+.na.od{color:#dc2626}.na.td{color:#d97706}.na.ok{color:var(--muted)}
+.rem{margin-top:14px;padding:13px;background:#fff;border-radius:11px;border:1px solid var(--line)}
+.rem .rt{font-size:12.5px;font-weight:700;margin-bottom:9px}
+.rem .rr{display:flex;gap:8px;flex-wrap:wrap}
+.rem input{border:1px solid var(--line);border-radius:9px;padding:9px 11px;outline:none;background:#fff}
+.rem input[type=datetime-local]{flex:0 0 auto}
+.rem input[type=text]{flex:1;min-width:160px}
+.lr{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:9px 12px;font-size:12.5px;color:#b91c1c;margin-top:12px}
 .bn{display:none}
 @media(max-width:860px){
  .side{display:none}.wrap{padding:14px 14px 96px}.kpis{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}
@@ -169,15 +188,9 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const SOURCES = {Facebook:"#1877f2",Instagram:"#e1306c",TikTok:"#111827",Google:"#ea4335","Сайт":"#0ea5e9","Дзвінок":"#16a34a","Рекомендація":"#a855f7",ProZorro:"#7c3aed","Інше":"#64748b"};
-const SERVICES = ["Розмитнення","Договір купівлі-продажу","Оцінка / експертиза","Оцінка + договір купівлі-продажу","Підбір авто","Авто зі США","Інше"];
+const SERVICES = ["Підбір авто","Авто зі США","Розмитнення","Оцінка / експертиза","Договір купівлі-продажу","Супровід угоди","Інше"];
 const ORIGINS = ["США","Європа","Корея","ОАЕ","Україна"];
 const srcColor = s => SOURCES[s] || "#64748b";
-/* воронка залежно від послуги ліда */
-const pipeFor=(cfg,svc)=>(cfg.pipelines||[]).find(p=>p.service===svc)||(cfg.pipelines||[]).find(p=>p.service==="Інше")||(cfg.pipelines||[{stages:[]}])[0];
-const stagesFor=(cfg,svc)=>pipeFor(cfg,svc).stages||[];
-const stageOf=(cfg,lead)=>stagesFor(cfg,lead.service).find(s=>s.name===lead.stage);
-const isWon=(cfg,lead)=>{const s=stageOf(cfg,lead);return !!(s&&s.type==="won");};
-const isLost=(cfg,lead)=>{const s=stageOf(cfg,lead);return !!(s&&s.type==="lost");};
 
 const DEFAULT_CONFIG = {
   title: "BROKSERVISAVTO CRM",
@@ -186,65 +199,18 @@ const DEFAULT_CONFIG = {
     {id:"m2",name:"Ірина Шевченко",color:"#10b981"},
     {id:"m3",name:"Андрій Бондар",color:"#f59e0b"},
   ],
-  pipelines: [
-    {service:"Розмитнення", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"Прорахунок вартості",color:"#6366f1",type:"active"},
-      {name:"Попередня декларація",color:"#d97706",type:"active"},
-      {name:"Розмитнено",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
-    {service:"Договір купівлі-продажу", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"Виконано",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
-    {service:"Оцінка / експертиза", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"Замовлення оцінки",color:"#0891b2",type:"active"},
-      {name:"Виконано",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
-    {service:"Оцінка + договір купівлі-продажу", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"Виготовлення оцінки",color:"#0891b2",type:"active"},
-      {name:"Договір",color:"#d97706",type:"active"},
-      {name:"Реалізовано",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
-    {service:"Підбір авто", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"Підбір / прорахунок",color:"#6366f1",type:"active"},
-      {name:"Перевірка авто",color:"#8b5cf6",type:"active"},
-      {name:"Договір + передоплата",color:"#d97706",type:"active"},
-      {name:"Купівля авто",color:"#ea580c",type:"active"},
-      {name:"Доставка",color:"#0d9488",type:"active"},
-      {name:"Передача клієнту",color:"#0ea5e9",type:"active"},
-      {name:"Реалізовано",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
-    {service:"Авто зі США", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"Підбір лоту",color:"#6366f1",type:"active"},
-      {name:"Купівля на аукціоні",color:"#ea580c",type:"active"},
-      {name:"Доставка / розмитнення",color:"#0d9488",type:"active"},
-      {name:"Передача клієнту",color:"#0ea5e9",type:"active"},
-      {name:"Реалізовано",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
-    {service:"Інше", stages:[
-      {name:"Новий лід",color:"#64748b",type:"active"},
-      {name:"1-й контакт",color:"#3b82f6",type:"active"},
-      {name:"В роботі",color:"#6366f1",type:"active"},
-      {name:"Виконано",color:"#16a34a",type:"won"},
-      {name:"Відмова",color:"#dc2626",type:"lost"},
-    ]},
+  stages: [
+    {name:"Новий лід",color:"#64748b",type:"active"},
+    {name:"Кваліфікація / 1-й контакт",color:"#3b82f6",type:"active"},
+    {name:"Підбір / прорахунок вартості",color:"#6366f1",type:"active"},
+    {name:"Перевірка авто (VIN/Інтерпол)",color:"#8b5cf6",type:"active"},
+    {name:"Узгодження договору",color:"#0891b2",type:"active"},
+    {name:"Договір + передоплата",color:"#d97706",type:"active"},
+    {name:"Купівля / оплата авто",color:"#ea580c",type:"active"},
+    {name:"Доставка / розмитнення",color:"#0d9488",type:"active"},
+    {name:"Передача клієнту",color:"#0ea5e9",type:"active"},
+    {name:"Успішно реалізовано",color:"#16a34a",type:"won"},
+    {name:"Втрачено / відмова",color:"#dc2626",type:"lost"},
   ],
 };
 
@@ -252,6 +218,12 @@ const uid = () => Math.random().toString(36).slice(2,9);
 const uah = n => (Number(n)||0).toLocaleString("uk-UA")+" грн";
 const usd = n => "$"+(Number(n)||0).toLocaleString("uk-UA");
 const fdate = ts => new Date(ts).toLocaleDateString("uk-UA",{day:"2-digit",month:"short",year:"2-digit"});
+const fdt = ts => ts ? new Date(ts).toLocaleString("uk-UA",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+const toLocal = ts => { if(!ts) return ""; const d=new Date(ts), p=n=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; };
+/* стан нагадування: od = прострочено, td = сьогодні, ok = у майбутньому */
+const naState = l => { if(!l.next_action_at) return null; const d=new Date(l.next_action_at), now=new Date(); if(d<now) return "od"; return d.toDateString()===now.toDateString() ? "td" : "ok"; };
+const LOSS_REASONS = ["Дорого / не влаштувала ціна","Обрав конкурента","Передумав / відклав покупку","Не виходить на зв'язок","Не підійшли умови чи строки","Нецільовий лід / спам","Інше"];
+const lossBase = r => (r||"").split(" — ")[0];
 
 /* спільні елементи форм (на верхньому рівні, щоб не перестворювались і не збивали фокус) */
 const F = ({l,children,full}) => <label className={"f"+(full?" full":"")}><span>{l}</span>{children}</label>;
@@ -305,7 +277,7 @@ function Shell({session}){
     const {data:ld}=await db.from("leads").select("*").order("created_at",{ascending:false});
     setLeads(ld||[]);
     const {data:cf}=await db.from("crm_config").select("data").eq("id",1).maybeSingle();
-    if(cf&&cf.data&&cf.data.pipelines) setCfg({...DEFAULT_CONFIG,...cf.data});
+    if(cf&&cf.data&&cf.data.stages) setCfg({...DEFAULT_CONFIG,...cf.data});
     else { await db.from("crm_config").upsert({id:1,data:DEFAULT_CONFIG}); }
     setSync("Оновлено "+new Date().toLocaleTimeString("uk-UA",{hour:"2-digit",minute:"2-digit"}));
     setReady(true);
@@ -327,13 +299,25 @@ function Shell({session}){
     let manager_id=lead.manager_id;
     if(!manager_id&&cfg.managers.length){ manager_id=cfg.managers[leads.length%cfg.managers.length].id; }
     const mgr=cfg.managers.find(m=>m.id===manager_id);
-    const ss=stagesFor(cfg,lead.service); const firstStage=(ss[0]&&ss[0].name)||"Новий лід";
-    const row={...lead,manager_id,source:lead.source||"CRM",stage:lead.stage||firstStage,
+    const row={...lead,manager_id,source:lead.source||"CRM",stage:lead.stage||cfg.stages[0].name,
       history:[{ts:Date.now(),text:`Створено вручну${mgr?" · менеджер: "+mgr.name:""}`}]};
     const {data}=await db.from("leads").insert(row).select().single();
     if(data) setLeads(ls=>[data,...ls]);
   };
   const delLead=async(id)=>{ setLeads(ls=>ls.filter(l=>l.id!==id)); await db.from("leads").delete().eq("id",id); };
+
+  /* зміна етапу з перехопленням: якщо етап типу "lost" — питаємо причину */
+  const [lossAsk,setLossAsk]=useState(null);
+  const requestStage=(id,stage,extraNote)=>{
+    const st=cfg.stages.find(s=>s.name===stage);
+    const cur=leads.find(l=>l.id===id);
+    if(st&&st.type==="lost"&&cur&&cur.stage!==stage){ setLossAsk({id,stage}); return; }
+    updateLead(id,{stage},(extraNote?extraNote+" · ":"")+"Етап → "+stage);
+  };
+  const confirmLoss=(reason)=>{
+    updateLead(lossAsk.id,{stage:lossAsk.stage,loss_reason:reason},"Етап → "+lossAsk.stage+" · Причина: "+reason);
+    setLossAsk(null);
+  };
 
   const NAV=[["dash","Дашборд","▦"],["funnel","Воронка","▥"],["leads","Ліди","☰"],["managers","Менеджери","☺"],["settings","Налаштування","⚙"]];
   const cur=open?leads.find(l=>l.id===open):null;
@@ -358,33 +342,45 @@ function Shell({session}){
       <div className="wrap">
         {!ready? <div className="muted">Завантаження даних…</div> :
          view==="dash"? <Dash leads={leads} cfg={cfg} openCard={setOpen}/> :
-         view==="funnel"? <Funnel leads={leads} cfg={cfg} updateLead={updateLead} openCard={setOpen}/> :
+         view==="funnel"? <Funnel leads={leads} cfg={cfg} requestStage={requestStage} openCard={setOpen}/> :
          view==="leads"? <Leads leads={leads} cfg={cfg} openCard={setOpen}/> :
          view==="managers"? <Managers leads={leads} cfg={cfg} saveCfg={saveCfg} updateLead={updateLead}/> :
          <Settings cfg={cfg} saveCfg={saveCfg}/>}
       </div>
     </main>
     <nav className="bn">{NAV.map(([k,l,i])=><button key={k} className={view===k?"on":""} onClick={()=>setView(k)}><span>{i}</span>{l}</button>)}</nav>
-    {cur&&<Card lead={cur} cfg={cfg} onClose={()=>setOpen(null)} updateLead={updateLead} delLead={id=>{delLead(id);setOpen(null);}}/>}
+    {cur&&<Card lead={cur} cfg={cfg} onClose={()=>setOpen(null)} updateLead={updateLead} requestStage={requestStage} delLead={id=>{delLead(id);setOpen(null);}}/>}
     {add&&<AddLead cfg={cfg} onClose={()=>setAdd(false)} addLead={l=>{addLead(l);setAdd(false);}}/>}
+    {lossAsk&&<LossModal onClose={()=>setLossAsk(null)} onConfirm={confirmLoss}/>}
   </div>;
 }
 
 /* ============================ DASHBOARD ============================ */
 function Dash({leads,cfg,openCard}){
+  const won=cfg.stages.filter(s=>s.type==="won").map(s=>s.name);
+  const lost=cfg.stages.filter(s=>s.type==="lost").map(s=>s.name);
   const total=leads.length;
-  const w=leads.filter(l=>isWon(cfg,l));
-  const active=leads.filter(l=>!isWon(cfg,l)&&!isLost(cfg,l));
+  const w=leads.filter(l=>won.includes(l.stage));
+  const active=leads.filter(l=>!won.includes(l.stage)&&!lost.includes(l.stage));
   const wsum=w.reduce((a,l)=>a+(+l.fee||0),0);
   const psum=active.reduce((a,l)=>a+(+l.fee||0),0);
   const conv=total?Math.round(w.length/total*100):0;
   const avg=w.length?Math.round(wsum/w.length):0;
-  const bySvc=(cfg.pipelines||[]).map(p=>{const ls=leads.filter(l=>l.service===p.service);const won=ls.filter(l=>isWon(cfg,l));return{s:p.service,c:ls.length,w:won.length,sum:won.reduce((a,l)=>a+(+l.fee||0),0)};}).filter(x=>x.c).sort((a,b)=>b.c-a.c);
+  const byStage=cfg.stages.map(s=>({...s,c:leads.filter(l=>l.stage===s.name).length}));
+  const maxS=Math.max(1,...byStage.map(b=>b.c));
+  const bySvc=SERVICES.map(s=>({s,c:leads.filter(l=>l.service===s).length})).filter(x=>x.c);
   const maxSv=Math.max(1,...bySvc.map(x=>x.c));
   const bySrc=Object.keys(SOURCES).map(s=>({s,c:leads.filter(l=>l.source===s).length})).filter(x=>x.c);
   const maxSr=Math.max(1,...bySrc.map(x=>x.c));
-  const byM=cfg.managers.map(m=>{const ls=leads.filter(l=>l.manager_id===m.id);const won=ls.filter(l=>isWon(cfg,l));return{...m,c:ls.length,w:won.length,sum:won.reduce((a,l)=>a+(+l.fee||0),0)};});
+  const byM=cfg.managers.map(m=>{const ls=leads.filter(l=>l.manager_id===m.id);return{...m,c:ls.length,w:ls.filter(l=>won.includes(l.stage)).length,sum:ls.filter(l=>won.includes(l.stage)).reduce((a,l)=>a+(+l.fee||0),0)};});
   const recent=[...leads].slice(0,5);
+  /* нагадування: активні ліди з датою наступної дії */
+  const due=active.filter(l=>l.next_action_at).sort((a,b)=>new Date(a.next_action_at)-new Date(b.next_action_at));
+  const overdue=due.filter(l=>naState(l)==="od").length;
+  /* причини відмов */
+  const lostLeads=leads.filter(l=>lost.includes(l.stage));
+  const byLoss=Object.entries(lostLeads.reduce((a,l)=>{const k=lossBase(l.loss_reason)||"Без причини";a[k]=(a[k]||0)+1;return a;},{})).map(([s,c])=>({s,c})).sort((a,b)=>b.c-a.c);
+  const maxL=Math.max(1,...byLoss.map(x=>x.c));
   const Kpi=({ic,l,v,s,c})=><div className="kpi"><div className="ic" style={{background:c+"1a",color:c}}>{ic}</div><div className="v">{v}</div><div className="l">{l}</div>{s&&<div className="s">{s}</div>}</div>;
   return <>
     <div className="kpis">
@@ -393,76 +389,69 @@ function Dash({leads,cfg,openCard}){
       <Kpi ic="★" l="Конверсія" v={conv+"%"} s={w.length+" реалізовано"} c="#16a34a"/>
       <Kpi ic="₴" l="Виручка (комісії)" v={uah(wsum)} s={"сер. чек "+uah(avg)} c="#8b5cf6"/>
     </div>
-    <div className="panel"><div className="ph">Аналітика по послугах</div>
-      <div className="tw"><table>
-        <thead><tr><th>Послуга</th><th>Лідів</th><th>Реалізовано</th><th>Конверсія</th><th>Виручка</th></tr></thead>
-        <tbody>{bySvc.map(x=><tr key={x.s}><td className="tn">{x.s}</td><td>{x.c}</td><td>{x.w}</td><td>{x.c?Math.round(x.w/x.c*100):0}%</td><td className="tn">{uah(x.sum)}</td></tr>)}</tbody>
-      </table>{!bySvc.length&&<div className="muted" style={{padding:20,textAlign:"center"}}>Даних ще немає</div>}</div>
-    </div>
     <div className="cols">
-      <div className="panel"><div className="ph">Популярність послуг</div><div className="bars">{bySvc.length?bySvc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSv*100+"%",background:"#2563eb"}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Немає даних</span>}</div></div>
-      <div className="panel"><div className="ph">Джерела</div><div className="bars">{bySrc.length?bySrc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSr*100+"%",background:srcColor(x.s)}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Немає даних</span>}</div></div>
+      <div className="panel"><div className="ph">Ліди по етапах</div><div className="bars">{byStage.map(b=><div className="bar" key={b.name}><span className="lbl">{b.name}</span><div className="tr"><div className="fl" style={{width:b.c/maxS*100+"%",background:b.color}}/></div><span className="n">{b.c}</span></div>)}</div></div>
+      <div className="panel">
+        <div className="ph">Типи послуг</div><div className="bars">{bySvc.length?bySvc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSv*100+"%",background:"#2563eb"}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Немає даних</span>}</div>
+        <div className="ph" style={{marginTop:18}}>Джерела</div><div className="bars">{bySrc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSr*100+"%",background:srcColor(x.s)}}/></div><span className="n">{x.c}</span></div>)}</div>
+        <div className="ph" style={{marginTop:18}}>Причини відмов</div><div className="bars">{byLoss.length?byLoss.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxL*100+"%",background:"#dc2626"}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Відмов ще немає 👍</span>}</div>
+      </div>
     </div>
     <div className="panel"><div className="ph">Менеджери</div><div className="mgrid">{byM.map(m=><div className="mc" key={m.id}><div className="t"><span className="av" style={{background:m.color}}>{m.name[0]}</span><b>{m.name}</b></div><div className="st"><div><b>{m.c}</b><span>лідів</span></div><div><b>{m.w}</b><span>угод</span></div></div><div className="sm">{uah(m.sum)}</div></div>)}</div></div>
-    <div className="panel"><div className="ph">Останні ліди</div><div className="recent">{recent.map(l=>{const st=stageOf(cfg,l);return <button key={l.id} onClick={()=>openCard(l.id)}><span className="dot" style={{background:srcColor(l.source)}}>{(l.source||"?")[0]}</span><span className="rn">{l.name}</span><span className="muted small">{l.service}</span><span className="pill" style={{color:st&&st.color,background:(st?st.color:"#999")+"22"}}>{l.stage}</span><b style={{fontSize:13}}>{uah(l.fee)}</b></button>;})}{!recent.length&&<span className="muted small">Заявок ще немає</span>}</div></div>
+    <div className="panel"><div className="ph">⏰ Нагадування {overdue>0&&<span style={{color:"#dc2626",fontSize:13}}>· прострочено: {overdue}</span>}</div>
+      <div className="recent">{due.slice(0,8).map(l=>{const st=naState(l);const c=st==="od"?"#dc2626":st==="td"?"#d97706":"#64748b";return <button key={l.id} onClick={()=>openCard(l.id)}>
+        <span className="dot" style={{background:c}}>⏰</span>
+        <span className="rn">{l.name}</span>
+        <span className="muted small" style={{flexShrink:0}}>{l.next_action_note||""}</span>
+        <span className="pill" style={{color:c,background:c+"22"}}>{st==="od"?"⚠ ":""}{fdt(l.next_action_at)}</span>
+      </button>;})}{!due.length&&<span className="muted small">Запланованих дій немає. Відкрий лід → «Наступна дія», щоб нічого не загубити.</span>}</div></div>
+    <div className="panel"><div className="ph">Останні ліди</div><div className="recent">{recent.map(l=>{const st=cfg.stages.find(s=>s.name===l.stage);return <button key={l.id} onClick={()=>openCard(l.id)}><span className="dot" style={{background:srcColor(l.source)}}>{(l.source||"?")[0]}</span><span className="rn">{l.name}</span><span className="muted small">{l.car_brand} {l.car_model}</span><span className="pill" style={{color:st&&st.color,background:(st?st.color:"#999")+"22"}}>{l.stage}</span><b style={{fontSize:13}}>{uah(l.fee)}</b></button>;})}{!recent.length&&<span className="muted small">Заявок ще немає</span>}</div></div>
   </>;
 }
 
 /* ============================ FUNNEL ============================ */
-function Funnel({leads,cfg,updateLead,openCard}){
-  const [svc,setSvc]=useState((cfg.pipelines&&cfg.pipelines[0]&&cfg.pipelines[0].service)||"Інше");
-  const stages=stagesFor(cfg,svc);
-  const svcLeads=leads.filter(l=>l.service===svc);
-  const move=(l,dir)=>{const i=stages.findIndex(s=>s.name===l.stage);const j=i+dir;if(j<0||j>=stages.length)return;updateLead(l.id,{stage:stages[j].name},`Етап → ${stages[j].name}`);};
-  const counts=stages.map(s=>svcLeads.filter(l=>l.stage===s.name).length);
-  const totalShown=counts.reduce((a,b)=>a+b,0);
-  return <>
-    <div className="filters" style={{marginBottom:14}}>
-      <select value={svc} onChange={e=>setSvc(e.target.value)} style={{minWidth:240,fontWeight:700}}>{(cfg.pipelines||[]).map(p=><option key={p.service}>{p.service}</option>)}</select>
-      <span className="muted small" style={{alignSelf:"center"}}>Лідів у воронці: <b>{svcLeads.length}</b></span>
-    </div>
-    <div className="kanban">{stages.map((s,si)=>{
-      // ліди цього етапу; ліди з невідомим етапом — у першу колонку
-      const col=svcLeads.filter(l=> l.stage===s.name || (si===0 && !stages.some(x=>x.name===l.stage)) );
-      const sum=col.reduce((a,l)=>a+(+l.fee||0),0);
-      return <div className="col" key={s.name}>
-        <div className="colh" style={{borderTopColor:s.color}}><span className="cd" style={{background:s.color}}/><span className="nm">{s.name}</span><span className="ct">{col.length}</span></div>
-        <div className="colsum">{uah(sum)}</div>
-        <div className="colb">{col.map(l=>{const m=cfg.managers.find(x=>x.id===l.manager_id);return <div className="kc" key={l.id} onClick={()=>openCard(l.id)}>
-          <div className="top"><span className="nm">{l.name}</span><span className="dot" style={{background:srcColor(l.source),width:20,height:20}}>{(l.source||"?")[0]}</span></div>
-          <div className="meta">{l.car_brand} {l.car_model} {l.car_year||""}</div>
-          <div className="b">{uah(l.fee)}</div>
-          <div className="ft">{m&&<span className="mini" style={{background:m.color}}>{m.name[0]}</span>}<span className="mg">{m?m.name:"—"}</span><span className="mv"><button onClick={e=>{e.stopPropagation();move(l,-1);}}>‹</button><button onClick={e=>{e.stopPropagation();move(l,1);}}>›</button></span></div>
-        </div>;})}{!col.length&&<div className="muted small" style={{textAlign:"center",padding:14}}>Порожньо</div>}</div>
-      </div>;
-    })}</div>
-    {!totalShown&&<div className="muted small" style={{marginTop:10}}>За цією послугою лідів ще немає. Обери іншу послугу у списку вгорі.</div>}
-  </>;
+function Funnel({leads,cfg,requestStage,openCard}){
+  const move=(l,dir)=>{const i=cfg.stages.findIndex(s=>s.name===l.stage);const j=i+dir;if(j<0||j>=cfg.stages.length)return;requestStage(l.id,cfg.stages[j].name);};
+  return <div className="kanban">{cfg.stages.map(s=>{
+    const col=leads.filter(l=>l.stage===s.name);const sum=col.reduce((a,l)=>a+(+l.fee||0),0);
+    return <div className="col" key={s.name}>
+      <div className="colh" style={{borderTopColor:s.color}}><span className="cd" style={{background:s.color}}/><span className="nm">{s.name}</span><span className="ct">{col.length}</span></div>
+      <div className="colsum">{uah(sum)}</div>
+      <div className="colb">{col.map(l=>{const m=cfg.managers.find(x=>x.id===l.manager_id);const na=s.type==="active"?naState(l):null;return <div className={"kc"+(na==="od"?" od":"")} key={l.id} onClick={()=>openCard(l.id)}>
+        <div className="top"><span className="nm">{l.name}</span><span className="dot" style={{background:srcColor(l.source),width:20,height:20}}>{(l.source||"?")[0]}</span></div>
+        <div className="meta">{l.car_brand} {l.car_model} {l.car_year||""}</div>
+        <div className="b">{uah(l.fee)}</div>
+        {na&&<div className={"na "+na}>⏰ {fdt(l.next_action_at)}{l.next_action_note?" · "+l.next_action_note:""}</div>}
+        <div className="ft">{m&&<span className="mini" style={{background:m.color}}>{m.name[0]}</span>}<span className="mg">{m?m.name:"—"}</span><span className="mv"><button onClick={e=>{e.stopPropagation();move(l,-1);}}>‹</button><button onClick={e=>{e.stopPropagation();move(l,1);}}>›</button></span></div>
+      </div>;})}{!col.length&&<div className="muted small" style={{textAlign:"center",padding:14}}>Порожньо</div>}</div>
+    </div>;
+  })}</div>;
 }
 
 /* ============================ LEADS TABLE ============================ */
 function Leads({leads,cfg,openCard}){
-  const [q,setQ]=useState(""),[fm,setFm]=useState(""),[fsv,setFsv]=useState("");
+  const [q,setQ]=useState(""),[fs,setFs]=useState(""),[fm,setFm]=useState(""),[fsv,setFsv]=useState("");
   const rows=useMemo(()=>leads.filter(l=>{
-    if(fm&&l.manager_id!==fm)return false; if(fsv&&l.service!==fsv)return false;
+    if(fs&&l.stage!==fs)return false; if(fm&&l.manager_id!==fm)return false; if(fsv&&l.service!==fsv)return false;
     if(q){const t=((l.name||"")+(l.phone||"")+(l.car_brand||"")+(l.car_model||"")+(l.vin||"")+(l.city||"")).toLowerCase();if(!t.includes(q.toLowerCase()))return false;}
     return true;
-  }),[leads,q,fm,fsv]);
+  }),[leads,q,fs,fm,fsv]);
   return <>
     <div className="filters">
       <div className="search"><span className="muted">⌕</span><input placeholder="Пошук: клієнт, телефон, авто, VIN…" value={q} onChange={e=>setQ(e.target.value)}/></div>
+      <select value={fs} onChange={e=>setFs(e.target.value)}><option value="">Усі етапи</option>{cfg.stages.map(s=><option key={s.name}>{s.name}</option>)}</select>
       <select value={fsv} onChange={e=>setFsv(e.target.value)}><option value="">Усі послуги</option>{SERVICES.map(s=><option key={s}>{s}</option>)}</select>
       <select value={fm} onChange={e=>setFm(e.target.value)}><option value="">Усі менеджери</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select>
     </div>
     <div className="panel np"><div className="tw"><table>
       <thead><tr><th>Клієнт</th><th>Авто</th><th>Послуга</th><th>Комісія</th><th>Менеджер</th><th>Етап</th><th>Дата</th></tr></thead>
-      <tbody>{rows.map(l=>{const s=stageOf(cfg,l);const m=cfg.managers.find(x=>x.id===l.manager_id);return <tr key={l.id} onClick={()=>openCard(l.id)}>
+      <tbody>{rows.map(l=>{const s=cfg.stages.find(x=>x.name===l.stage);const m=cfg.managers.find(x=>x.id===l.manager_id);return <tr key={l.id} onClick={()=>openCard(l.id)}>
         <td><div className="tn">{l.name}</div><div className="ts">{l.phone}</div></td>
         <td><div className="tn">{l.car_brand} {l.car_model}</div><div className="ts">{l.car_year} {l.origin?"· "+l.origin:""}</div></td>
         <td>{l.service||"—"}</td><td className="tn">{uah(l.fee)}</td>
         <td>{m?<span style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="mini" style={{background:m.color}}>{m.name[0]}</span>{m.name}</span>:"—"}</td>
         <td><span className="pill" style={{color:s&&s.color,background:(s?s.color:"#999")+"22"}}>{l.stage}</span></td>
-        <td className="muted">{fdate(l.created_at)}</td>
+        <td className="muted">{fdate(l.created_at)}{(()=>{const na=naState(l);if(!na)return null;const c=na==="od"?"#dc2626":na==="td"?"#d97706":"#94a3b8";return <div style={{fontSize:11,fontWeight:700,color:c,marginTop:3}}>⏰ {fdt(l.next_action_at)}</div>;})()}</td>
       </tr>;})}</tbody>
     </table>{!rows.length&&<div className="muted" style={{textAlign:"center",padding:30}}>Нічого не знайдено</div>}</div></div>
     <div className="muted small">Показано {rows.length} із {leads.length}</div>
@@ -471,6 +460,7 @@ function Leads({leads,cfg,openCard}){
 
 /* ============================ MANAGERS ============================ */
 function Managers({leads,cfg,saveCfg,updateLead}){
+  const won=cfg.stages.filter(s=>s.type==="won").map(s=>s.name);
   const [name,setName]=useState("");
   const pal=["#2563eb","#10b981","#f59e0b","#8b5cf6","#ec4899","#0891b2","#ef4444","#84cc16"];
   const unassigned=leads.filter(l=>!l.manager_id);
@@ -482,7 +472,7 @@ function Managers({leads,cfg,saveCfg,updateLead}){
     <div className="panel"><div className="ph">Розподіл лідів</div><p className="muted small" style={{marginBottom:12}}>Нерозподілених: <b>{unassigned.length}</b>. Авторозподіл призначить їх по черзі.</p><button className="btn p" onClick={distribute} disabled={!unassigned.length}>Авторозподілити ({unassigned.length})</button></div>
     <div className="panel"><div className="ph">Команда</div>
       <div className="addrow"><input placeholder="Ім'я менеджера" value={name} onChange={e=>setName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&add()}/><button className="btn p" onClick={add}>+ Додати</button></div>
-      {cfg.managers.map(m=>{const ls=leads.filter(l=>l.manager_id===m.id);const ws=ls.filter(l=>isWon(cfg,l)).reduce((a,l)=>a+(+l.fee||0),0);return <div className="mline" key={m.id}><span className="av" style={{background:m.color}}>{m.name[0]}</span><input className="gi" value={m.name} onChange={e=>ren(m.id,e.target.value)}/><span className="muted small">{ls.length} · {uah(ws)}</span><button className="ib d" onClick={()=>rm(m.id)}>🗑</button></div>;})}
+      {cfg.managers.map(m=>{const ls=leads.filter(l=>l.manager_id===m.id);const ws=ls.filter(l=>won.includes(l.stage)).reduce((a,l)=>a+(+l.fee||0),0);return <div className="mline" key={m.id}><span className="av" style={{background:m.color}}>{m.name[0]}</span><input className="gi" value={m.name} onChange={e=>ren(m.id,e.target.value)}/><span className="muted small">{ls.length} · {uah(ws)}</span><button className="ib d" onClick={()=>rm(m.id)}>🗑</button></div>;})}
       <p className="note" style={{marginTop:14}}>Щоб менеджер міг заходити в CRM — створи йому акаунт у Supabase → Authentication → Add user (email + пароль). Імена тут і акаунти в Supabase — це різні речі: тут лише для воронки й аналітики.</p>
     </div>
   </>;
@@ -490,40 +480,74 @@ function Managers({leads,cfg,saveCfg,updateLead}){
 
 /* ============================ SETTINGS ============================ */
 function Settings({cfg,saveCfg}){
-  const [pi,setPi]=useState(0);
   const [ns,setNs]=useState("");
   const pal=["#64748b","#3b82f6","#6366f1","#8b5cf6","#0891b2","#d97706","#ea580c","#0d9488","#0ea5e9","#16a34a","#dc2626"];
-  const pipe=(cfg.pipelines||[])[pi]||{stages:[]};
-  const setStages=(stages)=>{const ps=cfg.pipelines.map((p,k)=>k===pi?{...p,stages}:p);saveCfg({...cfg,pipelines:ps});};
-  const ren=(i,v)=>setStages(pipe.stages.map((s,k)=>k===i?{...s,name:v}:s));
-  const col=(i,v)=>setStages(pipe.stages.map((s,k)=>k===i?{...s,color:v}:s));
-  const typ=(i,v)=>setStages(pipe.stages.map((s,k)=>k===i?{...s,type:v}:s));
-  const rm=(i)=>setStages(pipe.stages.filter((_,k)=>k!==i));
-  const addS=()=>{if(!ns.trim())return;setStages([...pipe.stages,{name:ns.trim(),color:pal[pipe.stages.length%pal.length],type:"active"}]);setNs("");};
-  const mv=(i,d)=>{const a=[...pipe.stages];const j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];setStages(a);};
+  const ren=(i,v)=>saveCfg({...cfg,stages:cfg.stages.map((s,k)=>k===i?{...s,name:v}:s)});
+  const col=(i,v)=>saveCfg({...cfg,stages:cfg.stages.map((s,k)=>k===i?{...s,color:v}:s)});
+  const typ=(i,v)=>saveCfg({...cfg,stages:cfg.stages.map((s,k)=>k===i?{...s,type:v}:s)});
+  const rm=(i)=>saveCfg({...cfg,stages:cfg.stages.filter((_,k)=>k!==i)});
+  const addS=()=>{if(!ns.trim())return;saveCfg({...cfg,stages:[...cfg.stages,{name:ns.trim(),color:pal[cfg.stages.length%pal.length],type:"active"}]});setNs("");};
+  const mv=(i,d)=>{const a=[...cfg.stages];const j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];saveCfg({...cfg,stages:a});};
   return <>
     <div className="panel"><div className="ph">Загальні</div><label className="field"><span>Назва CRM</span><input value={cfg.title} onChange={e=>saveCfg({...cfg,title:e.target.value})}/></label></div>
-    <div className="panel"><div className="ph">Воронки по послугах</div>
-      <p className="muted small" style={{marginBottom:12}}>Обери послугу — і редагуй її етапи (назва, колір, порядок, тип). Тип «виграно» рахується як угода в аналітиці.</p>
-      <label className="field" style={{marginBottom:14}}><span>Послуга</span><select value={pi} onChange={e=>setPi(+e.target.value)} style={{fontWeight:700}}>{(cfg.pipelines||[]).map((p,k)=><option key={p.service} value={k}>{p.service}</option>)}</select></label>
-      {pipe.stages.map((s,i)=><div className="stl" key={i}><input type="color" className="ci" value={s.color} onChange={e=>col(i,e.target.value)}/><input className="gi" value={s.name} onChange={e=>ren(i,e.target.value)}/><select className="tsel" value={s.type} onChange={e=>typ(i,e.target.value)}><option value="active">активний</option><option value="won">виграно</option><option value="lost">втрачено</option></select><div className="reord"><button onClick={()=>mv(i,-1)}>▲</button><button onClick={()=>mv(i,1)}>▼</button></div><button className="ib d" onClick={()=>rm(i)}>🗑</button></div>)}
+    <div className="panel"><div className="ph">Воронка продажів</div><p className="muted small" style={{marginBottom:12}}>Назва, колір, порядок, тип етапу. Тип впливає на аналітику.</p>
+      {cfg.stages.map((s,i)=><div className="stl" key={i}><input type="color" className="ci" value={s.color} onChange={e=>col(i,e.target.value)}/><input className="gi" value={s.name} onChange={e=>ren(i,e.target.value)}/><select className="tsel" value={s.type} onChange={e=>typ(i,e.target.value)}><option value="active">активний</option><option value="won">виграно</option><option value="lost">втрачено</option></select><div className="reord"><button onClick={()=>mv(i,-1)}>▲</button><button onClick={()=>mv(i,1)}>▼</button></div><button className="ib d" onClick={()=>rm(i)}>🗑</button></div>)}
       <div className="addrow" style={{marginTop:12}}><input placeholder="Назва нового етапу" value={ns} onChange={e=>setNs(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addS()}/><button className="btn p" onClick={addS}>+ Етап</button></div>
     </div>
     <div className="panel"><div className="ph">Інтеграція</div><p className="note">Заявки з сайту вже надходять у воронку (джерело «Сайт»). Для реклами Meta/TikTok/Google — налаштуй вебхук на endpoint, що пише в таблицю <b>leads</b> (як це робить форма на сайті).</p></div>
   </>;
 }
 
+/* ============================ LOSS MODAL ============================ */
+function LossModal({onClose,onConfirm}){
+  const [r,setR]=useState("");
+  const [t,setT]=useState("");
+  const submit=()=>{
+    if(!r){alert("Обери причину відмови");return;}
+    onConfirm(r+(t.trim()?" — "+t.trim():""));
+  };
+  return <div className="overlay c" onClick={onClose}><div className="modal" onClick={e=>e.stopPropagation()}>
+    <h3>Чому втратили лід?</h3>
+    <p className="sub">Причина збережеться в картці та піде в аналітику відмов.</p>
+    <div className="rlist">{LOSS_REASONS.map(x=><button key={x} className={r===x?"sel":""} onClick={()=>setR(x)}>{x}</button>)}</div>
+    <textarea rows={2} placeholder="Коментар (необов'язково)…" value={t} onChange={e=>setT(e.target.value)}/>
+    <div className="fa" style={{marginTop:14}}><button className="btn g" onClick={onClose}>Скасувати</button><button className="btn p" onClick={submit}>Підтвердити відмову</button></div>
+  </div></div>;
+}
+
 /* ============================ CARD ============================ */
-function Card({lead,cfg,onClose,updateLead,delLead}){
+function Card({lead,cfg,onClose,updateLead,requestStage,delLead}){
   const [edit,setEdit]=useState(false);
   const [f,setF]=useState(lead);
   const [c,setC]=useState("");
-  useEffect(()=>setF(lead),[lead.id]);
+  const [na,setNa]=useState(toLocal(lead.next_action_at));
+  const [nn,setNn]=useState(lead.next_action_note||"");
+  useEffect(()=>{setF(lead);setNa(toLocal(lead.next_action_at));setNn(lead.next_action_note||"");},[lead.id]);
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
-  const save=()=>{const ch=[];if(f.stage!==lead.stage)ch.push("етап → "+f.stage);const m1=cfg.managers.find(m=>m.id===f.manager_id);const m0=cfg.managers.find(m=>m.id===lead.manager_id);if(f.manager_id!==lead.manager_id)ch.push("менеджер → "+(m1?m1.name:"—"));updateLead(lead.id,{name:f.name,phone:f.phone,email:f.email,city:f.city,client_type:f.client_type,service:f.service,car_brand:f.car_brand,car_model:f.car_model,car_year:+f.car_year||null,vin:f.vin,mileage:+f.mileage||null,origin:f.origin,car_budget:+f.car_budget||null,fee:+f.fee||null,source:f.source,stage:f.stage,manager_id:f.manager_id,notes:f.notes},"Картку оновлено"+(ch.length?": "+ch.join(", "):""));setEdit(false);};
+  const save=()=>{
+    const ch=[];if(f.stage!==lead.stage)ch.push("етап → "+f.stage);
+    const m1=cfg.managers.find(m=>m.id===f.manager_id);const m0=cfg.managers.find(m=>m.id===lead.manager_id);
+    if(f.manager_id!==lead.manager_id)ch.push("менеджер → "+(m1?m1.name:"—"));
+    /* якщо новий етап типу "lost" — зберігаємо все, крім етапу, а етап міняємо через requestStage (з причиною) */
+    const newSt=cfg.stages.find(s=>s.name===f.stage);
+    const toLost=newSt&&newSt.type==="lost"&&f.stage!==lead.stage;
+    const patch={name:f.name,phone:f.phone,email:f.email,city:f.city,client_type:f.client_type,service:f.service,car_brand:f.car_brand,car_model:f.car_model,car_year:+f.car_year||null,vin:f.vin,mileage:+f.mileage||null,origin:f.origin,car_budget:+f.car_budget||null,fee:+f.fee||null,source:f.source,manager_id:f.manager_id,notes:f.notes};
+    if(!toLost)patch.stage=f.stage;
+    updateLead(lead.id,patch,"Картку оновлено"+(ch.filter(x=>!toLost||!x.startsWith("етап")).length?": "+ch.filter(x=>!toLost||!x.startsWith("етап")).join(", "):""));
+    if(toLost)requestStage(lead.id,f.stage);
+    setEdit(false);
+  };
   const addC=()=>{if(!c.trim())return;updateLead(lead.id,{},"💬 "+c.trim());setC("");};
-  const setService=(v)=>{const ss=stagesFor(cfg,v);setF(p=>({...p,service:v,stage:ss.some(s=>s.name===p.stage)?p.stage:(ss[0]&&ss[0].name)||p.stage}));};
-  const st=stageOf(cfg,lead);
+  const saveNa=()=>{
+    if(!na){alert("Вкажи дату та час");return;}
+    updateLead(lead.id,{next_action_at:new Date(na).toISOString(),next_action_note:nn.trim()||null},"⏰ Наступна дія: "+fdt(new Date(na).toISOString())+(nn.trim()?" · "+nn.trim():""));
+  };
+  const doneNa=()=>{
+    updateLead(lead.id,{next_action_at:null,next_action_note:null},"✓ Дію виконано"+(lead.next_action_note?": "+lead.next_action_note:""));
+    setNa("");setNn("");
+  };
+  const st=cfg.stages.find(s=>s.name===lead.stage);
+  const naSt=st&&st.type==="active"?naState(lead):null;
   return <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
     <div className="sh"><div><div className="ttl">{lead.name}</div><div className="muted small">{lead.service} · {fdate(lead.created_at)} · {lead.source}</div></div>
       <div style={{display:"flex",gap:7}}>{!edit&&<button className="x" onClick={()=>setEdit(true)}>✎</button>}<button className="x" onClick={()=>{if(confirm("Видалити лід?"))delLead(lead.id);}}>🗑</button><button className="x" onClick={onClose}>×</button></div></div>
@@ -542,7 +566,7 @@ function Card({lead,cfg,onClose,updateLead,delLead}){
         <F l="Email"><input value={f.email||""} onChange={e=>set("email",e.target.value)}/></F>
         <F l="Місто"><input value={f.city||""} onChange={e=>set("city",e.target.value)}/></F>
         <F l="Тип клієнта"><select value={f.client_type||"Фіз. особа"} onChange={e=>set("client_type",e.target.value)}><option>Фіз. особа</option><option>Юр. особа</option></select></F>
-        <F l="Послуга"><select value={f.service||""} onChange={e=>setService(e.target.value)}>{SERVICES.map(s=><option key={s}>{s}</option>)}</select></F>
+        <F l="Послуга"><select value={f.service||""} onChange={e=>set("service",e.target.value)}>{SERVICES.map(s=><option key={s}>{s}</option>)}</select></F>
         <F l="Марка"><input value={f.car_brand||""} onChange={e=>set("car_brand",e.target.value)}/></F>
         <F l="Модель"><input value={f.car_model||""} onChange={e=>set("car_model",e.target.value)}/></F>
         <F l="Рік"><input type="number" value={f.car_year||""} onChange={e=>set("car_year",e.target.value)}/></F>
@@ -552,13 +576,25 @@ function Card({lead,cfg,onClose,updateLead,delLead}){
         <F l="Бюджет, $"><input type="number" value={f.car_budget||""} onChange={e=>set("car_budget",e.target.value)}/></F>
         <F l="Комісія, грн"><input type="number" value={f.fee||""} onChange={e=>set("fee",e.target.value)}/></F>
         <F l="Джерело"><select value={f.source||""} onChange={e=>set("source",e.target.value)}>{Object.keys(SOURCES).map(s=><option key={s}>{s}</option>)}</select></F>
-        <F l="Етап"><select value={f.stage} onChange={e=>set("stage",e.target.value)}>{stagesFor(cfg,f.service).map(s=><option key={s.name}>{s.name}</option>)}</select></F>
+        <F l="Етап"><select value={f.stage} onChange={e=>set("stage",e.target.value)}>{cfg.stages.map(s=><option key={s.name}>{s.name}</option>)}</select></F>
         <F l="Менеджер"><select value={f.manager_id||""} onChange={e=>set("manager_id",e.target.value)}><option value="">не призначено</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></F>
         <F l="Примітки" full><textarea rows={3} value={f.notes||""} onChange={e=>set("notes",e.target.value)}/></F>
         <div className="fa full"><button className="btn g" onClick={()=>{setF(lead);setEdit(false);}}>Скасувати</button><button className="btn p" onClick={save}>Зберегти</button></div>
       </div>}
       {!edit&&<>
-        <div className="qs"><span className="muted small">Швидко етап:</span><select value={lead.stage} onChange={e=>updateLead(lead.id,{stage:e.target.value},"Етап → "+e.target.value)}>{stagesFor(cfg,lead.service).map(s=><option key={s.name}>{s.name}</option>)}</select></div>
+        {lead.loss_reason&&<div className="lr">Причина відмови: <b>{lead.loss_reason}</b></div>}
+        <div className="qs"><span className="muted small">Швидко етап:</span><select value={lead.stage} onChange={e=>requestStage(lead.id,e.target.value)}>{cfg.stages.map(s=><option key={s.name}>{s.name}</option>)}</select></div>
+        <div className="rem">
+          <div className="rt">⏰ Наступна дія {naSt==="od"&&<span style={{color:"#dc2626"}}>· прострочено!</span>}{naSt==="td"&&<span style={{color:"#d97706"}}>· сьогодні</span>}</div>
+          <div className="rr">
+            <input type="datetime-local" value={na} onChange={e=>setNa(e.target.value)}/>
+            <input type="text" placeholder="Що зробити: подзвонити, надіслати КП…" value={nn} onChange={e=>setNn(e.target.value)}/>
+          </div>
+          <div style={{display:"flex",gap:8,marginTop:9}}>
+            <button className="btn p" style={{padding:"8px 13px",fontSize:13}} onClick={saveNa}>Зберегти</button>
+            {lead.next_action_at&&<button className="btn g" style={{padding:"8px 13px",fontSize:13}} onClick={doneNa}>✓ Виконано</button>}
+          </div>
+        </div>
         <div className="tl"><div className="ph" style={{fontSize:14}}>Історія та коментарі</div>
           <div className="crow"><input placeholder="Додати коментар…" value={c} onChange={e=>setC(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addC()}/><button className="btn p" onClick={addC}>→</button></div>
           <ul>{[...(lead.history||[])].reverse().map((h,i)=><li key={i}><span className="d"/><div><p>{h.text}</p><time>{fdate(h.ts)}</time></div></li>)}</ul>
@@ -570,10 +606,8 @@ function Card({lead,cfg,onClose,updateLead,delLead}){
 
 /* ============================ ADD LEAD ============================ */
 function AddLead({cfg,onClose,addLead}){
-  const svc0=(cfg.pipelines&&cfg.pipelines[0]&&cfg.pipelines[0].service)||"Інше";
-  const [f,setF]=useState({name:"",phone:"",email:"",city:"",client_type:"Фіз. особа",service:svc0,car_brand:"",car_model:"",car_year:"",vin:"",origin:"США",car_budget:"",fee:"",source:"CRM",manager_id:"",stage:(stagesFor(cfg,svc0)[0]&&stagesFor(cfg,svc0)[0].name)||"Новий лід"});
+  const [f,setF]=useState({name:"",phone:"",email:"",city:"",client_type:"Фіз. особа",service:"Підбір авто",car_brand:"",car_model:"",car_year:"",vin:"",origin:"США",car_budget:"",fee:"",source:"CRM",manager_id:"",stage:cfg.stages[0].name});
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
-  const setService=(v)=>{const ss=stagesFor(cfg,v);setF(p=>({...p,service:v,stage:(ss[0]&&ss[0].name)||"Новий лід"}));};
   const submit=()=>{if(!f.name.trim()){alert("Вкажіть ім'я");return;}addLead({...f,car_year:+f.car_year||null,car_budget:+f.car_budget||null,fee:+f.fee||null});};
   return <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
     <div className="sh"><div className="ttl">Новий лід</div><button className="x" onClick={onClose}>×</button></div>
@@ -583,7 +617,7 @@ function AddLead({cfg,onClose,addLead}){
       <F l="Email"><input value={f.email} onChange={e=>set("email",e.target.value)}/></F>
       <F l="Місто"><input value={f.city} onChange={e=>set("city",e.target.value)}/></F>
       <F l="Тип клієнта"><select value={f.client_type} onChange={e=>set("client_type",e.target.value)}><option>Фіз. особа</option><option>Юр. особа</option></select></F>
-      <F l="Послуга"><select value={f.service} onChange={e=>setService(e.target.value)}>{SERVICES.map(s=><option key={s}>{s}</option>)}</select></F>
+      <F l="Послуга"><select value={f.service} onChange={e=>set("service",e.target.value)}>{SERVICES.map(s=><option key={s}>{s}</option>)}</select></F>
       <F l="Марка"><input value={f.car_brand} onChange={e=>set("car_brand",e.target.value)}/></F>
       <F l="Модель"><input value={f.car_model} onChange={e=>set("car_model",e.target.value)}/></F>
       <F l="Рік"><input type="number" value={f.car_year} onChange={e=>set("car_year",e.target.value)}/></F>
@@ -591,7 +625,7 @@ function AddLead({cfg,onClose,addLead}){
       <F l="VIN" full><input value={f.vin} onChange={e=>set("vin",e.target.value)}/></F>
       <F l="Бюджет, $"><input type="number" value={f.car_budget} onChange={e=>set("car_budget",e.target.value)}/></F>
       <F l="Комісія, грн"><input type="number" value={f.fee} onChange={e=>set("fee",e.target.value)}/></F>
-      <F l="Етап"><select value={f.stage} onChange={e=>set("stage",e.target.value)}>{stagesFor(cfg,f.service).map(s=><option key={s.name}>{s.name}</option>)}</select></F>
+      <F l="Етап"><select value={f.stage} onChange={e=>set("stage",e.target.value)}>{cfg.stages.map(s=><option key={s.name}>{s.name}</option>)}</select></F>
       <F l="Менеджер"><select value={f.manager_id} onChange={e=>set("manager_id",e.target.value)}><option value="">авто (по черзі)</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></F>
       <div className="fa full"><button className="btn g" onClick={onClose}>Скасувати</button><button className="btn p" onClick={submit}>+ Створити</button></div>
     </div></div>
