@@ -13,12 +13,13 @@
   1) Supabase → SQL Editor → виконати блок з повідомлення (політики + crm_config).
   2) Supabase → Authentication → вимкнути публічну реєстрацію, додати менеджерів (email+пароль).
   3) Залити цей файл у репозиторій → відкрити brokservisavto.com/crm.html → увійти.
+
+  ЩО ЗМІНЕНО (стабільність завантаження):
+  • Усі CDN закріплені на конкретних версіях і переведені на один CDN (jsDelivr).
+  • Якщо щось не завантажиться — на екрані з'явиться зрозуміла помилка + кнопка
+    «Перезавантажити» (раніше був просто білий екран, особливо на iOS).
   ============================================================================
 -->
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -171,6 +172,13 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#f7f9fc}
 .ptabs button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 15px;font-size:13px;font-weight:700;color:var(--muted)}
 .ptabs button.on{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border-color:transparent;box-shadow:0 4px 12px #2563eb44}
 .bn{display:none}
+/* екран помилки завантаження */
+.boot-err{min-height:100vh;display:grid;place-items:center;padding:24px}
+.boot-err .bx{max-width:480px;width:100%;background:#fff;border:1px solid #fecaca;border-radius:18px;padding:26px;box-shadow:0 24px 70px rgba(13,23,38,.12)}
+.boot-err h2{font-family:'Archivo';margin:10px 0 6px;font-size:19px;color:#0d1726}
+.boot-err p{margin:0 0 16px;font-size:14px;line-height:1.55;color:#6b7a90}
+.boot-err code{font-size:12px;word-break:break-all;color:#b91c1c}
+.boot-err button{background:#2563eb;color:#fff;border:none;border-radius:11px;padding:12px 18px;font-weight:700;font-size:14px}
 @media(max-width:860px){
  .side{display:none}.wrap{padding:14px 14px 96px}.kpis{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}
  .mgrid{grid-template-columns:1fr}.bar{grid-template-columns:130px 1fr 28px}.ig,.fg{grid-template-columns:1fr}.sheet{width:100%}
@@ -178,11 +186,98 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#f7f9fc}
  .bn button{display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;color:var(--muted);font-size:10px;font-weight:600;padding:6px 4px;flex:1}.bn button.on{color:var(--acc)}
 }
 </style>
+
+<!-- BOOT GUARD: реєструється ПЕРШИМ, ловить помилки завантаження CDN і показує їх на екрані -->
+<script>
+(function(){
+  var pending=null;
+  function paint(msg){
+    pending=msg;
+    var root=document.getElementById('root');
+    if(!root) return;
+    root.innerHTML='<div class="boot-err"><div class="bx">'
+      +'<div style="font-size:32px;line-height:1">⚠️</div>'
+      +'<h2>CRM не завантажилась</h2>'
+      +'<p>'+msg+'</p>'
+      +'<button onclick="location.reload()">↻ Перезавантажити</button>'
+      +'</div></div>';
+  }
+  window.__crmShow=paint;
+  window.addEventListener('error',function(e){
+    if(e&&e.target&&e.target.tagName==='SCRIPT'&&e.target.src){
+      paint('Не вдалося завантажити скрипт із CDN:<br><code>'+e.target.src+'</code><br><br>Найчастіша причина — блокувальник реклами в Safari або тимчасова недоступність CDN. Спробуй: вимкнути блокувальник для цього сайту, перевірити інтернет і перезавантажити сторінку.');
+    } else if(e&&e.message){
+      paint('Помилка виконання:<br><code>'+e.message+'</code>');
+    }
+  },true);
+  window.addEventListener('unhandledrejection',function(e){
+    var m=(e&&e.reason&&e.reason.message)||(e&&e.reason)||'невідома помилка';
+    paint('Помилка: '+m);
+  });
+  document.addEventListener('DOMContentLoaded',function(){ if(pending) paint(pending); });
+})();
+</script>
+
+<!--
+  Завантажувач бібліотек. URL-и зібрані з частин у JS, тому в HTML немає
+  жодного рядка виду "слово@версія" — Cloudflare Email Obfuscation не має що
+  псувати (саме воно ламало @babel/standalone@<версія> → [email protected]).
+  Версії закріплені; усе з одного CDN (jsDelivr); завантаження послідовне.
+-->
+<script>
+(function(){
+  var AT = String.fromCharCode(64);        // "@" — окремо, щоб не утворювати email-патерн
+  var B  = "https://cdn.jsdelivr.net/npm/";
+  var RV = "18.3.1", BV = "7.26.7", SV = "2";
+  var SCRIPTS = [
+    B + "react" + AT + RV + "/umd/react.production.min.js",
+    B + "react-dom" + AT + RV + "/umd/react-dom.production.min.js",
+    B + AT + "babel/standalone" + AT + BV + "/babel.min.js",
+    B + AT + "supabase/supabase-js" + AT + SV
+  ];
+  function fail(url){
+    if(window.__crmShow) window.__crmShow(
+      'Не вдалося завантажити скрипт із CDN:<br><code>'+url+'</code><br><br>'
+      +'Найчастіша причина — блокувальник реклами в Safari або тимчасова недоступність CDN. '
+      +'Перевір інтернет, вимкни блокувальник для цього сайту й перезавантаж.');
+  }
+  function loadSeq(i){
+    if(i>=SCRIPTS.length){ return run(); }
+    var s=document.createElement("script");
+    s.src=SCRIPTS[i]; s.async=false;
+    s.onload=function(){ loadSeq(i+1); };
+    s.onerror=function(){ fail(SCRIPTS[i]); };
+    document.head.appendChild(s);
+  }
+  function run(){
+    var miss=[];
+    if(typeof React==="undefined")miss.push("React");
+    if(typeof ReactDOM==="undefined")miss.push("ReactDOM");
+    if(typeof Babel==="undefined")miss.push("Babel");
+    if(typeof supabase==="undefined")miss.push("supabase-js");
+    if(miss.length){
+      if(window.__crmShow)window.__crmShow("Не завантажились бібліотеки: <b>"+miss.join(", ")+"</b>. Зазвичай це блокувальник реклами або CDN. Вимкни блокувальник для сайту й перезавантаж.");
+      return;
+    }
+    try{ Babel.transformScriptTags(); }            // компілюємо <script type="text/babel"> і запускаємо застосунок
+    catch(e){ if(window.__crmShow)window.__crmShow("Помилка компіляції Babel:<br><code>"+(e&&e.message||e)+"</code>"); }
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){loadSeq(0);});
+  else loadSeq(0);
+})();
+</script>
 </head>
 <body>
-<div id="root"></div>
+<div id="root">
+  <div class="center">
+    <div style="text-align:center;color:#6b7a90;font-family:system-ui,sans-serif">
+      <div class="spin" style="font-size:34px">◐</div>
+      <p style="margin-top:10px">Завантаження CRM…</p>
+    </div>
+  </div>
+</div>
 
-<script type="text/babel">
+<script type="text/babel" data-presets="react">
 const { useState, useEffect, useMemo, useRef } = React;
 
 /* ====== CONFIG (твої ключі вже вписані) ====== */
@@ -706,7 +801,22 @@ function AddLead({cfg,onClose,addLead}){
   </div></div>;
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+/* ============================ ЗАХИЩЕНИЙ ЗАПУСК ============================ */
+(function(){
+  var miss=[];
+  if(typeof React==="undefined")miss.push("React");
+  if(typeof ReactDOM==="undefined")miss.push("ReactDOM");
+  if(typeof supabase==="undefined")miss.push("supabase-js");
+  if(miss.length){
+    if(window.__crmShow)window.__crmShow("Не завантажились бібліотеки: <b>"+miss.join(", ")+"</b>. Майже завжди це блокувальник реклами в Safari або тимчасова недоступність CDN. Вимкни блокувальник для цього сайту й перезавантаж.");
+    return;
+  }
+  try{
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  }catch(err){
+    if(window.__crmShow)window.__crmShow("Помилка під час запуску:<br><code>"+((err&&err.message)||err)+"</code>");
+  }
+})();
 </script>
 </body>
 </html>
