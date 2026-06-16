@@ -360,6 +360,24 @@ const allStages = cfg => [...cfg.stages,...(cfg.pipelines||[]).flatMap(p=>p.stag
 const typeNames = (cfg,t) => [...new Set(allStages(cfg).filter(s=>s.type===t).map(s=>s.name))];
 const stOf = (cfg,l) => pipeFor(cfg,l.service).find(s=>s.name===l.stage)||allStages(cfg).find(s=>s.name===l.stage);
 
+/* період: розбивка лідів по роках і місяцях за created_at */
+const MONTHS = ["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
+const yearsFrom = leads => [...new Set(leads.map(l=>l.created_at?new Date(l.created_at).getFullYear():null).filter(Boolean))].sort((a,b)=>b-a);
+/* year/month — рядки: "" = усі. month: "0".."11" */
+const inPeriod = (l,year,month) => {
+  if(year===""&&month==="") return true;
+  if(!l.created_at) return false;
+  const d=new Date(l.created_at);
+  if(year!==""&&d.getFullYear()!==+year) return false;
+  if(month!==""&&d.getMonth()!==+month) return false;
+  return true;
+};
+const periodLabel = (year,month) => {
+  if(year===""&&month==="") return "за весь час";
+  if(month!=="") return MONTHS[+month]+(year!==""?" "+year:"");
+  return String(year);
+};
+
 /* спільні елементи форм (на верхньому рівні, щоб не перестворювались і не збивали фокус) */
 const F = ({l,children,full}) => <label className={"f"+(full?" full":"")}><span>{l}</span>{children}</label>;
 const I = ({l,v}) => <div className="info"><span className="l">{l}</span><span className="v">{v}</span></div>;
@@ -423,7 +441,26 @@ function Shell({session}){
   };
   const busyRef=useRef(false);
   useEffect(()=>{ busyRef.current = (open!==null)||add; },[open,add]);
-  useEffect(()=>{ load(); const t=setInterval(()=>{ if(!busyRef.current) load(); },20000); return ()=>clearInterval(t); },[]);
+  useEffect(()=>{
+    load();
+    const ch=db.channel("leads-rt")
+      .on("postgres_changes",{event:"*",schema:"public",table:"leads"},payload=>{
+        if(busyRef.current){ load(); return; }   // відкрита картка/форма — тихо перезавантажуємо
+        setLeads(ls=>{
+          if(payload.eventType==="INSERT"){
+            if(ls.some(l=>l.id===payload.new.id)) return ls;     // не дублюємо власну вставку
+            return [payload.new,...ls];
+          }
+          if(payload.eventType==="UPDATE") return ls.map(l=>l.id===payload.new.id?{...l,...payload.new}:l);
+          if(payload.eventType==="DELETE") return ls.filter(l=>l.id!==payload.old.id);
+          return ls;
+        });
+        setSync("Оновлено "+new Date().toLocaleTimeString("uk-UA",{hour:"2-digit",minute:"2-digit"}));
+      })
+      .subscribe();
+    const fallback=setInterval(()=>{ if(!busyRef.current) load(); },120000); // підстраховка раз на 2 хв (Safari/iOS рве вебсокет у фоні)
+    return ()=>{ db.removeChannel(ch); clearInterval(fallback); };
+  },[]);
 
   const saveCfg=async(next)=>{ setCfg(next); await db.from("crm_config").upsert({id:1,data:next}); };
 
@@ -495,7 +532,11 @@ function Shell({session}){
 }
 
 /* ============================ DASHBOARD ============================ */
-function Dash({leads,cfg,openCard}){
+function Dash({leads:allLeads,cfg,openCard}){
+  const [year,setYear]=useState("");
+  const [month,setMonth]=useState("");
+  const years=useMemo(()=>yearsFrom(allLeads),[allLeads]);
+  const leads=useMemo(()=>allLeads.filter(l=>inPeriod(l,year,month)),[allLeads,year,month]);
   const won=typeNames(cfg,"won");
   const lost=typeNames(cfg,"lost");
   const pipes=cfg.pipelines||[];
@@ -527,6 +568,19 @@ function Dash({leads,cfg,openCard}){
   const maxL=Math.max(1,...byLoss.map(x=>x.c));
   const Kpi=({ic,l,v,s,c})=><div className="kpi"><div className="ic" style={{background:c+"1a",color:c}}>{ic}</div><div className="v">{v}</div><div className="l">{l}</div>{s&&<div className="s">{s}</div>}</div>;
   return <>
+    <div className="panel" style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",padding:"12px 16px"}}>
+      <span style={{fontFamily:"'Archivo'",fontWeight:700,fontSize:14}}>Період</span>
+      <select className="tsel" value={year} onChange={e=>setYear(e.target.value)}>
+        <option value="">Усі роки</option>
+        {years.map(y=><option key={y} value={y}>{y}</option>)}
+      </select>
+      <select className="tsel" value={month} onChange={e=>setMonth(e.target.value)}>
+        <option value="">Усі місяці</option>
+        {MONTHS.map((m,i)=><option key={i} value={i}>{m}</option>)}
+      </select>
+      {(year!==""||month!=="")&&<button className="btn g" style={{padding:"7px 12px",fontSize:13}} onClick={()=>{setYear("");setMonth("");}}>Скинути</button>}
+      <span className="muted small" style={{marginLeft:"auto"}}>Показано {periodLabel(year,month)}: <b style={{color:"var(--ink)"}}>{leads.length}</b> лідів</span>
+    </div>
     <div className="kpis">
       <Kpi ic="☺" l="Усього лідів" v={total} c="#2563eb"/>
       <Kpi ic="↗" l="Активні угоди" v={active.length} s={uah(psum)} c="#f59e0b"/>
@@ -587,14 +641,20 @@ function Funnel({leads,cfg,requestStage,openCard}){
 /* ============================ LEADS TABLE ============================ */
 function Leads({leads,cfg,openCard}){
   const [q,setQ]=useState(""),[fs,setFs]=useState(""),[fm,setFm]=useState(""),[fsv,setFsv]=useState("");
+  const [fy,setFy]=useState(""),[fmo,setFmo]=useState("");
+  const years=useMemo(()=>yearsFrom(leads),[leads]);
   const rows=useMemo(()=>leads.filter(l=>{
+    if(!inPeriod(l,fy,fmo))return false;
     if(fs&&l.stage!==fs)return false; if(fm&&l.manager_id!==fm)return false; if(fsv&&l.service!==fsv)return false;
     if(q){const t=((l.name||"")+(l.phone||"")+(l.car_brand||"")+(l.car_model||"")+(l.vin||"")+(l.city||"")).toLowerCase();if(!t.includes(q.toLowerCase()))return false;}
     return true;
-  }),[leads,q,fs,fm,fsv]);
+  }),[leads,q,fs,fm,fsv,fy,fmo]);
+  const sumFee=rows.reduce((a,l)=>a+(+l.fee||0),0);
   return <>
     <div className="filters">
       <div className="search"><span className="muted">⌕</span><input placeholder="Пошук: клієнт, телефон, авто, VIN…" value={q} onChange={e=>setQ(e.target.value)}/></div>
+      <select value={fy} onChange={e=>setFy(e.target.value)}><option value="">Усі роки</option>{years.map(y=><option key={y} value={y}>{y}</option>)}</select>
+      <select value={fmo} onChange={e=>setFmo(e.target.value)}><option value="">Усі місяці</option>{MONTHS.map((m,i)=><option key={i} value={i}>{m}</option>)}</select>
       <select value={fs} onChange={e=>setFs(e.target.value)}><option value="">Усі етапи</option>{[...new Set(allStages(cfg).map(s=>s.name))].map(n=><option key={n}>{n}</option>)}</select>
       <select value={fsv} onChange={e=>setFsv(e.target.value)}><option value="">Усі послуги</option>{SERVICES.map(s=><option key={s}>{s}</option>)}</select>
       <select value={fm} onChange={e=>setFm(e.target.value)}><option value="">Усі менеджери</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select>
@@ -610,7 +670,7 @@ function Leads({leads,cfg,openCard}){
         <td className="muted">{fdate(l.created_at)}{(()=>{const na=naState(l);if(!na)return null;const c=na==="od"?"#dc2626":na==="td"?"#d97706":"#94a3b8";return <div style={{fontSize:11,fontWeight:700,color:c,marginTop:3}}>⏰ {fdt(l.next_action_at)}</div>;})()}</td>
       </tr>;})}</tbody>
     </table>{!rows.length&&<div className="muted" style={{textAlign:"center",padding:30}}>Нічого не знайдено</div>}</div></div>
-    <div className="muted small">Показано {rows.length} із {leads.length}</div>
+    <div className="muted small">Показано {rows.length} із {leads.length} · сума комісій: <b style={{color:"var(--ink)"}}>{uah(sumFee)}</b></div>
   </>;
 }
 
