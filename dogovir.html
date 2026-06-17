@@ -155,7 +155,10 @@ details[open] summary::after{content:"−"}
 details .answer{padding:0 18px 16px;color:var(--muted)}
 
 .form-box{max-width:520px}
-.form-box input{width:100%;padding:14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:'Manrope',sans-serif;font-size:1rem}
+.form-box input,
+.form-box textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:'Manrope',sans-serif;font-size:1rem}
+.form-box textarea{resize:vertical;min-height:92px;line-height:1.5}
+.form-box .field-hint{font-size:.82rem;color:var(--muted);margin:-6px 0 14px}
 .form-box button{border:none;cursor:pointer;width:100%}
 #lead-status{margin-top:10px;font-size:.9rem}
 
@@ -358,10 +361,13 @@ footer .cols{display:flex;flex-wrap:wrap;gap:30px;justify-content:space-between}
 <section id="zayavka">
   <div class="container">
     <h2>Залишити заявку на оформлення ДКП</h2>
-    <p>Залиште контакти — зателефонуємо протягом 15 хвилин, прорахуємо вартість і запишемо на зручний час.</p>
+    <p>Залиште контакти — зателефонуємо протягом 15 хвилин, прорахуємо вартість і запишемо на зручний час. Що більше деталей по авто вкажете, то точніше прорахуємо угоду.</p>
     <div class="form-box">
-      <input id="lead-name" type="text" placeholder="Ваше ім'я">
-      <input id="lead-phone" type="tel" placeholder="+38 (0__) ___ __ __">
+      <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name">
+      <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel">
+      <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email">
+      <textarea id="lead-details" placeholder="Деталі по авто: марка, модель, рік, VIN, місто угоди (необов'язково)"></textarea>
+      <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати вам прорахунок і зразок договору.</p>
       <button class="btn" onclick="sendLead()">Надіслати заявку</button>
       <p id="lead-status"></p>
     </div>
@@ -400,15 +406,31 @@ footer .cols{display:flex;flex-wrap:wrap;gap:30px;justify-content:space-between}
 const SUPABASE_URL = 'https://rhduokjaawmorcyiuviy.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg';
 
+// Приводить телефон до формату E.164 (+380XXXXXXXXX) для розширених конверсій
+function normalizePhone(raw){
+  let p = (raw || '').replace(/[^\d+]/g, ''); // прибираємо пробіли, дужки, дефіси
+  if(p.startsWith('+380')) return p;
+  if(p.startsWith('380'))  return '+' + p;          // 380... -> +380...
+  if(p.startsWith('0'))    return '+38' + p;         // 0XX...  -> +380XX...
+  if(p.startsWith('+'))    return p;                 // вже з кодом іншої країни
+  return '+38' + p;                                  // запасний варіант
+}
+
 async function sendLead(){
-  const name = document.getElementById('lead-name').value.trim();
-  const phone = document.getElementById('lead-phone').value.trim();
-  const status = document.getElementById('lead-status');
-  if(!name || !phone){
+  const name     = document.getElementById('lead-name').value.trim();
+  const phoneRaw = document.getElementById('lead-phone').value.trim();
+  const email    = document.getElementById('lead-email').value.trim();
+  const details  = document.getElementById('lead-details').value.trim();
+  const status   = document.getElementById('lead-status');
+
+  if(!name || !phoneRaw){
     status.textContent = 'Заповніть ім\'я та телефон';
     status.style.color = '#C0392B';
     return;
   }
+
+  const phone = normalizePhone(phoneRaw);
+
   try{
     const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
       method: 'POST',
@@ -418,14 +440,31 @@ async function sendLead(){
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify({ name: name, phone: phone, source: 'dogovir', service: 'ДКП' })
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        email: email || null,
+        details: details || null,
+        source: 'dogovir',
+        service: 'ДКП'
+      })
     });
     if(!res.ok) throw new Error(await res.text());
+
     status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
     status.style.color = '#1E8E3E';
     document.getElementById('lead-name').value = '';
     document.getElementById('lead-phone').value = '';
-    if(typeof gtag === 'function'){ gtag('event','conversion',{'send_to':'AW-18171698074'}); }
+    document.getElementById('lead-email').value = '';
+    document.getElementById('lead-details').value = '';
+
+    // Розширені конверсії: передаємо хешовані дані ПЕРЕД подією конверсії
+    if(typeof gtag === 'function'){
+      const userData = { phone_number: phone };
+      if(email) userData.email = email;
+      gtag('set', 'user_data', userData);
+      gtag('event', 'conversion', { 'send_to': 'AW-18171698074' });
+    }
   }catch(e){
     status.textContent = 'Помилка надсилання. Зателефонуйте нам: +38 098 172 23 42';
     status.style.color = '#C0392B';
