@@ -444,9 +444,10 @@ async function sendLead(){
         name: name,
         phone: phone,
         email: email || null,
-        details: details || null,
-        source: 'dogovir',
-        service: 'ДКП'
+        notes: details || null,
+        source: 'Сайт',
+        service: 'Договір купівлі-продажу',
+        stage: 'Новий лід'
       })
     });
     if(!res.ok) throw new Error(await res.text());
