@@ -6,18 +6,21 @@
 <title>BROKSERVISAVTO · CRM</title>
 <!--
   ============================================================================
-  BROKSERVISAVTO CRM — підключена до Supabase.
-  Заявки з сайту й реклами надходять у воронку в реальному часі.
+  CRM — підключена до Supabase.
+  Заявки з brokservisavto.com і clerk.tax надходять у воронки в реальному часі.
 
-  ПЕРЕД ВИКОРИСТАННЯМ (один раз):
-  1) Supabase → SQL Editor → виконати блок з повідомлення (політики + crm_config).
-  2) Supabase → Authentication → вимкнути публічну реєстрацію, додати менеджерів (email+пароль).
-  3) Залити цей файл у репозиторій → відкрити brokservisavto.com/crm.html → увійти.
+  ЩО ДОДАНО В ЦІЙ ВЕРСІЇ:
+  • Воронка «Бухгалтерія» — під заявки з clerk.tax
+    (облік, податки, зарплата, реєстрація, аудит, юрсупровід).
+  • Джерело «clerk.tax» — щоб відрізняти заявки двох сайтів.
+  • Фільтр за джерелом у розділі «Ліди».
+  • Для бухгалтерських лідів приховані поля авто (марка, VIN, пробіг тощо).
+  • Показ UTM-міток заявки — видно, з якої реклами прийшов клієнт.
+  • Міграція конфігурації: нові воронки додаються до вже збереженої в базі
+    конфігурації, а не ігноруються.
 
-  ЩО ЗМІНЕНО (стабільність завантаження):
-  • Усі CDN закріплені на конкретних версіях і переведені на один CDN (jsDelivr).
-  • Якщо щось не завантажиться — на екрані з'явиться зрозуміла помилка + кнопка
-    «Перезавантажити» (раніше був просто білий екран, особливо на iOS).
+  ПОТРІБНО ОДИН РАЗ У SUPABASE → SQL Editor:
+    alter table leads add column if not exists utm text;
   ============================================================================
 -->
 <style>
@@ -168,6 +171,8 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#f7f9fc}
 .rem input[type=datetime-local]{flex:0 0 auto}
 .rem input[type=text]{flex:1;min-width:160px}
 .lr{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:9px 12px;font-size:12.5px;color:#b91c1c;margin-top:12px}
+.utm{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:11.5px;color:var(--muted);margin-top:12px;word-break:break-all;line-height:1.6}
+.utm b{color:var(--ink)}
 .ptabs{display:flex;gap:8px;flex-wrap:wrap}
 .ptabs button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 15px;font-size:13px;font-weight:700;color:var(--muted)}
 .ptabs button.on{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border-color:transparent;box-shadow:0 4px 12px #2563eb44}
@@ -221,8 +226,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#f7f9fc}
 <!--
   Завантажувач бібліотек. URL-и зібрані з частин у JS, тому в HTML немає
   жодного рядка виду "слово@версія" — Cloudflare Email Obfuscation не має що
-  псувати (саме воно ламало @babel/standalone@<версія> → [email protected]).
-  Версії закріплені; усе з одного CDN (jsDelivr); завантаження послідовне.
+  псувати. Версії закріплені; усе з одного CDN (jsDelivr); завантаження послідовне.
 -->
 <script>
 (function(){
@@ -280,13 +284,20 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#f7f9fc}
 <script type="text/babel" data-presets="react">
 const { useState, useEffect, useMemo, useRef } = React;
 
-/* ====== CONFIG (твої ключі вже вписані) ====== */
+/* ====== CONFIG ====== */
 const SUPABASE_URL = "https://rhduokjaawmorcyiuviy.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg";
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const SOURCES = {Facebook:"#1877f2",Instagram:"#e1306c",TikTok:"#111827",Google:"#ea4335","Сайт":"#0ea5e9","Дзвінок":"#16a34a","Рекомендація":"#a855f7",ProZorro:"#7c3aed","Інше":"#64748b"};
-const SERVICES = ["Підбір авто","Авто зі США","Розмитнення","Оцінка / експертиза","Договір купівлі-продажу","Оцінка + договір","Супровід угоди","Інше"];
+const SOURCES = {Facebook:"#1877f2",Instagram:"#e1306c",TikTok:"#111827",Google:"#ea4335","Сайт":"#0ea5e9","clerk.tax":"#c8a96e","Дзвінок":"#16a34a","Рекомендація":"#a855f7",ProZorro:"#7c3aed","Інше":"#64748b"};
+
+/* послуги авто-напряму */
+const AUTO_SERVICES = ["Підбір авто","Авто зі США","Розмитнення","Оцінка / експертиза","Договір купівлі-продажу","Оцінка + договір","Супровід угоди","Інше"];
+/* послуги бухгалтерського напряму — значення мають збігатися з формою на clerk.tax */
+const ACC_SERVICES = ["Бухгалтерський облік","Податкове планування","Зарплатний облік","Реєстрація бізнесу","Аудит / відновлення обліку","Юридичний супровід","Весь комплекс послуг"];
+const SERVICES = [...AUTO_SERVICES, ...ACC_SERVICES];
+const isAcc = s => ACC_SERVICES.includes(s);
+
 const ORIGINS = ["США","Європа","Корея","ОАЕ","Україна"];
 const srcColor = s => SOURCES[s] || "#64748b";
 
@@ -341,6 +352,17 @@ const DEFAULT_CONFIG = {
       {name:"Реалізовано",color:"#16a34a",type:"won"},
       {name:"Втрачено / відмова",color:"#dc2626",type:"lost"},
     ]},
+    /* воронка під заявки з clerk.tax */
+    {id:"accounting",name:"Бухгалтерія",services:ACC_SERVICES,stages:[
+      {name:"Новий лід",color:"#64748b",type:"active"},
+      {name:"1-й контакт",color:"#3b82f6",type:"active"},
+      {name:"Консультація проведена",color:"#6366f1",type:"active"},
+      {name:"Прорахунок вартості",color:"#8b5cf6",type:"active"},
+      {name:"Узгодження договору",color:"#0891b2",type:"active"},
+      {name:"Договір підписано",color:"#d97706",type:"active"},
+      {name:"На обслуговуванні",color:"#16a34a",type:"won"},
+      {name:"Втрачено / відмова",color:"#dc2626",type:"lost"},
+    ]},
   ],
 };
 
@@ -359,6 +381,17 @@ const pipeFor = (cfg,service) => { const p=(cfg.pipelines||[]).find(p=>(p.servic
 const allStages = cfg => [...cfg.stages,...(cfg.pipelines||[]).flatMap(p=>p.stages)];
 const typeNames = (cfg,t) => [...new Set(allStages(cfg).filter(s=>s.type===t).map(s=>s.name))];
 const stOf = (cfg,l) => pipeFor(cfg,l.service).find(s=>s.name===l.stage)||allStages(cfg).find(s=>s.name===l.stage);
+
+/* красивий вивід UTM-міток із заявки */
+const utmText = raw => {
+  if(!raw) return null;
+  try{
+    const o=typeof raw==="string"?JSON.parse(raw):raw;
+    const keys=Object.keys(o||{});
+    if(!keys.length) return null;
+    return keys.map(k=>k.replace("utm_","")+": "+o[k]).join(" · ");
+  }catch(e){ return String(raw); }
+};
 
 /* період: розбивка лідів по роках і місяцях за created_at */
 const MONTHS = ["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
@@ -433,6 +466,12 @@ function Shell({session}){
     if(cf&&cf.data&&cf.data.stages){
       const merged={...DEFAULT_CONFIG,...cf.data};
       if(!Array.isArray(merged.pipelines)||merged.pipelines.some(p=>!p||!p.id||!Array.isArray(p.stages)||!p.stages.length||!Array.isArray(p.services))) merged.pipelines=DEFAULT_CONFIG.pipelines;
+      /* МІГРАЦІЯ: воронки, доданi у новій версії, підтягуємо до збереженої конфігурації */
+      const missing=DEFAULT_CONFIG.pipelines.filter(dp=>!merged.pipelines.some(p=>p.id===dp.id));
+      if(missing.length){
+        merged.pipelines=[...merged.pipelines,...missing];
+        await db.from("crm_config").upsert({id:1,data:merged});
+      }
       setCfg(merged);
     }
     else { await db.from("crm_config").upsert({id:1,data:DEFAULT_CONFIG}); }
@@ -500,7 +539,7 @@ function Shell({session}){
 
   return <div className="app">
     <aside className="side">
-      <div className="brand"><div className="lg">🚗</div><div><b>{cfg.title}</b><span>Автоброкер · оцінка</span></div></div>
+      <div className="brand"><div className="lg">🚗</div><div><b>{cfg.title}</b><span>Авто · оцінка · бухгалтерія</span></div></div>
       <div className="nav">{NAV.map(([k,l,i])=><button key={k} className={view===k?"on":""} onClick={()=>setView(k)}><span style={{width:18,textAlign:"center"}}>{i}</span>{l}</button>)}</div>
       <button className="btn p" style={{marginTop:8}} onClick={()=>setAdd(true)}>+ Новий лід</button>
       <div className="who">{session.user.email}</div>
@@ -590,7 +629,7 @@ function Dash({leads:allLeads,cfg,openCard}){
     <div className="cols">
       <div className="panel"><div className="ph" style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>Ліди по етапах<select className="tsel" value={pid} onChange={e=>setPid(e.target.value)}><option value="main">🚗 Авто</option>{pipes.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div><div className="bars">{byStage.map(b=><div className="bar" key={b.name}><span className="lbl">{b.name}</span><div className="tr"><div className="fl" style={{width:b.c/maxS*100+"%",background:b.color}}/></div><span className="n">{b.c}</span></div>)}</div></div>
       <div className="panel">
-        <div className="ph">Типи послуг</div><div className="bars">{bySvc.length?bySvc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSv*100+"%",background:"#2563eb"}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Немає даних</span>}</div>
+        <div className="ph">Типи послуг</div><div className="bars">{bySvc.length?bySvc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSv*100+"%",background:isAcc(x.s)?"#c8a96e":"#2563eb"}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Немає даних</span>}</div>
         <div className="ph" style={{marginTop:18}}>Джерела</div><div className="bars">{bySrc.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxSr*100+"%",background:srcColor(x.s)}}/></div><span className="n">{x.c}</span></div>)}</div>
         <div className="ph" style={{marginTop:18}}>Причини відмов</div><div className="bars">{byLoss.length?byLoss.map(x=><div className="bar" key={x.s}><span className="lbl">{x.s}</span><div className="tr"><div className="fl" style={{width:x.c/maxL*100+"%",background:"#dc2626"}}/></div><span className="n">{x.c}</span></div>):<span className="muted small">Відмов ще немає 👍</span>}</div>
       </div>
@@ -603,7 +642,7 @@ function Dash({leads:allLeads,cfg,openCard}){
         <span className="muted small" style={{flexShrink:0}}>{l.next_action_note||""}</span>
         <span className="pill" style={{color:c,background:c+"22"}}>{st==="od"?"⚠ ":""}{fdt(l.next_action_at)}</span>
       </button>;})}{!due.length&&<span className="muted small">Запланованих дій немає. Відкрий лід → «Наступна дія», щоб нічого не загубити.</span>}</div></div>
-    <div className="panel"><div className="ph">Останні ліди</div><div className="recent">{recent.map(l=>{const st=stOf(cfg,l);return <button key={l.id} onClick={()=>openCard(l.id)}><span className="dot" style={{background:srcColor(l.source)}}>{(l.source||"?")[0]}</span><span className="rn">{l.name}</span><span className="muted small">{l.car_brand} {l.car_model}</span><span className="pill" style={{color:st&&st.color,background:(st?st.color:"#999")+"22"}}>{l.stage}</span><b style={{fontSize:13}}>{uah(l.fee)}</b></button>;})}{!recent.length&&<span className="muted small">Заявок ще немає</span>}</div></div>
+    <div className="panel"><div className="ph">Останні ліди</div><div className="recent">{recent.map(l=>{const st=stOf(cfg,l);return <button key={l.id} onClick={()=>openCard(l.id)}><span className="dot" style={{background:srcColor(l.source)}}>{(l.source||"?")[0]}</span><span className="rn">{l.name}</span><span className="muted small">{isAcc(l.service)?l.service:(l.car_brand||"")+" "+(l.car_model||"")}</span><span className="pill" style={{color:st&&st.color,background:(st?st.color:"#999")+"22"}}>{l.stage}</span><b style={{fontSize:13}}>{uah(l.fee)}</b></button>;})}{!recent.length&&<span className="muted small">Заявок ще немає</span>}</div></div>
   </>;
 }
 
@@ -628,7 +667,7 @@ function Funnel({leads,cfg,requestStage,openCard}){
       <div className="colsum">{uah(sum)}</div>
       <div className="colb">{col.map(l=>{const m=cfg.managers.find(x=>x.id===l.manager_id);const na=s.type==="active"?naState(l):null;return <div className={"kc"+(na==="od"?" od":"")} key={l.id} onClick={()=>openCard(l.id)}>
         <div className="top"><span className="nm">{l.name}</span><span className="dot" style={{background:srcColor(l.source),width:20,height:20}}>{(l.source||"?")[0]}</span></div>
-        <div className="meta">{l.car_brand} {l.car_model} {l.car_year||""}</div>
+        <div className="meta">{isAcc(l.service)?l.service:`${l.car_brand||""} ${l.car_model||""} ${l.car_year||""}`}</div>
         <div className="b">{uah(l.fee)}</div>
         {na&&<div className={"na "+na}>⏰ {fdt(l.next_action_at)}{l.next_action_note?" · "+l.next_action_note:""}</div>}
         <div className="ft">{m&&<span className="mini" style={{background:m.color}}>{m.name[0]}</span>}<span className="mg">{m?m.name:"—"}</span><span className="mv"><button onClick={e=>{e.stopPropagation();move(l,-1);}}>‹</button><button onClick={e=>{e.stopPropagation();move(l,1);}}>›</button></span></div>
@@ -641,36 +680,41 @@ function Funnel({leads,cfg,requestStage,openCard}){
 /* ============================ LEADS TABLE ============================ */
 function Leads({leads,cfg,openCard}){
   const [q,setQ]=useState(""),[fs,setFs]=useState(""),[fm,setFm]=useState(""),[fsv,setFsv]=useState("");
-  const [fy,setFy]=useState(""),[fmo,setFmo]=useState("");
+  const [fy,setFy]=useState(""),[fmo,setFmo]=useState(""),[fsrc,setFsrc]=useState("");
   const years=useMemo(()=>yearsFrom(leads),[leads]);
+  const srcList=useMemo(()=>[...new Set(leads.map(l=>l.source).filter(Boolean))].sort(),[leads]);
   const rows=useMemo(()=>leads.filter(l=>{
     if(!inPeriod(l,fy,fmo))return false;
     if(fs&&l.stage!==fs)return false; if(fm&&l.manager_id!==fm)return false; if(fsv&&l.service!==fsv)return false;
+    if(fsrc&&l.source!==fsrc)return false;
     if(q){const t=((l.name||"")+(l.phone||"")+(l.car_brand||"")+(l.car_model||"")+(l.vin||"")+(l.city||"")).toLowerCase();if(!t.includes(q.toLowerCase()))return false;}
     return true;
-  }),[leads,q,fs,fm,fsv,fy,fmo]);
+  }),[leads,q,fs,fm,fsv,fy,fmo,fsrc]);
   const sumFee=rows.reduce((a,l)=>a+(+l.fee||0),0);
   return <>
     <div className="filters">
       <div className="search"><span className="muted">⌕</span><input placeholder="Пошук: клієнт, телефон, авто, VIN…" value={q} onChange={e=>setQ(e.target.value)}/></div>
       <select value={fy} onChange={e=>setFy(e.target.value)}><option value="">Усі роки</option>{years.map(y=><option key={y} value={y}>{y}</option>)}</select>
       <select value={fmo} onChange={e=>setFmo(e.target.value)}><option value="">Усі місяці</option>{MONTHS.map((m,i)=><option key={i} value={i}>{m}</option>)}</select>
+      <select value={fsrc} onChange={e=>setFsrc(e.target.value)}><option value="">Усі джерела</option>{srcList.map(s=><option key={s}>{s}</option>)}</select>
       <select value={fs} onChange={e=>setFs(e.target.value)}><option value="">Усі етапи</option>{[...new Set(allStages(cfg).map(s=>s.name))].map(n=><option key={n}>{n}</option>)}</select>
       <select value={fsv} onChange={e=>setFsv(e.target.value)}><option value="">Усі послуги</option>{SERVICES.map(s=><option key={s}>{s}</option>)}</select>
       <select value={fm} onChange={e=>setFm(e.target.value)}><option value="">Усі менеджери</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select>
     </div>
     <div className="panel np"><div className="tw"><table>
-      <thead><tr><th>Клієнт</th><th>Авто</th><th>Послуга</th><th>Комісія</th><th>Менеджер</th><th>Етап</th><th>Дата</th></tr></thead>
+      <thead><tr><th>Клієнт</th><th>Авто / напрям</th><th>Послуга</th><th>Сума</th><th>Менеджер</th><th>Етап</th><th>Дата</th></tr></thead>
       <tbody>{rows.map(l=>{const s=stOf(cfg,l);const m=cfg.managers.find(x=>x.id===l.manager_id);return <tr key={l.id} onClick={()=>openCard(l.id)}>
         <td><div className="tn">{l.name}</div><div className="ts">{l.phone}</div></td>
-        <td><div className="tn">{l.car_brand} {l.car_model}</div><div className="ts">{l.car_year} {l.origin?"· "+l.origin:""}</div></td>
+        <td>{isAcc(l.service)
+          ? <><div className="tn">Бухгалтерія</div><div className="ts">{l.source||""}</div></>
+          : <><div className="tn">{l.car_brand} {l.car_model}</div><div className="ts">{l.car_year} {l.origin?"· "+l.origin:""}</div></>}</td>
         <td>{l.service||"—"}</td><td className="tn">{uah(l.fee)}</td>
         <td>{m?<span style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="mini" style={{background:m.color}}>{m.name[0]}</span>{m.name}</span>:"—"}</td>
         <td><span className="pill" style={{color:s&&s.color,background:(s?s.color:"#999")+"22"}}>{l.stage}</span></td>
         <td className="muted">{fdate(l.created_at)}{(()=>{const na=naState(l);if(!na)return null;const c=na==="od"?"#dc2626":na==="td"?"#d97706":"#94a3b8";return <div style={{fontSize:11,fontWeight:700,color:c,marginTop:3}}>⏰ {fdt(l.next_action_at)}</div>;})()}</td>
       </tr>;})}</tbody>
     </table>{!rows.length&&<div className="muted" style={{textAlign:"center",padding:30}}>Нічого не знайдено</div>}</div></div>
-    <div className="muted small">Показано {rows.length} із {leads.length} · сума комісій: <b style={{color:"var(--ink)"}}>{uah(sumFee)}</b></div>
+    <div className="muted small">Показано {rows.length} із {leads.length} · сума: <b style={{color:"var(--ink)"}}>{uah(sumFee)}</b></div>
   </>;
 }
 
@@ -720,7 +764,7 @@ function Settings({cfg,saveCfg}){
       {stages.map((s,i)=><div className="stl" key={i}><input type="color" className="ci" value={s.color} onChange={e=>col(i,e.target.value)}/><input className="gi" value={s.name} onChange={e=>ren(i,e.target.value)}/><select className="tsel" value={s.type} onChange={e=>typ(i,e.target.value)}><option value="active">активний</option><option value="won">виграно</option><option value="lost">втрачено</option></select><div className="reord"><button onClick={()=>mv(i,-1)}>▲</button><button onClick={()=>mv(i,1)}>▼</button></div><button className="ib d" onClick={()=>rm(i)}>🗑</button></div>)}
       <div className="addrow" style={{marginTop:12}}><input placeholder="Назва нового етапу" value={ns} onChange={e=>setNs(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addS()}/><button className="btn p" onClick={addS}>+ Етап</button></div>
     </div>
-    <div className="panel"><div className="ph">Інтеграція</div><p className="note">Заявки з сайту вже надходять у воронку (джерело «Сайт»). Лід автоматично потрапляє у воронку своєї послуги: Розмитнення, Договір, Оцінка, Оцінка + договір — окремі воронки, решта — «Авто». Для реклами Meta/TikTok/Google — налаштуй вебхук на endpoint, що пише в таблицю <b>leads</b> (як це робить форма на сайті).</p></div>
+    <div className="panel"><div className="ph">Інтеграція</div><p className="note">Заявки надходять із двох сайтів. <b>brokservisavto.com</b> — джерело «Сайт», лід іде у воронку своєї послуги: Розмитнення, Договір, Оцінка, Оцінка + договір, решта — «Авто». <b>clerk.tax</b> — джерело «clerk.tax», усі бухгалтерські послуги йдуть у воронку «Бухгалтерія». Розділити потоки можна фільтром за джерелом у розділі «Ліди». Для реклами Meta/TikTok/Google — налаштуй вебхук на endpoint, що пише в таблицю <b>leads</b>.</p></div>
   </>;
 }
 
@@ -751,6 +795,8 @@ function Card({lead,cfg,onClose,updateLead,requestStage,delLead}){
   useEffect(()=>{setF(lead);setNa(toLocal(lead.next_action_at));setNn(lead.next_action_note||"");},[lead.id]);
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
   const setService=v=>setF(p=>{const ps=pipeFor(cfg,v);const stage=ps.some(s=>s.name===p.stage)?p.stage:ps[0].name;return {...p,service:v,stage};});
+  const acc=isAcc(lead.service);
+  const accEdit=isAcc(f.service);
   const save=()=>{
     const ch=[];if(f.stage!==lead.stage)ch.push("етап → "+f.stage);
     const m1=cfg.managers.find(m=>m.id===f.manager_id);const m0=cfg.managers.find(m=>m.id===lead.manager_id);
@@ -776,6 +822,7 @@ function Card({lead,cfg,onClose,updateLead,requestStage,delLead}){
   const st=stOf(cfg,lead);
   const myStages=pipeFor(cfg,lead.service);
   const naSt=st&&st.type==="active"?naState(lead):null;
+  const utm=utmText(lead.utm);
   return <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
     <div className="sh"><div><div className="ttl">{lead.name}</div><div className="muted small">{lead.service} · {fdate(lead.created_at)} · {lead.source}</div></div>
       <div style={{display:"flex",gap:7}}>{!edit&&<button className="x" onClick={()=>setEdit(true)}>✎</button>}<button className="x" onClick={()=>{if(confirm("Видалити лід?"))delLead(lead.id);}}>🗑</button><button className="x" onClick={onClose}>×</button></div></div>
@@ -783,26 +830,34 @@ function Card({lead,cfg,onClose,updateLead,requestStage,delLead}){
       <span className="pill" style={{color:st&&st.color,background:(st?st.color:"#999")+"22",fontSize:13,padding:"6px 13px"}}>{lead.stage}</span>
       {!edit?<div className="ig" style={{marginTop:16}}>
         <I l="Телефон" v={lead.phone}/><I l="Email" v={lead.email||"—"}/><I l="Місто" v={lead.city||"—"}/><I l="Тип клієнта" v={lead.client_type||"—"}/>
-        <I l="Авто" v={`${lead.car_brand||""} ${lead.car_model||""} ${lead.car_year||""}`}/><I l="Походження" v={lead.origin||"—"}/>
-        <I l="VIN" v={lead.vin||"—"}/><I l="Пробіг" v={lead.mileage?(+lead.mileage).toLocaleString("uk-UA")+" км":"—"}/>
-        <I l="Бюджет на авто" v={lead.car_budget?usd(lead.car_budget):"—"}/><I l="Комісія / вартість" v={uah(lead.fee)}/>
+        {!acc&&<>
+          <I l="Авто" v={`${lead.car_brand||""} ${lead.car_model||""} ${lead.car_year||""}`}/><I l="Походження" v={lead.origin||"—"}/>
+          <I l="VIN" v={lead.vin||"—"}/><I l="Пробіг" v={lead.mileage?(+lead.mileage).toLocaleString("uk-UA")+" км":"—"}/>
+          <I l="Бюджет на авто" v={lead.car_budget?usd(lead.car_budget):"—"}/>
+        </>}
+        <I l={acc?"Вартість послуги":"Комісія / вартість"} v={uah(lead.fee)}/>
         <I l="Менеджер" v={(cfg.managers.find(m=>m.id===lead.manager_id)||{}).name||"не призначено"}/>
-        {lead.notes&&<div style={{gridColumn:"1/-1"}}><span className="muted small">Примітки</span><p style={{fontSize:13.5,marginTop:4}}>{lead.notes}</p></div>}
+        {lead.notes&&<div style={{gridColumn:"1/-1"}}><span className="muted small">Примітки</span><p style={{fontSize:13.5,marginTop:4,whiteSpace:"pre-line"}}>{lead.notes}</p></div>}
       </div>:<div className="fg" style={{marginTop:16}}>
         <F l="Ім'я"><input value={f.name||""} onChange={e=>set("name",e.target.value)}/></F>
         <F l="Телефон"><input value={f.phone||""} onChange={e=>set("phone",e.target.value)}/></F>
         <F l="Email"><input value={f.email||""} onChange={e=>set("email",e.target.value)}/></F>
         <F l="Місто"><input value={f.city||""} onChange={e=>set("city",e.target.value)}/></F>
         <F l="Тип клієнта"><select value={f.client_type||"Фіз. особа"} onChange={e=>set("client_type",e.target.value)}><option>Фіз. особа</option><option>Юр. особа</option></select></F>
-        <F l="Послуга"><select value={f.service||""} onChange={e=>setService(e.target.value)}>{SERVICES.map(s=><option key={s}>{s}</option>)}</select></F>
-        <F l="Марка"><input value={f.car_brand||""} onChange={e=>set("car_brand",e.target.value)}/></F>
-        <F l="Модель"><input value={f.car_model||""} onChange={e=>set("car_model",e.target.value)}/></F>
-        <F l="Рік"><input type="number" value={f.car_year||""} onChange={e=>set("car_year",e.target.value)}/></F>
-        <F l="Походження"><select value={f.origin||""} onChange={e=>set("origin",e.target.value)}><option value="">—</option>{ORIGINS.map(o=><option key={o}>{o}</option>)}</select></F>
-        <F l="VIN" full><input value={f.vin||""} onChange={e=>set("vin",e.target.value)}/></F>
-        <F l="Пробіг, км"><input type="number" value={f.mileage||""} onChange={e=>set("mileage",e.target.value)}/></F>
-        <F l="Бюджет, $"><input type="number" value={f.car_budget||""} onChange={e=>set("car_budget",e.target.value)}/></F>
-        <F l="Комісія, грн"><input type="number" value={f.fee||""} onChange={e=>set("fee",e.target.value)}/></F>
+        <F l="Послуга"><select value={f.service||""} onChange={e=>setService(e.target.value)}>
+          <optgroup label="Авто">{AUTO_SERVICES.map(s=><option key={s}>{s}</option>)}</optgroup>
+          <optgroup label="Бухгалтерія">{ACC_SERVICES.map(s=><option key={s}>{s}</option>)}</optgroup>
+        </select></F>
+        {!accEdit&&<>
+          <F l="Марка"><input value={f.car_brand||""} onChange={e=>set("car_brand",e.target.value)}/></F>
+          <F l="Модель"><input value={f.car_model||""} onChange={e=>set("car_model",e.target.value)}/></F>
+          <F l="Рік"><input type="number" value={f.car_year||""} onChange={e=>set("car_year",e.target.value)}/></F>
+          <F l="Походження"><select value={f.origin||""} onChange={e=>set("origin",e.target.value)}><option value="">—</option>{ORIGINS.map(o=><option key={o}>{o}</option>)}</select></F>
+          <F l="VIN" full><input value={f.vin||""} onChange={e=>set("vin",e.target.value)}/></F>
+          <F l="Пробіг, км"><input type="number" value={f.mileage||""} onChange={e=>set("mileage",e.target.value)}/></F>
+          <F l="Бюджет, $"><input type="number" value={f.car_budget||""} onChange={e=>set("car_budget",e.target.value)}/></F>
+        </>}
+        <F l={accEdit?"Вартість, грн":"Комісія, грн"}><input type="number" value={f.fee||""} onChange={e=>set("fee",e.target.value)}/></F>
         <F l="Джерело"><select value={f.source||""} onChange={e=>set("source",e.target.value)}>{Object.keys(SOURCES).map(s=><option key={s}>{s}</option>)}</select></F>
         <F l="Етап"><select value={f.stage} onChange={e=>set("stage",e.target.value)}>{pipeFor(cfg,f.service).map(s=><option key={s.name}>{s.name}</option>)}</select></F>
         <F l="Менеджер"><select value={f.manager_id||""} onChange={e=>set("manager_id",e.target.value)}><option value="">не призначено</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></F>
@@ -811,6 +866,7 @@ function Card({lead,cfg,onClose,updateLead,requestStage,delLead}){
       </div>}
       {!edit&&<>
         {lead.loss_reason&&<div className="lr">Причина відмови: <b>{lead.loss_reason}</b></div>}
+        {utm&&<div className="utm"><b>Звідки прийшов:</b> {utm}</div>}
         <div className="qs"><span className="muted small">Швидко етап:</span><select value={lead.stage} onChange={e=>requestStage(lead.id,e.target.value)}>{!myStages.some(s=>s.name===lead.stage)&&<option>{lead.stage}</option>}{myStages.map(s=><option key={s.name}>{s.name}</option>)}</select></div>
         <div className="rem">
           <div className="rt">⏰ Наступна дія {naSt==="od"&&<span style={{color:"#dc2626"}}>· прострочено!</span>}{naSt==="td"&&<span style={{color:"#d97706"}}>· сьогодні</span>}</div>
@@ -834,9 +890,10 @@ function Card({lead,cfg,onClose,updateLead,requestStage,delLead}){
 
 /* ============================ ADD LEAD ============================ */
 function AddLead({cfg,onClose,addLead}){
-  const [f,setF]=useState({name:"",phone:"",email:"",city:"",client_type:"Фіз. особа",service:"Підбір авто",car_brand:"",car_model:"",car_year:"",vin:"",origin:"США",car_budget:"",fee:"",source:"CRM",manager_id:"",stage:cfg.stages[0].name});
+  const [f,setF]=useState({name:"",phone:"",email:"",city:"",client_type:"Фіз. особа",service:"Підбір авто",car_brand:"",car_model:"",car_year:"",vin:"",origin:"США",car_budget:"",fee:"",source:"CRM",manager_id:"",stage:cfg.stages[0].name,notes:""});
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
   const setService=v=>setF(p=>{const ps=pipeFor(cfg,v);const stage=ps.some(s=>s.name===p.stage)?p.stage:ps[0].name;return {...p,service:v,stage};});
+  const acc=isAcc(f.service);
   const submit=()=>{if(!f.name.trim()){alert("Вкажіть ім'я");return;}addLead({...f,car_year:+f.car_year||null,car_budget:+f.car_budget||null,fee:+f.fee||null});};
   return <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
     <div className="sh"><div className="ttl">Новий лід</div><button className="x" onClick={onClose}>×</button></div>
@@ -846,16 +903,23 @@ function AddLead({cfg,onClose,addLead}){
       <F l="Email"><input value={f.email} onChange={e=>set("email",e.target.value)}/></F>
       <F l="Місто"><input value={f.city} onChange={e=>set("city",e.target.value)}/></F>
       <F l="Тип клієнта"><select value={f.client_type} onChange={e=>set("client_type",e.target.value)}><option>Фіз. особа</option><option>Юр. особа</option></select></F>
-      <F l="Послуга"><select value={f.service} onChange={e=>setService(e.target.value)}>{SERVICES.map(s=><option key={s}>{s}</option>)}</select></F>
-      <F l="Марка"><input value={f.car_brand} onChange={e=>set("car_brand",e.target.value)}/></F>
-      <F l="Модель"><input value={f.car_model} onChange={e=>set("car_model",e.target.value)}/></F>
-      <F l="Рік"><input type="number" value={f.car_year} onChange={e=>set("car_year",e.target.value)}/></F>
-      <F l="Походження"><select value={f.origin} onChange={e=>set("origin",e.target.value)}>{ORIGINS.map(o=><option key={o}>{o}</option>)}</select></F>
-      <F l="VIN" full><input value={f.vin} onChange={e=>set("vin",e.target.value)}/></F>
-      <F l="Бюджет, $"><input type="number" value={f.car_budget} onChange={e=>set("car_budget",e.target.value)}/></F>
-      <F l="Комісія, грн"><input type="number" value={f.fee} onChange={e=>set("fee",e.target.value)}/></F>
+      <F l="Послуга"><select value={f.service} onChange={e=>setService(e.target.value)}>
+        <optgroup label="Авто">{AUTO_SERVICES.map(s=><option key={s}>{s}</option>)}</optgroup>
+        <optgroup label="Бухгалтерія">{ACC_SERVICES.map(s=><option key={s}>{s}</option>)}</optgroup>
+      </select></F>
+      {!acc&&<>
+        <F l="Марка"><input value={f.car_brand} onChange={e=>set("car_brand",e.target.value)}/></F>
+        <F l="Модель"><input value={f.car_model} onChange={e=>set("car_model",e.target.value)}/></F>
+        <F l="Рік"><input type="number" value={f.car_year} onChange={e=>set("car_year",e.target.value)}/></F>
+        <F l="Походження"><select value={f.origin} onChange={e=>set("origin",e.target.value)}>{ORIGINS.map(o=><option key={o}>{o}</option>)}</select></F>
+        <F l="VIN" full><input value={f.vin} onChange={e=>set("vin",e.target.value)}/></F>
+        <F l="Бюджет, $"><input type="number" value={f.car_budget} onChange={e=>set("car_budget",e.target.value)}/></F>
+      </>}
+      <F l={acc?"Вартість, грн":"Комісія, грн"}><input type="number" value={f.fee} onChange={e=>set("fee",e.target.value)}/></F>
+      <F l="Джерело"><select value={f.source} onChange={e=>set("source",e.target.value)}><option>CRM</option>{Object.keys(SOURCES).map(s=><option key={s}>{s}</option>)}</select></F>
       <F l="Етап"><select value={f.stage} onChange={e=>set("stage",e.target.value)}>{pipeFor(cfg,f.service).map(s=><option key={s.name}>{s.name}</option>)}</select></F>
       <F l="Менеджер"><select value={f.manager_id} onChange={e=>set("manager_id",e.target.value)}><option value="">авто (по черзі)</option>{cfg.managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></F>
+      <F l="Примітки" full><textarea rows={3} value={f.notes} onChange={e=>set("notes",e.target.value)}/></F>
       <div className="fa full"><button className="btn g" onClick={onClose}>Скасувати</button><button className="btn p" onClick={submit}>+ Створити</button></div>
     </div></div>
   </div></div>;
