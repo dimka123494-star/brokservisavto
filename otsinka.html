@@ -18,7 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<!-- Зафіксована версія Tabler Icons для стабільності -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.28.0/tabler-icons.min.css">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
 <script>
@@ -363,12 +364,15 @@
     <h2>Залишити заявку на оцінку авто</h2>
     <p class="lead">Залиште контакти — зателефонуємо протягом 15 хвилин, назвемо точну ціну і термін. Що більше деталей по авто вкажете, то точніше прорахуємо.</p>
     <div class="form-box">
-      <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name">
-      <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel">
-      <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email">
-      <textarea id="lead-details" placeholder="Марка, модель, рік авто і мета оцінки: митниця, банк, продаж, суд"></textarea>
-      <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати прорахунок.</p>
-      <button class="btn-primary" onclick="sendLead()"><i class="ti ti-send"></i>Надіслати заявку</button>
+      <!-- Додано тег form з підтриманням відправки по Enter та атрибути accessibility -->
+      <form id="lead-form" onsubmit="event.preventDefault(); sendLead();">
+        <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name" aria-label="Ваше ім'я" required>
+        <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" aria-label="Ваш номер телефону" required>
+        <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email" aria-label="Ваш Email">
+        <textarea id="lead-details" placeholder="Марка, модель, рік авто і мета оцінки: митниця, банк, продаж, суд" aria-label="Деталі про авто та мету оцінки"></textarea>
+        <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати прорахунок.</p>
+        <button type="submit" class="btn-primary"><i class="ti ti-send"></i>Надіслати заявку</button>
+      </form>
       <p id="lead-status"></p>
     </div>
   </div>
@@ -441,10 +445,7 @@ async function sendLead(){
 
     status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
     status.style.color = '#1E8E3E';
-    document.getElementById('lead-name').value = '';
-    document.getElementById('lead-phone').value = '';
-    document.getElementById('lead-email').value = '';
-    document.getElementById('lead-details').value = '';
+    document.getElementById('lead-form').reset();
 
     if(typeof gtag === 'function'){
       const userData = { phone_number: phone };
