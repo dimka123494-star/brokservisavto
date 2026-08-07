@@ -19,7 +19,7 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "AutoRepair",
   "@id": "https://brokservisavto.com/#business",
   "name": "BROKSERVISAVTO",
   "image": "https://brokservisavto.com/logo.png",
@@ -33,6 +33,11 @@
     "addressLocality": "Київ",
     "postalCode": "03035",
     "addressCountry": "UA"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 50.4283,
+    "longitude": 30.4789
   },
   "openingHoursSpecification": [
     {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},
@@ -55,6 +60,7 @@
 }
 </script>
 
+<!-- Google Tag Manager / Ads (Optimized Loading) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -81,13 +87,13 @@
   :root {
     color-scheme: light only;
     --blue: #378ADD;
-    --blue-dark: #185FA5;
+    --blue-dark: #14508e;
     --navy: #0a0f1e;
     --white: #ffffff;
     --off-white: #f5f6fa;
     --text: #111827;
-    --text-muted: #6b7280;
-    --border: rgba(0,0,0,0.08);
+    --text-muted: #4b5563; /* Покращено контрастність для Google Accessibility */
+    --border: rgba(0,0,0,0.12);
     --radius: 12px;
   }
 
@@ -96,69 +102,69 @@
 
   /* NAV */
   nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,15,30,0.95); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; height:64px; border-bottom:0.5px solid rgba(255,255,255,0.08); }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; display:inline-flex; align-items:center; height:100%; }
   .nav-logo span { color:#fff; }
-  .nav-links { display:flex; gap:2rem; list-style:none; }
-  .nav-links a { color:rgba(255,255,255,0.62); text-decoration:none; font-size:13px; letter-spacing:0.5px; transition:color 0.2s; }
+  .nav-links { display:flex; gap:1.5rem; list-style:none; }
+  .nav-links a { color:rgba(255,255,255,0.75); text-decoration:none; font-size:14px; letter-spacing:0.5px; transition:color 0.2s; padding:10px 4px; display:inline-block; }
   .nav-links a:hover { color:#fff; }
-  .nav-cta { background:var(--blue); color:#fff; border:none; padding:9px 20px; border-radius:8px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:opacity 0.2s; }
+  .nav-cta { background:var(--blue); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:opacity 0.2s; min-height:40px; }
   .nav-cta:hover { opacity:0.88; }
 
   /* HERO */
-  .hero { background:var(--navy); min-height:100vh; display:flex; align-items:center; padding:100px 2rem 4rem; position:relative; overflow:hidden; }
+  .hero { background:var(--navy); min-height:100vh; display:flex; align-items:center; padding:110px 2rem 4rem; position:relative; overflow:hidden; }
   .hero-bg-ring { position:absolute; border-radius:50%; border:48px solid rgba(55,138,221,0.07); pointer-events:none; }
   .hero-bg-ring.r1 { width:600px; height:600px; top:-160px; right:-180px; }
   .hero-bg-ring.r2 { width:360px; height:360px; bottom:-100px; left:-120px; border-width:28px; opacity:0.5; }
   .hero-bg-ring.r3 { width:180px; height:180px; bottom:80px; right:120px; border-width:18px; opacity:0.3; }
   .hero-inner { max-width:1100px; margin:0 auto; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; position:relative; z-index:1; }
-  .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(55,138,221,0.15); color:#85B7EB; border:0.5px solid rgba(55,138,221,0.3); border-radius:20px; padding:5px 14px; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:1.5rem; }
+  .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(55,138,221,0.15); color:#9dc4f0; border:0.5px solid rgba(55,138,221,0.4); border-radius:20px; padding:6px 14px; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:1.5rem; }
   .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(44px,6.5vw,76px); line-height:0.97; color:#fff; margin-bottom:1.25rem; letter-spacing:1px; }
   .hero-title span { color:var(--blue); }
-  .hero-sub { font-size:16px; color:rgba(255,255,255,0.72); margin-bottom:1.5rem; max-width:440px; line-height:1.7; }
-  .hero-prices { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:2rem; }
-  .hero-price { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.07); border:0.5px solid rgba(255,255,255,0.16); border-radius:9px; padding:8px 14px; font-size:13px; color:#D5E2F2; }
-  .hero-price i { color:#85B7EB; font-size:15px; }
-  .hero-price b { color:#fff; font-weight:600; }
+  .hero-sub { font-size:16px; color:rgba(255,255,255,0.8); margin-bottom:1.5rem; max-width:440px; line-height:1.7; }
+  .hero-prices { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:2rem; }
+  .hero-price { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.08); border:0.5px solid rgba(255,255,255,0.2); border-radius:9px; padding:10px 14px; font-size:13px; color:#e0e9f5; }
+  .hero-price i { color:#85B7EB; font-size:16px; }
+  .hero-price b { color:#fff; font-weight:700; }
   .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
-  .btn-primary { background:var(--blue); color:#fff; border:none; padding:14px 28px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:opacity 0.2s, transform 0.15s; }
-  .btn-primary:hover { opacity:0.88; transform:translateY(-1px); }
-  .btn-ghost { background:transparent; color:rgba(255,255,255,0.85); border:0.5px solid rgba(255,255,255,0.3); padding:14px 28px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:border-color 0.2s,color 0.2s; }
-  .btn-ghost:hover { border-color:rgba(255,255,255,0.6); color:#fff; }
+  .btn-primary { background:var(--blue); color:#fff; border:none; padding:14px 28px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:opacity 0.2s, transform 0.15s; min-height:48px; }
+  .btn-primary:hover { opacity:0.9; transform:translateY(-1px); }
+  .btn-ghost { background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.4); padding:14px 28px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:border-color 0.2s,color 0.2s; min-height:48px; }
+  .btn-ghost:hover { border-color:#fff; background:rgba(255,255,255,0.05); }
   .hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .stat-card { background:rgba(255,255,255,0.04); border:0.5px solid rgba(255,255,255,0.1); border-radius:var(--radius); padding:1.5rem; }
+  .stat-card { background:rgba(255,255,255,0.05); border:0.5px solid rgba(255,255,255,0.15); border-radius:var(--radius); padding:1.5rem; }
   .stat-number { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--blue); line-height:1; margin-bottom:4px; }
-  .stat-label { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.4; }
+  .stat-label { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.4; }
 
   /* SECTIONS */
   section { padding:5rem 2rem; }
   .container { max-width:1100px; margin:0 auto; }
-  .section-eyebrow { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--blue-dark); font-weight:600; margin-bottom:0.5rem; }
+  .section-eyebrow { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--blue-dark); font-weight:700; margin-bottom:0.5rem; }
   .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,5vw,48px); line-height:1; margin-bottom:1rem; letter-spacing:0.5px; }
   .section-sub { font-size:15px; color:var(--text-muted); max-width:560px; line-height:1.7; margin-bottom:3rem; }
 
   /* SERVICES */
   .services { background:var(--white); }
-  .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
+  .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; }
   .service-card { background:var(--off-white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.75rem 1.5rem; transition:transform 0.2s; position:relative; overflow:hidden; text-decoration:none; color:var(--text); display:block; }
   .service-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--blue); transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
   .service-card:hover { transform:translateY(-4px); }
   .service-card:hover::before { transform:scaleX(1); }
-  .service-icon { width:48px; height:48px; background:rgba(55,138,221,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--blue); margin-bottom:1rem; }
-  .service-title { font-size:16px; font-weight:600; margin-bottom:6px; color:var(--text); }
-  .service-price { font-size:13px; font-weight:600; color:var(--blue-dark); margin-bottom:6px; }
-  .service-desc { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:0.9rem; }
-  .service-more { font-size:13px; color:var(--blue); display:flex; align-items:center; gap:4px; font-weight:500; }
+  .service-icon { width:48px; height:48px; background:rgba(55,138,221,0.12); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--blue-dark); margin-bottom:1rem; }
+  .service-title { font-size:17px; font-weight:700; margin-bottom:6px; color:var(--text); }
+  .service-price { font-size:13.5px; font-weight:700; color:var(--blue-dark); margin-bottom:6px; }
+  .service-desc { font-size:13.5px; color:var(--text-muted); line-height:1.6; margin-bottom:1rem; }
+  .service-more { font-size:13.5px; color:var(--blue-dark); display:flex; align-items:center; gap:4px; font-weight:600; }
 
   /* HOW */
   .how { background:var(--navy); color:#fff; }
   .how .section-title { color:#fff; }
-  .how .section-sub { color:rgba(255,255,255,0.6); }
+  .how .section-sub { color:rgba(255,255,255,0.7); }
   .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0; position:relative; }
   .step { padding:2rem 1.5rem; position:relative; }
-  .step:not(:last-child)::after { content:''; position:absolute; top:2.75rem; right:0; width:1px; height:32px; background:rgba(55,138,221,0.2); }
-  .step-num { font-family:'Bebas Neue',sans-serif; font-size:56px; color:rgba(55,138,221,0.22); line-height:1; margin-bottom:0.5rem; }
-  .step-title { font-size:15px; font-weight:500; color:#fff; margin-bottom:6px; }
-  .step-desc { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.5; }
+  .step:not(:last-child)::after { content:''; position:absolute; top:2.75rem; right:0; width:1px; height:32px; background:rgba(55,138,221,0.3); }
+  .step-num { font-family:'Bebas Neue',sans-serif; font-size:56px; color:rgba(55,138,221,0.35); line-height:1; margin-bottom:0.5rem; }
+  .step-title { font-size:16px; font-weight:600; color:#fff; margin-bottom:6px; }
+  .step-desc { font-size:13.5px; color:rgba(255,255,255,0.7); line-height:1.5; }
 
   /* CALC PROMO */
   .calc-promo { background:var(--off-white); }
@@ -166,45 +172,47 @@
   .promo-box::before { content:''; position:absolute; width:280px; height:280px; border-radius:50%; border:36px solid rgba(55,138,221,0.09); top:-90px; right:-70px; pointer-events:none; }
   .promo-text { flex:1; min-width:260px; position:relative; z-index:1; }
   .promo-text h3 { font-family:'Bebas Neue',sans-serif; font-size:clamp(26px,3.5vw,36px); color:#fff; line-height:1.05; margin-bottom:0.6rem; }
-  .promo-text p { font-size:14.5px; color:rgba(255,255,255,0.7); line-height:1.65; max-width:480px; }
+  .promo-text p { font-size:14.5px; color:rgba(255,255,255,0.75); line-height:1.65; max-width:480px; }
   .promo-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:1.1rem; }
-  .promo-tag { font-size:12.5px; color:#D5E2F2; background:rgba(255,255,255,0.08); border:0.5px solid rgba(255,255,255,0.15); border-radius:8px; padding:6px 12px; }
+  .promo-tag { font-size:12.5px; color:#D5E2F2; background:rgba(255,255,255,0.12); border:0.5px solid rgba(255,255,255,0.2); border-radius:8px; padding:6px 12px; }
   .promo-cta { position:relative; z-index:1; }
 
   /* CONTACTS */
   .contacts { background:var(--white); }
   .contacts-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
   .contact-block { background:var(--off-white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.75rem; }
-  .contact-block-title { font-size:14px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:1.25rem; }
+  .contact-block-title { font-size:13px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:1.25rem; }
   .contact-item { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:0.5px solid var(--border); }
   .contact-item:last-child { border-bottom:none; padding-bottom:0; }
-  .contact-icon-wrap { width:40px; height:40px; background:rgba(55,138,221,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--blue); flex-shrink:0; }
-  .contact-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; }
-  .contact-value { font-size:15px; font-weight:500; color:var(--text); text-decoration:none; display:block; }
-  .contact-value:hover { color:var(--blue); }
+  .contact-icon-wrap { width:40px; height:40px; background:rgba(55,138,221,0.12); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--blue-dark); flex-shrink:0; }
+  .contact-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; font-weight:600; }
+  .contact-value { font-size:15px; font-weight:600; color:var(--text); text-decoration:none; display:inline-block; padding:2px 0; }
+  .contact-value:hover { color:var(--blue-dark); }
   .socials-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .social-card { background:var(--off-white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.5rem; display:flex; align-items:center; gap:14px; text-decoration:none; color:var(--text); transition:transform 0.2s,border-color 0.2s; }
-  .social-card:hover { transform:translateY(-2px); border-color:rgba(55,138,221,0.3); }
+  .social-card { background:var(--off-white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.25rem 1.5rem; display:flex; align-items:center; gap:14px; text-decoration:none; color:var(--text); transition:transform 0.2s,border-color 0.2s; min-height:64px; }
+  .social-card:hover { transform:translateY(-2px); border-color:rgba(55,138,221,0.4); }
   .social-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-  .social-icon.tg { background:rgba(55,138,221,0.12); color:#185FA5; }
-  .social-icon.ig { background:rgba(212,83,126,0.12); color:#993556; }
-  .social-icon.fb { background:rgba(55,138,221,0.12); color:#185FA5; }
-  .social-net { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
-  .social-handle { font-size:14px; font-weight:500; margin-top:2px; }
+  .social-icon.tg { background:rgba(55,138,221,0.15); color:#104780; }
+  .social-icon.ig { background:rgba(212,83,126,0.15); color:#822645; }
+  .social-icon.fb { background:rgba(55,138,221,0.15); color:#104780; }
+  .social-net { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+  .social-handle { font-size:14px; font-weight:600; margin-top:2px; }
 
   /* SUBPAGES */
   .subpages { background:var(--white); }
-  .sub-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .sub-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
   .sub-card { background:var(--off-white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.5rem; text-decoration:none; color:var(--text); display:block; transition:transform 0.2s,border-color 0.2s; }
-  .sub-card:hover { transform:translateY(-4px); border-color:rgba(55,138,221,0.35); }
-  .sub-ic { font-size:24px; color:var(--blue); margin-bottom:0.75rem; }
-  .sub-t { font-size:16px; font-weight:600; margin-bottom:4px; }
-  .sub-d { font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:1rem; }
-  .sub-more { font-size:13px; color:var(--blue); display:flex; align-items:center; gap:4px; }
+  .sub-card:hover { transform:translateY(-4px); border-color:rgba(55,138,221,0.4); }
+  .sub-ic { font-size:24px; color:var(--blue-dark); margin-bottom:0.75rem; }
+  .sub-t { font-size:16px; font-weight:700; margin-bottom:4px; }
+  .sub-d { font-size:13.5px; color:var(--text-muted); line-height:1.5; margin-bottom:1rem; }
+  .sub-more { font-size:13.5px; color:var(--blue-dark); display:flex; align-items:center; gap:4px; font-weight:600; }
 
-  footer { background:var(--navy); color:rgba(255,255,255,0.55); text-align:center; padding:2rem; font-size:13px; }
-  footer span { color:var(--blue); }
-  footer a { color:rgba(255,255,255,0.7); text-decoration:none; }
+  /* FOOTER */
+  footer { background:var(--navy); color:rgba(255,255,255,0.65); text-align:center; padding:2.5rem 2rem; font-size:13.5px; }
+  footer span { color:var(--blue); font-weight:600; }
+  footer a { color:rgba(255,255,255,0.85); text-decoration:none; padding:6px 2px; display:inline-block; }
+  footer a:hover { color:#fff; text-decoration:underline; }
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
   .hero-badge { animation:fadeUp 0.5s ease both; }
@@ -222,6 +230,7 @@
     .hero-stats { grid-template-columns:1fr 1fr; }
     .contacts-grid { grid-template-columns:1fr; }
     .socials-grid { grid-template-columns:1fr; }
+    .social-card { grid-column:auto !important; }
     .nav-links { display:none; }
     .step::after { display:none; }
     .promo-box { padding:1.75rem; }
@@ -255,195 +264,197 @@
   </a>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg-ring r1"></div>
-  <div class="hero-bg-ring r2"></div>
-  <div class="hero-bg-ring r3"></div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-badge"><i class="ti ti-map-pin" aria-hidden="true"></i> Київ · Україна</div>
-      <h1 class="hero-title">Розмитнення, оцінка та<br><span>договір купівлі-продажу авто</span></h1>
-      <p class="hero-sub">Митне оформлення, офіційна оцінка та юридичне оформлення угод з автомобілями в Києві. Швидко, з юридичною силою документа.</p>
-      <div class="hero-prices">
-        <div class="hero-price"><i class="ti ti-chart-bar"></i>Оцінка від <b>2 000 грн</b></div>
-        <div class="hero-price"><i class="ti ti-file-description"></i>Договір від <b>2 500 грн</b></div>
-        <div class="hero-price"><i class="ti ti-clock"></i>Від <b>2 годин</b></div>
-      </div>
-      <div class="hero-btns">
-        <a href="tel:+380981722342" onclick="gtagCallConversion()" class="btn-primary"><i class="ti ti-phone" aria-hidden="true"></i>Зателефонувати</a>
-        <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="btn-ghost" target="_blank" rel="noopener"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Написати в Telegram</a>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">Авто успішно доставлено</div></div>
-      <div class="stat-card"><div class="stat-number">5+</div><div class="stat-label">Років на ринку</div></div>
-      <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Офіційне оформлення</div></div>
-      <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">На зв'язку для клієнтів</div></div>
-    </div>
-  </div>
-</section>
+<!-- MAIN WRAPPER FOR SEO ACCESSIBILITY -->
+<main>
 
-<!-- SERVICES -->
-<section class="services" id="services">
-  <div class="container">
-    <div class="section-eyebrow">Що ми робимо</div>
-    <h2 class="section-title">Наші послуги</h2>
-    <p class="section-sub">Все необхідне для придбання та легалізації автомобіля — в одному місці.</p>
-    <div class="services-grid">
-      <a href="/dogovir" class="service-card">
-        <div class="service-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
-        <div class="service-title">Договір купівлі-продажу</div>
-        <div class="service-price">від 2 500 грн · за 30 хвилин</div>
-        <div class="service-desc">Складання ДКП, перевірка авто по базах МВС та Interpol, супровід угоди в сервісному центрі або в нотаріуса.</div>
-        <div class="service-more">Детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
-      <a href="/rozmytnennya" class="service-card">
-        <div class="service-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
-        <div class="service-title">Розмитнення авто</div>
-        <div class="service-price">оформлення 1–5 днів</div>
-        <div class="service-desc">Повний супровід митного оформлення: розрахунок акцизу, мита та ПДВ, декларація, супровід на митниці.</div>
-        <div class="service-more">Калькулятор і деталі <i class="ti ti-arrow-right"></i></div>
-      </a>
-      <a href="/otsinka" class="service-card">
-        <div class="service-icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
-        <div class="service-title">Оцінка транспортних засобів</div>
-        <div class="service-price">від 2 000 грн · звіт за 2 години</div>
-        <div class="service-desc">Офіційна ринкова оцінка авто для митниці, банку, страхової, суду, нотаріуса або продажу.</div>
-        <div class="service-more">Детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
-      <a href="/avto-ssha" class="service-card">
-        <div class="service-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
-        <div class="service-title">Авто зі США під ключ</div>
-        <div class="service-price">Copart · IAAI · Manheim</div>
-        <div class="service-desc">Підбір на американських аукціонах, перевірка VIN, доставка та розмитнення — весь цикл в одних руках.</div>
-        <div class="service-more">Детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="how">
-  <div class="container">
-    <div class="section-eyebrow" style="color:#85B7EB;">Процес роботи</div>
-    <h2 class="section-title">Як це працює</h2>
-    <p class="section-sub">Чотири прості кроки від вибору до отримання ключів.</p>
-    <div class="steps">
-      <div class="step"><div class="step-num">01</div><div class="step-title">Консультація</div><div class="step-desc">Обговорюємо бюджет, побажання та підбираємо оптимальний варіант авто.</div></div>
-      <div class="step"><div class="step-num">02</div><div class="step-title">Купівля та доставка</div><div class="step-desc">Беремо участь в аукціоні, організовуємо транспортування до України.</div></div>
-      <div class="step"><div class="step-num">03</div><div class="step-title">Розмитнення</div><div class="step-desc">Оформлюємо всі митні документи та сплачуємо платежі.</div></div>
-      <div class="step"><div class="step-num">04</div><div class="step-title">Реєстрація</div><div class="step-desc">Ставимо авто на облік. Ви отримуєте ключі та всі документи.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- КАЛЬКУЛЯТОР — веде на /rozmytnennya -->
-<section class="calc-promo" id="calculator">
-  <div class="container">
-    <div class="section-eyebrow">Інструмент</div>
-    <h2 class="section-title">Калькулятор розмитнення</h2>
-    <p class="section-sub">Порахуйте акциз, мито та ПДВ за актуальними ставками 2026 року — з курсом НБУ та розшифровкою кожного платежу.</p>
-    <div class="promo-box">
-      <div class="promo-text">
-        <h3>Дізнайтесь вартість розмитнення за хвилину</h3>
-        <p>Вкажіть тип пального, об'єм двигуна або ємність батареї, рік випуску та вартість авто — калькулятор покаже суму кожного платежу окремо, включно з пенсійним збором і сертифікацією.</p>
-        <div class="promo-tags">
-          <span class="promo-tag">Бензин і дизель</span>
-          <span class="promo-tag">Електромобілі та гібриди</span>
-          <span class="promo-tag">Курс НБУ онлайн</span>
-        </div>
-      </div>
-      <div class="promo-cta">
-        <a href="/rozmytnennya#kalkulyator" class="btn-primary"><i class="ti ti-calculator" aria-hidden="true"></i>Відкрити калькулятор</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACTS -->
-<section class="contacts" id="contacts">
-  <div class="container">
-    <div class="section-eyebrow">Зв'язок</div>
-    <h2 class="section-title">Контакти</h2>
-    <p class="section-sub">Напишіть або зателефонуйте — відповідаємо швидко.</p>
-    <div class="contacts-grid">
-      <div class="contact-block">
-        <div class="contact-block-title">Прямий зв'язок</div>
-        <div class="contact-item">
-          <div class="contact-icon-wrap"><i class="ti ti-phone" aria-hidden="true"></i></div>
-          <div><div class="contact-label">Телефон</div>
-            <a href="tel:+380981722342" onclick="gtagCallConversion()" class="contact-value">+38 098 172 23 42</a></div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon-wrap"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
-          <div><div class="contact-label">Telegram</div>
-            <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="contact-value" target="_blank" rel="noopener">@Dimakrykun95</a></div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon-wrap"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
-          <div><div class="contact-label">Адреса</div>
-            <span class="contact-value">вул. Солом'янська, 5, Київ</span></div>
-        </div>
-      </div>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg-ring r1"></div>
+    <div class="hero-bg-ring r2"></div>
+    <div class="hero-bg-ring r3"></div>
+    <div class="hero-inner">
       <div>
-        <div class="contact-block-title">Соціальні мережі</div>
-        <div class="socials-grid">
-          <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="social-card" target="_blank" rel="noopener">
-            <div class="social-icon tg"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
-            <div><div class="social-net">Telegram</div><div class="social-handle">@Dimakrykun95</div></div>
-          </a>
-          <a href="https://instagram.com/brokservisavto" class="social-card" target="_blank" rel="noopener">
-            <div class="social-icon ig"><i class="ti ti-brand-instagram" aria-hidden="true"></i></div>
-            <div><div class="social-net">Instagram</div><div class="social-handle">@brokservisavto</div></div>
-          </a>
-          <!-- ⚠️ ЗАМІНИ href НА ПРЯМЕ ПОСИЛАННЯ НА СВОЮ СТОРІНКУ FACEBOOK
-               (відкрий її у браузері й скопіюй адресу з рядка,
-                вигляду https://www.facebook.com/НазваСторінки) -->
-          <a href="https://www.facebook.com/search/top?q=%D0%84%D0%B2%D1%80%D0%BE%D0%BF%D0%B0%20%D1%82%D1%80%D0%B0%D0%BD%D1%81%20%D0%B3%D1%80%D1%83%D0%BF" class="social-card" target="_blank" rel="noopener" style="grid-column:span 2;">
-            <div class="social-icon fb"><i class="ti ti-brand-facebook" aria-hidden="true"></i></div>
-            <div><div class="social-net">Facebook</div><div class="social-handle">Європа транс груп</div></div>
-          </a>
+        <div class="hero-badge"><i class="ti ti-map-pin" aria-hidden="true"></i> Київ · Солом'янська, 5</div>
+        <h1 class="hero-title">Розмитнення, оцінка та<br><span>договір купівлі-продажу авто</span></h1>
+        <p class="hero-sub">Митне оформлення, офіційна оцінка та юридичне оформлення угод з автомобілями в Києві. Швидко, з юридичною силою документа.</p>
+        <div class="hero-prices">
+          <div class="hero-price"><i class="ti ti-chart-bar" aria-hidden="true"></i>Оцінка від <b>2 000 грн</b></div>
+          <div class="hero-price"><i class="ti ti-file-description" aria-hidden="true"></i>Договір від <b>2 500 грн</b></div>
+          <div class="hero-price"><i class="ti ti-clock" aria-hidden="true"></i>Від <b>30 хвилин</b></div>
+        </div>
+        <div class="hero-btns">
+          <a href="tel:+380981722342" onclick="gtagCallConversion()" class="btn-primary"><i class="ti ti-phone" aria-hidden="true"></i>Зателефонувати</a>
+          <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="btn-ghost" target="_blank" rel="noopener"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Написати в Telegram</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">Авто успішно оформлено</div></div>
+        <div class="stat-card"><div class="stat-number">5+</div><div class="stat-label">Років на ринку Києва</div></div>
+        <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Офіційні документи</div></div>
+        <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Консультація спеціаліста</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-eyebrow">Що ми робимо</div>
+      <h2 class="section-title">Наші послуги</h2>
+      <p class="section-sub">Все необхідне для придбання, перевірки та легалізації автомобіля — в одному місці.</p>
+      <div class="services-grid">
+        <a href="/dogovir" class="service-card">
+          <div class="service-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
+          <div class="service-title">Договір купівлі-продажу</div>
+          <div class="service-price">від 2 500 грн · за 30 хвилин</div>
+          <div class="service-desc">Складання ДКП, перевірка авто по базах МВС та Interpol, супровід угоди в сервісному центрі або в нотаріуса.</div>
+          <div class="service-more">Детальніше про ДКП <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+        <a href="/rozmytnennya" class="service-card">
+          <div class="service-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+          <div class="service-title">Розмитнення авто</div>
+          <div class="service-price">оформлення 1–5 днів</div>
+          <div class="service-desc">Повний супровід митного оформлення: розрахунок акцизу, мита та ПДВ, декларація, супровід на митниці.</div>
+          <div class="service-more">Калькулятор і деталі <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+        <a href="/otsinka" class="service-card">
+          <div class="service-icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+          <div class="service-title">Оцінка транспортних засобів</div>
+          <div class="service-price">від 2 000 грн · звіт за 2 години</div>
+          <div class="service-desc">Офіційна ринкова оцінка авто для митниці, банку, страхової, суду, нотаріуса або продажу.</div>
+          <div class="service-more">Детальніше про оцінку <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+        <a href="/avto-ssha" class="service-card">
+          <div class="service-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="service-title">Авто зі США під ключ</div>
+          <div class="service-price">Copart · IAAI · Manheim</div>
+          <div class="service-desc">Підбір на американських аукціонах, перевірка VIN, доставка та розмитнення — весь цикл в одних руках.</div>
+          <div class="service-more">Детальніше про авто зі США <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-eyebrow" style="color:#85B7EB;">Процес роботи</div>
+      <h2 class="section-title">Як це працює</h2>
+      <p class="section-sub">Чотири прості кроки від звернення до отримання готових документів.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><div class="step-title">Консультація</div><div class="step-desc">Обговорюємо задачу, розраховуємо точну вартість послуг і перевіряємо документи.</div></div>
+        <div class="step"><div class="step-num">02</div><div class="step-title">Підготовка документів</div><div class="step-desc">Готуємо договір, оціночний звіт або митну декларацію.</div></div>
+        <div class="step"><div class="step-num">03</div><div class="step-title">Перевірка та підписання</div><div class="step-desc">Проводимо перевірку за базами МВС, підписуємо угоду у зручний час.</div></div>
+        <div class="step"><div class="step-num">04</div><div class="step-title">Фінальний результат</div><div class="step-desc">Ви отримуєте повністю легальні документи та готові до перереєстрації.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАЛЬКУЛЯТОР -->
+  <section class="calc-promo" id="calculator">
+    <div class="container">
+      <div class="section-eyebrow">Інструмент</div>
+      <h2 class="section-title">Калькулятор розмитнення</h2>
+      <p class="section-sub">Порахуйте акциз, мито та ПДВ за актуальними ставками 2026 року — з курсом НБУ та розшифровкою кожного платежу.</p>
+      <div class="promo-box">
+        <div class="promo-text">
+          <h3>Дізнайтесь вартість розмитнення за хвилину</h3>
+          <p>Вкажіть тип пального, об'єм двигуна або ємність батареї, рік випуску та вартість авто — калькулятор покаже суму кожного платежу окремо, включно з пенсійним збором і сертифікацією.</p>
+          <div class="promo-tags">
+            <span class="promo-tag">Бензин і дизель</span>
+            <span class="promo-tag">Електромобілі та гібриди</span>
+            <span class="promo-tag">Курс НБУ онлайн</span>
+          </div>
+        </div>
+        <div class="promo-cta">
+          <a href="/rozmytnennya#kalkulyator" class="btn-primary"><i class="ti ti-calculator" aria-hidden="true"></i>Відкрити калькулятор</a>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SUBPAGES -->
-<section class="subpages">
-  <div class="container">
-    <div class="section-eyebrow">Детальніше</div>
-    <h2 class="section-title">Дізнайтесь більше про кожну послугу</h2>
-    <p class="section-sub">Детальні сторінки з цінами, документами, FAQ та покроковими інструкціями.</p>
-    <div class="sub-grid">
-      <a href="/rozmytnennya" class="sub-card">
-        <div class="sub-ic"><i class="ti ti-shield-check"></i></div>
-        <div class="sub-t">Розмитнення авто</div>
-        <div class="sub-d">Калькулятор, формули акцизу, документи, FAQ — усе, що потрібно знати.</div>
-        <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
-      <a href="/otsinka" class="sub-card">
-        <div class="sub-ic"><i class="ti ti-chart-bar"></i></div>
-        <div class="sub-t">Оцінка авто</div>
-        <div class="sub-d">Від 2 000 грн: для митниці, банку, страхової, суду або продажу.</div>
-        <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
-      <a href="/dogovir" class="sub-card">
-        <div class="sub-ic"><i class="ti ti-file-description"></i></div>
-        <div class="sub-t">Договір купівлі-продажу</div>
-        <div class="sub-d">Від 2 500 грн, безкоштовний зразок ДКП 2026 і супровід угоди.</div>
-        <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
-      <a href="/avto-ssha" class="sub-card">
-        <div class="sub-ic"><i class="ti ti-world"></i></div>
-        <div class="sub-t">Авто зі США під ключ</div>
-        <div class="sub-d">Copart, IAAI, доставка, розмитнення — весь процес від А до Я.</div>
-        <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right"></i></div>
-      </a>
+  <!-- CONTACTS -->
+  <section class="contacts" id="contacts">
+    <div class="container">
+      <div class="section-eyebrow">Зв'язок</div>
+      <h2 class="section-title">Контакти</h2>
+      <p class="section-sub">Напишіть або зателефонуйте — відповідаємо оперативно.</p>
+      <div class="contacts-grid">
+        <div class="contact-block">
+          <div class="contact-block-title">Прямий зв'язок</div>
+          <div class="contact-item">
+            <div class="contact-icon-wrap"><i class="ti ti-phone" aria-hidden="true"></i></div>
+            <div><div class="contact-label">Телефон</div>
+              <a href="tel:+380981722342" onclick="gtagCallConversion()" class="contact-value">+38 098 172 23 42</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon-wrap"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+            <div><div class="contact-label">Telegram</div>
+              <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="contact-value" target="_blank" rel="noopener">@Dimakrykun95</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon-wrap"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+            <div><div class="contact-label">Адреса</div>
+              <span class="contact-value">вул. Солом'янська, 5, Київ</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="contact-block-title">Соціальні мережі</div>
+          <div class="socials-grid">
+            <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="social-card" target="_blank" rel="noopener">
+              <div class="social-icon tg"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+              <div><div class="social-net">Telegram</div><div class="social-handle">@Dimakrykun95</div></div>
+            </a>
+            <a href="https://instagram.com/brokservisavto" class="social-card" target="_blank" rel="noopener">
+              <div class="social-icon ig"><i class="ti ti-brand-instagram" aria-hidden="true"></i></div>
+              <div><div class="social-net">Instagram</div><div class="social-handle">@brokservisavto</div></div>
+            </a>
+            <a href="https://www.facebook.com/search/top?q=%D0%84%D0%B2%D1%80%D0%BE%D0%BF%D0%B0%20%D1%82%D1%80%D0%B0%D0%BD%D1%81%20%D0%B3%D1%80%D1%83%D0%BF" class="social-card" target="_blank" rel="noopener" style="grid-column:span 2;">
+              <div class="social-icon fb"><i class="ti ti-brand-facebook" aria-hidden="true"></i></div>
+              <div><div class="social-net">Facebook</div><div class="social-handle">Європа транс груп</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- SUBPAGES -->
+  <section class="subpages">
+    <div class="container">
+      <div class="section-eyebrow">Детальніше</div>
+      <h2 class="section-title">Дізнайтесь більше про кожну послугу</h2>
+      <p class="section-sub">Детальні сторінки з цінами, документами, FAQ та покроковими інструкціями.</p>
+      <div class="sub-grid">
+        <a href="/rozmytnennya" class="sub-card">
+          <div class="sub-ic"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+          <div class="sub-t">Розмитнення авто</div>
+          <div class="sub-d">Калькулятор, формули акцизу, документи, FAQ — усе, що потрібно знати.</div>
+          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+        <a href="/otsinka" class="sub-card">
+          <div class="sub-ic"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+          <div class="sub-t">Оцінка авто</div>
+          <div class="sub-d">Від 2 000 грн: для митниці, банку, страхової, суду або продажу.</div>
+          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+        <a href="/dogovir" class="sub-card">
+          <div class="sub-ic"><i class="ti ti-file-description" aria-hidden="true"></i></div>
+          <div class="sub-t">Договір купівлі-продажу</div>
+          <div class="sub-d">Від 2 500 грн, безкоштовний зразок ДКП 2026 і супровід угоди.</div>
+          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+        <a href="/avto-ssha" class="sub-card">
+          <div class="sub-ic"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="sub-t">Авто зі США під ключ</div>
+          <div class="sub-d">Copart, IAAI, доставка, розмитнення — весь процес від А до Я.</div>
+          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
 
 <footer>
   <p>© 2026 <span>BROKSERVISAVTO</span> · вул. Солом'янська, 5, Київ · <a href="tel:+380981722342">+38 098 172 23 42</a> · <a href="mailto:custom@forwardcarua.com">custom@forwardcarua.com</a></p>
