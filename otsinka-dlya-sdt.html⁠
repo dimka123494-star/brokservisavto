@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Оцінка авто для Сервісного Центру МВС (ТСЦ) у Києві — від 2 000 грн | BROKSERVISAVTO</title>
+<meta name="description" content="Офіційна експертна оцінка авто для переоформлення в Сервісному Центрі МВС (ТСЦ) у Києві. Звіт від 2 годин, сертифіковані оцінювачі СОД. Солом'янська, 5. ☎ +38 098 172 23 42">
+<link rel="canonical" href="https://brokservisavto.com/otsinka-dlya-sdt">
+
+<meta property="og:title" content="Оцінка авто для Сервісного Центру МВС (ТСЦ) у Києві | BROKSERVISAVTO">
+<meta property="og:description" content="Офіційний звіт з оцінки транспортного засобу для подачі в ТСЦ МВС при продажу чи переоформленні. Готово від 2 годин.">
+<meta property="og:url" content="https://brokservisavto.com/otsinka-dlya-sdt">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="uk_UA">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.28.0/tabler-icons.min.css">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18171698074');
+  function gtagCallConversion() { gtag('event','conversion',{'send_to':'AW-18171698074/call'}); return true; }
+  function gtagTelegramConversion() { gtag('event','conversion',{'send_to':'AW-18171698074/telegram'}); return true; }
+</script>
+
+<!-- Schema.org: бізнес + послуга з ціною -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://brokservisavto.com/#business",
+  "name": "BROKSERVISAVTO",
+  "url": "https://brokservisavto.com",
+  "telephone": "+380981722342",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "вулиця Солом'янська, 5",
+    "addressLocality": "Київ",
+    "addressCountry": "UA"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Київ" },
+    { "@type": "Country", "name": "Ukraine" }
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "itemListElement": [{
+      "@type": "Offer",
+      "price": "2000",
+      "priceCurrency": "UAH",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Оцінка авто для Сервісного Центру МВС (ТСЦ)",
+        "url": "https://brokservisavto.com/otsinka-dlya-sdt",
+        "description": "Офіційна експертна оцінка автомобіля для розрахунку податку та переоформлення в Сервісних Центрах МВС України. Від 2 000 грн.",
+        "provider": { "@type": "LocalBusiness", "name": "BROKSERVISAVTO" },
+        "areaServed": { "@type": "City", "name": "Київ" }
+      }
+    }]
+  }
+}
+</script>
+
+<!-- Schema.org: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Коли потрібна оцінка авто для Сервісного Центру МВС (ТСЦ)?","acceptedAnswer":{"@type":"Answer","text":"Оцінка обов'язкова при продажу другого (податок 5%) та третього чи наступного (податок 18%) легкого авто протягом року, а також при продажу будь-якого вантажного авто, автобуса чи спецтехніки."}},
+    {"@type":"Question","name":"Скільки коштує оцінка автомобіля для ТСЦ МВС?","acceptedAnswer":{"@type":"Answer","text":"Оцінка легкового авто для СЦ МВС коштує від 2 000 грн. Звіт готується від 2 годин і містить усі необхідні витяги з реєстрів ФДМУ."}},
+    {"@type":"Question","name":"Чи приймають ваші звіти в усіх Сервісних Центрах МВС Києва?","acceptedAnswer":{"@type":"Answer","text":"Так, наші звіти виконуються атестованими оцінювачами СОД (Суб'єкт оціночної діяльності) з внесенням до бази ФДМУ, тому їх без зауважень приймають адміністратори всіх ТСЦ Києва та України."}},
+    {"@type":"Question","name":"Скільки часу дійсний звіт з оцінки для МВС?","acceptedAnswer":{"@type":"Answer","text":"Звіт про оцінку транспортного засобу для ТСЦ МВС дійсний протягом 6 місяців з дати його складання."}},
+    {"@type":"Question","name":"Чи потрібно приганяти автомобіля до вашого офісу?","acceptedAnswer":{"@type":"Answer","text":"У більшості випадків приїжджати не обов'язково. Оцінку для Сервісного Центру можна оформити дистанційно по фото та копіях документів."}}
+  ]
+}
+</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { color-scheme: light only; --blue:#378ADD; --navy:#0a0f1e; --white:#fff; --off:#f5f6fa; --text:#111827; --muted:#6b7280; --border:rgba(0,0,0,0.08); --r:12px; }
+  html { scroll-behavior: smooth; }
+  body { font-family:'Manrope',sans-serif; background:var(--off); color:var(--text); line-height:1.6; overflow-x:hidden; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,15,30,0.96); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; height:64px; border-bottom:0.5px solid rgba(255,255,255,0.08); }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; }
+  .nav-logo span { color:#fff; }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { color:rgba(255,255,255,0.6); text-decoration:none; font-size:13px; transition:color 0.2s; }
+  .nav-links a:hover { color:#fff; }
+  .nav-cta { background:var(--blue); color:#fff; border:none; padding:9px 20px; border-radius:8px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+  .hero { background:var(--navy); padding:120px 2rem 5rem; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-80px; right:-100px; width:400px; height:400px; border-radius:50%; border:40px solid rgba(55,138,221,0.08); pointer-events:none; }
+  .hero-inner { max-width:860px; margin:0 auto; position:relative; z-index:1; }
+  .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(55,138,221,0.15); color:#85B7EB; border:0.5px solid rgba(55,138,221,0.3); border-radius:20px; padding:5px 14px; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:1.5rem; }
+  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(42px,6vw,72px); line-height:1; color:#fff; margin-bottom:1rem; }
+  h1 span { color:var(--blue); }
+  .hero-sub { font-size:16px; color:rgba(255,255,255,0.72); max-width:600px; line-height:1.7; margin-bottom:1.5rem; }
+  .hero-facts { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:2rem; }
+  .hero-fact { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.07); border:0.5px solid rgba(255,255,255,0.16); border-radius:9px; padding:8px 14px; font-size:13px; color:#D5E2F2; }
+  .hero-fact i { color:#85B7EB; font-size:16px; }
+  .hero-fact b { color:#fff; font-weight:600; }
+  .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-primary { background:var(--blue); color:#fff; border:none; padding:13px 26px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:opacity 0.2s; }
+  .btn-primary:hover { opacity:0.88; }
+  .btn-ghost { background:transparent; color:rgba(255,255,255,0.85); border:0.5px solid rgba(255,255,255,0.3); padding:13px 26px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+  .btn-ghost:hover { border-color:rgba(255,255,255,0.6); color:#fff; }
+  section { padding:4rem 2rem; }
+  .container { max-width:900px; margin:0 auto; }
+  .eyebrow { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--blue); font-weight:600; margin-bottom:0.5rem; }
+  h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,4vw,42px); margin-bottom:0.75rem; }
+  h3 { font-size:16px; font-weight:600; }
+  .lead { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:2.5rem; max-width:640px; }
+  .text-block p { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:1rem; max-width:720px; }
+
+  /* Ціни */
+  .price-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-bottom:1.5rem; }
+  .price-card { background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); padding:1.5rem; }
+  .price-card.accent { border:1.5px solid var(--blue); }
+  .price-card .label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+  .price-card .value { font-family:'Bebas Neue',sans-serif; font-size:40px; line-height:1; color:var(--navy); }
+  .price-card .value span { font-size:20px; color:var(--blue); }
+  .price-card .note { font-size:13px; color:var(--muted); line-height:1.55; margin-top:8px; }
+  .price-table { width:100%; border-collapse:collapse; font-size:14px; background:var(--white); border-radius:var(--r); overflow:hidden; border:0.5px solid var(--border); }
+  .price-table th { background:var(--navy); color:#fff; text-align:left; padding:12px 16px; font-weight:600; font-size:13px; }
+  .price-table td { padding:12px 16px; border-bottom:0.5px solid var(--border); color:var(--muted); }
+  .price-table td:first-child { color:var(--text); font-weight:500; }
+  .price-table tr:last-child td { border-bottom:none; }
+  .table-wrap { overflow-x:auto; }
+
+  .purposes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-bottom:2rem; }
+  .purpose-card { background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); padding:1.25rem 1.5rem; }
+  .purpose-card h3 { font-size:15px; font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .purpose-card h3 i { color:var(--blue); font-size:18px; }
+  .purpose-card p { font-size:13px; color:var(--muted); line-height:1.55; }
+  .how-list { display:flex; flex-direction:column; gap:10px; margin-bottom:2rem; }
+  .how-item { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:1rem 1.25rem; display:flex; gap:14px; align-items:flex-start; }
+  .how-num { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--blue); line-height:1; min-width:28px; }
+  .how-text { font-size:14px; color:var(--muted); line-height:1.55; padding-top:2px; }
+  .trust-box { background:var(--navy); border-radius:var(--r); padding:1.5rem; color:#fff; margin-bottom:2rem; display:flex; gap:1.5rem; align-items:flex-start; }
+  .trust-box i { color:#85B7EB; font-size:28px; flex-shrink:0; margin-top:4px; }
+  .trust-box h3 { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; margin-bottom:6px; }
+  .trust-box p { font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .docs-list { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:1.5rem; }
+  .docs-list li { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:0.85rem 1.15rem; font-size:14px; color:var(--muted); display:flex; gap:10px; align-items:flex-start; }
+  .docs-list li i { color:var(--blue); font-size:17px; flex-shrink:0; margin-top:2px; }
+  .faq-list { display:flex; flex-direction:column; gap:12px; }
+  .faq-item { background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); padding:1.25rem 1.5rem; }
+  .faq-q { font-size:15px; font-weight:600; margin-bottom:6px; }
+  .faq-a { font-size:14px; color:var(--muted); line-height:1.6; }
+
+  /* Форма */
+  .form-box { max-width:520px; }
+  .form-box input, .form-box textarea { width:100%; padding:13px 15px; border:0.5px solid var(--border); border-radius:10px; margin-bottom:10px; font-family:'Manrope',sans-serif; font-size:15px; background:var(--white); color:var(--text); }
+  .form-box textarea { resize:vertical; min-height:88px; line-height:1.5; }
+  .form-box .field-hint { font-size:12.5px; color:var(--muted); margin:2px 0 12px; }
+  .form-box button { width:100%; justify-content:center; }
+  #lead-status { margin-top:10px; font-size:14px; }
+
+  .cta-section { background:var(--navy); color:#fff; text-align:center; }
+  .cta-section h2 { color:#fff; }
+  .cta-section p { color:rgba(255,255,255,0.65); margin-bottom:2rem; font-size:15px; }
+  .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  footer { background:#060a14; color:rgba(255,255,255,0.45); text-align:center; padding:1.5rem; font-size:13px; }
+  footer span { color:var(--blue); }
+  .back-link { display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,0.6); text-decoration:none; font-size:13px; margin-bottom:1.5rem; transition:color 0.2s; }
+  .back-link:hover { color:#fff; }
+  .internal-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-top:2rem; }
+  .internal-link { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:1rem 1.25rem; text-decoration:none; color:var(--text); display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500; transition:border-color 0.2s; }
+  .internal-link:hover { border-color:var(--blue); }
+  .internal-link i { color:var(--blue); font-size:18px; }
+  @media(max-width:768px) { .nav-links { display:none; } .trust-box { flex-direction:column; } section { padding:3rem 1.25rem; } .hero { padding:100px 1.25rem 3.5rem; } }
+
+  /* Блокуємо автоматичну темну тему браузера */
+  @media (prefers-color-scheme: dark){
+    html, body { background:var(--off) !important; color:var(--text) !important; }
+    .purpose-card, .how-item, .faq-item, .internal-link, .price-card,
+    .price-table, .docs-list li, .form-box input, .form-box textarea { background:var(--white) !important; color:var(--text) !important; }
+    .faq-a, .purpose-card p, .how-text, .lead, .text-block p, .price-card .note, .docs-list li { color:var(--muted) !important; }
+    h2, h3, .faq-q, .price-card .value { color:var(--navy) !important; }
+    .hero h1, .cta-section h2, .trust-box h3 { color:#fff !important; }
+    .price-table th { background:var(--navy) !important; color:#fff !important; }
+    .form-box input::placeholder, .form-box textarea::placeholder { color:#8A93A6 !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">BROK<span>SERVIS</span>AVTO</a>
+  <ul class="nav-links">
+    <li><a href="/">Головна</a></li>
+    <li><a href="/rozmytnennya">Розмитнення</a></li>
+    <li><a href="/otsinka">Оцінка</a></li>
+    <li><a href="/dogovir">Договір</a></li>
+    <li><a href="/avto-ssha">Авто зі США</a></li>
+  </ul>
+  <a href="tel:+380981722342" class="nav-cta" onclick="gtagCallConversion()"><i class="ti ti-phone"></i>+38 098 172 23 42</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <a href="/otsinka" class="back-link"><i class="ti ti-arrow-left"></i> Усі види оцінки</a>
+    <div class="hero-badge"><i class="ti ti-building-community"></i> Для ТСЦ МВС України</div>
+    <h1>Оцінка авто для <span>Сервісного Центру МВС</span> — від 2 000 грн</h1>
+    <p class="hero-sub">Офіційний звіт сертифікованого оцінювача для переоформлення авто в ТСЦ МВС (Київ). Розрахунок податку при другому та третьому продажу за рік. Готовність від 2 годин.</p>
+    <div class="hero-facts">
+      <div class="hero-fact"><i class="ti ti-tag"></i>Від <b>2 000 грн</b></div>
+      <div class="hero-fact"><i class="ti ti-clock"></i>Звіт від <b>2 годин</b></div>
+      <div class="hero-fact"><i class="ti ti-file-check"></i>Реєстр ФДМУ / СОД</div>
+      <div class="hero-fact"><i class="ti ti-map-pin"></i>Солом'янська, 5 (поруч з ТСЦ)</div>
+    </div>
+    <div class="hero-btns">
+      <a href="tel:+380981722342" class="btn-primary" onclick="gtagCallConversion()"><i class="ti ti-phone"></i>Замовити оцінку для ТСЦ</a>
+      <a href="#zayavka" class="btn-ghost"><i class="ti ti-mail"></i>Залишити заявку</a>
+      <a href="https://t.me/Dimakrykun95" class="btn-ghost" target="_blank" rel="noopener" onclick="gtagTelegramConversion()"><i class="ti ti-brand-telegram"></i>Telegram</a>
+    </div>
+  </div>
+</div>
+
+<!-- ЦІНА ТА ПОДАТКИ -->
+<section style="background:var(--off);" id="tsina">
+  <div class="container">
+    <div class="eyebrow">Тарифи та податки</div>
+    <h2>Вартість оцінки авто для ТСЦ МВС у Києві</h2>
+    <p class="lead">Оцінка потрібна для визначення оподатковуваної вартості ТЗ відповідно до Податкового кодексу України. Готуємо документи день у день.</p>
+    <div class="price-grid">
+      <div class="price-card accent">
+        <div class="label">Легковий автомобіль / Мотоцикл</div>
+        <div class="value">від 2 000 <span>грн</span></div>
+        <div class="note">Для розрахунку податку 5% або 18% при продажу в Сервісному Центрі.</div>
+      </div>
+      <div class="price-card">
+        <div class="label">Вантажне авто / Спецтехніка</div>
+        <div class="value">від 2 500 <span>грн</span></div>
+        <div class="note">Обов'язкова оцінка при будь-якому продажу (податок 5% або 18% з 1-го продажу).</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="price-table">
+        <tr><th>Продаж за рік (легкове авто)</th><th>Ставка податку (ПДФО + ВЗ)</th><th>Чи потрібна оцінка для ТСЦ?</th></tr>
+        <tr><td>1-й продаж у календарному році</td><td>0% (без податку)</td><td>За бажанням сторін</td></tr>
+        <tr><td>2-й продаж у календарному році</td><td>5% ПДФО + 1.5% Військовий збір</td><td><strong>Обов'язково</strong></td></tr>
+        <tr><td>3-й і наступні продажі за рік</td><td>18% ПДФО + 1.5% Військовий збір</td><td><strong>Обов'язково</strong></td></tr>
+        <tr><td>Вантажне авто / Причіп / Автобус</td><td>5% або 18% (з першого продажу)</td><td><strong>Обов'язково</strong></td></tr>
+      </table>
+    </div>
+    <p style="margin-top:1rem;font-size:14px;color:var(--muted);">Маєте сумніви щодо ставки податку? Наш експерт проконсультує безкоштовно: <a href="tel:+380981722342" style="color:var(--blue);text-decoration:none;font-weight:600;" onclick="gtagCallConversion()">+38 098 172 23 42</a>.</p>
+  </div>
+</section>
+
+<!-- ПРО ПОСЛУГУ ДЛЯ ТСЦ -->
+<section style="background:var(--white);">
+  <div class="container">
+    <div class="eyebrow">Для сервісного центру</div>
+    <h2>Чому адміністратор ТСЦ вимагає оцінку майна</h2>
+    <div class="text-block">
+      <p>Під час переоформлення автомобіля в Сервісному Центрі МВС (колишній МРЕВ) адміністратор зобов’язаний перевірити правильність сплати податків до бюджету України.</p>
+      <p>Якщо угода підпадає під оподаткування (2-й чи 3-й продаж за рік або продаж вантажного транспорту), базою для нарахування податку є **оціночна вартість**, визначена у звіті суб'єкта оціночної діяльності (СОД). Без офіційного звіту з витягом із бази ФДМУ адміністратор ТСЦ не має права провести реєстраційну дію.</p>
+      <p>Оцінювач BROKSERVISAVTO входить до офіційного реєстру, тому ви отримаєте готовий пакет документів, який приймається в усіх ТСЦ Києва без додаткових питань чи затримок.</p>
+    </div>
+    <div class="trust-box">
+      <i class="ti ti-file-certificate"></i>
+      <div>
+        <h3>100% гарантія прийняття в усіх ТСЦ України</h3>
+        <p>Звіт виготовляється сертифікованим оцінювачем відповідно до Закону України «Про оцінку майна». Кожен документ має індивідуальний номер, печатку оцінювача та витяг з Єдиної бази даних Фонду держмайна.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ДЛЯ ЯКИХ СИТУАЦІЙ В ТСЦ -->
+<section style="background:var(--off);">
+  <div class="container">
+    <div class="eyebrow">Випадки</div>
+    <h2>Коли потрібна оцінка в Сервісному Центрі</h2>
+    <p class="lead">Спеціалізуємося на підготовці документів для будь-яких реєстраційних дій у ТСЦ.</p>
+    <div class="purposes-grid">
+      <div class="purpose-card"><h3><i class="ti ti-car"></i>Повторний продаж авто</h3><p>При продажу 2-го авто (5% податку) або 3-го авто (18% податку) протягом поточного календарного року.</p></div>
+      <div class="purpose-card"><h3><i class="ti ti-truck"></i>Вантажні авто та комтранс</h3><p>Продаж або переоформлення тягачів, напівпричепів, автобусів, спецтехніки (податок сплачується з 1-го продажу).</p></div>
+      <div class="purpose-card"><h3><i class="ti ti-users"></i>Переоформлення від юрособи</h3><p>При продажу транспортного засобу з балансу підприємства чи компанії на фізичну особу в ТСЦ.</p></div>
+      <div class="purpose-card"><h3><i class="ti ti-file-description"></i>Договір купівлі-продажу</h3><p>Для внесення точної оціночної вартості в офіційний бланк ДКП, який складається в сервісному центрі.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ДОКУМЕНТИ -->
+<section style="background:var(--white);">
+  <div class="container">
+    <div class="eyebrow">Що надати</div>
+    <h2>Документи для замовлення оцінки під ТСЦ</h2>
+    <p class="lead">Вам не потрібно збирати складні довідки. Надішліть чіткі фото або скан-копії:</p>
+    <ul class="docs-list">
+      <li><i class="ti ti-file-text"></i>Свідоцтво про реєстрацію ТЗ (Техпаспорт з обох боків)</li>
+      <li><i class="ti ti-id"></i>Паспорт (1, 2 стор. або ID-картка) та ІПН продавця/власника</li>
+      <li><i class="ti ti-dashboard"></i>Поточний пробіг автомобіля (показник одометра)</li>
+      <li><i class="ti ti-camera"></i>Загальні фото авто (спереду, ззаду, салон, VIN-номер)</li>
+      <li><i class="ti ti-building-bank"></i>Для юридичних осіб — реквізити компанії (витяг ЄДР)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ПРОЦЕС -->
+<section style="background:var(--off);">
+  <div class="container">
+    <div class="eyebrow">Етапи</div>
+    <h2>Як отримати оцінку перед візитом до ТСЦ</h2>
+    <p class="lead">Все робиться швидко, щоб ви встигли на свій талончик у Сервісному Центрі.</p>
+    <div class="how-list">
+      <div class="how-item"><span class="how-num">01</span><span class="how-text">Надсилаєте фото техпаспорта та паспорта у Telegram або Viber. Наш оцінювач одразу перевіряє дані.</span></div>
+      <div class="how-item"><span class="how-num">02</span><span class="how-text">Розраховуємо оціночну вартість згідно з нормами ФДМУ та формуємо офіційний звіт.</span></div>
+      <div class="how-item"><span class="how-num">03</span><span class="how-text">Забираєте готовий звіт з печаткою у нашому офісі (Солом'янська, 5) або отримуєте електронний документ.</span></div>
+      <div class="how-item"><span class="how-num">04</span><span class="how-text">Здаєте звіт адміністратору ТСЦ МВС разом із квитанцією про сплату податку. Переоформлення успішне!</span></div>
+    </div>
+    <div class="internal-links">
+      <a href="/dogovir" class="internal-link"><i class="ti ti-file-description"></i>Оформити ДКП авто (Солом'янський район)</a>
+      <a href="/otsinka" class="internal-link"><i class="ti ti-calculator"></i>Усі послуги з оцінки авто в Києві</a>
+      <a href="/rozmytnennya" class="internal-link"><i class="ti ti-shield-check"></i>Розмитнення авто + оцінка</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--white);">
+  <div class="container">
+    <div class="eyebrow">FAQ</div>
+    <h2>Часті запитання про оцінку для ТСЦ МВС</h2>
+    <p class="lead">Відповіді на популярні запитання водіїв при переоформленні авто у Києві.</p>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q">Коли потрібна оцінка авто для Сервісного Центру МВС (ТСЦ)?</div><div class="faq-a">Оцінка обов'язкова при продажу второго (податок 5%) та третього чи наступного (податок 18%) легкого авто протягом року, а також при продажу будь-якого вантажного авто, автобуса чи спецтехніки.</div></div>
+      <div class="faq-item"><div class="faq-q">Скільки коштує оцінка автомобіля для ТСЦ МВС?</div><div class="faq-a">Оцінка легкового авто для СЦ МВС коштує від 2 000 грн. Звіт готується від 2 годин і містить усі необхідні витяги з реєстрів ФДМУ.</div></div>
+      <div class="faq-item"><div class="faq-q">Чи приймають ваші звіти в усіх Сервісних Центрах МВС Києва?</div><div class="faq-a">Так, наші звіти виконуються атестованими оцінювачами СОД (Суб'єкт оціночної діяльності) з внесенням до бази ФДМУ, тому їх без зауважень приймають адміністратори всіх ТСЦ Києва та України.</div></div>
+      <div class="faq-item"><div class="faq-q">Скільки часу дійсний звіт з оцінки для МВС?</div><div class="faq-a">Звіт про оцінку транспортного засобу для ТСЦ МВС дійсний протягом 6 місяців з дати його складання.</div></div>
+      <div class="faq-item"><div class="faq-q">Чи потрібно приганяти автомобіля до вашого офісу?</div><div class="faq-a">У більшості випадків приїжджати не обов'язково. Оцінку для Сервісного Центру можна оформити дистанційно по фото та копіях документів.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ЗАЯВКА -->
+<section style="background:var(--off);" id="zayavka">
+  <div class="container">
+    <div class="eyebrow">Заявка</div>
+    <h2>Замовити оцінку для Сервісного Центру МВС</h2>
+    <p class="lead">Залиште ім'я та телефон — зателефонуємо протягом 15 хвилин, уточнимо параметри авто та підготуємо звіт до вашого візиту в ТСЦ.</p>
+    <div class="form-box">
+      <form id="lead-form" onsubmit="event.preventDefault(); sendLead();">
+        <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name" aria-label="Ваше ім'я" required>
+        <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" aria-label="Ваш номер телефону" required>
+        <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email" aria-label="Ваш Email">
+        <textarea id="lead-details" placeholder="Марка, модель, рік авто, який за рахунком продаж за рік (2-й чи 3-й) або адреса ТСЦ МВС" aria-label="Деталі про авто"></textarea>
+        <p class="field-hint">Поля з * — обов'язкові. Дані не передаються третім особам.</p>
+        <button type="submit" class="btn-primary"><i class="ti ti-send"></i>Розрахувати вартість оцінки</button>
+      </form>
+      <p id="lead-status"></p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="eyebrow" style="color:#85B7EB;">Консультація</div>
+    <h2>Потрібна термінова оцінка для ТСЦ?</h2>
+    <p>Виготуємо документ за 2 години. Солом'янська, 5, Київ.</p>
+    <div class="cta-btns">
+      <a href="tel:+380981722342" class="btn-primary" onclick="gtagCallConversion()"><i class="ti ti-phone"></i>+38 098 172 23 42</a>
+      <a href="https://t.me/Dimakrykun95" class="btn-ghost" target="_blank" rel="noopener" onclick="gtagTelegramConversion()"><i class="ti ti-brand-telegram"></i>@Dimakrykun95</a>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2026 <span>BROKSERVISAVTO</span> · вул. Солом'янська, 5, Київ · <a href="tel:+380981722342" style="color:rgba(255,255,255,0.6);text-decoration:none;">+38 098 172 23 42</a></p></footer>
+
+<script>
+const SUPABASE_URL = 'https://rhduokjaawmorcyiuviy.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg';
+
+function normalizePhone(raw){
+  let p = (raw || '').replace(/[^\d+]/g, '');
+  if(p.startsWith('+380')) return p;
+  if(p.startsWith('380'))  return '+' + p;
+  if(p.startsWith('0'))    return '+38' + p;
+  if(p.startsWith('+'))    return p;
+  return '+38' + p;
+}
+
+async function sendLead(){
+  const name     = document.getElementById('lead-name').value.trim();
+  const phoneRaw = document.getElementById('lead-phone').value.trim();
+  const email    = document.getElementById('lead-email').value.trim();
+  const details  = document.getElementById('lead-details').value.trim();
+  const status   = document.getElementById('lead-status');
+
+  if(!name || !phoneRaw){
+    status.textContent = 'Заповніть ім\'я та телефон';
+    status.style.color = '#C0392B';
+    return;
+  }
+
+  const phone = normalizePhone(phoneRaw);
+
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        email: email || null,
+        notes: details || null,
+        source: 'Сайт (Оцінка МВС)',
+        client_type: 'Фіз. особа',
+        service: 'Оцінка для ТСЦ МВС',
+        stage: 'Новий лід'
+      })
+    });
+    if(!res.ok) throw new Error(await res.text());
+
+    status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
+    status.style.color = '#1E8E3E';
+    document.getElementById('lead-form').reset();
+
+    if(typeof gtag === 'function'){
+      const userData = { phone_number: phone };
+      if(email) userData.email = email;
+      gtag('set', 'user_data', userData);
+      gtag('event', 'conversion', { 'send_to': 'AW-18171698074' });
+    }
+  }catch(e){
+    status.textContent = 'Помилка надсилання. Зателефонуйте нам: +38 098 172 23 42';
+    status.style.color = '#C0392B';
+  }
+}
+</script>
+
+</body>
+</html>
