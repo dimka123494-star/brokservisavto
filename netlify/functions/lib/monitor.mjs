@@ -1,49 +1,67 @@
-// netlify/functions/lib/monitor.mjs
-// Спільна логіка. Цей файл НЕ є окремою функцією — лежить у підпапці lib/.
-
-// ---------- ДЖЕРЕЛА ----------
-// type: 'rss'  — стандартна RSS-стрічка
-// type: 'html' — сторінка списку, збираємо всі посилання
-// Якщо джерело не працює — воно просто нічого не поверне,
-// а в результаті ручного запуску буде видно помилку.
+// netlify/functions/lib/monitor.mjs — версія 2
+// Зміни: двоступеневий фільтр, ширші стоп-слова, браузерні заголовки,
+// виправлена адреса ФДМУ, менший поріг довжини заголовка.
 
 export const SOURCES = [
   { id: 'hsc',     name: 'ГСЦ МВС',              type: 'rss',  url: 'https://hsc.gov.ua/category/novini/feed/' },
   { id: 'customs', name: 'Держмитслужба',        type: 'html', url: 'https://customs.gov.ua/news' },
   { id: 'tax',     name: 'ДПС',                  type: 'html', url: 'https://tax.gov.ua/media-tsentr/novini/' },
   { id: 'kmu',     name: 'Кабмін (акти)',        type: 'html', url: 'https://www.kmu.gov.ua/npas' },
-  { id: 'spfu',    name: 'ФДМУ',                 type: 'html', url: 'https://www.spfu.gov.ua/ua/news.html' },
+  { id: 'spfu',    name: 'ФДМУ',                 type: 'html', url: 'https://www.spfu.gov.ua/ua/news/press-news.html' },
   { id: 'rada',    name: 'Нове в законодавстві', type: 'html', url: 'https://zakon.rada.gov.ua/laws/main/new' },
 ];
 
-// ---------- СЛОВА-ТРИГЕРИ ----------
-// Тільки в нижньому регістрі, без закінчень — щоб ловило всі форми.
+// ── РІВЕНЬ 1: однозначні слова, спрацьовують самі по собі ──
 
-export const KEYWORDS_AUTO = [
-  'акциз', 'розмитн', 'мито', 'митн', 'електромобіл', 'електрокар',
-  'ввезен', 'імпорт авто', 'транспортн засоб', 'реєстрац тз',
-  'перереєстрац', 'зняття з обліку', 'номерн знак', 'свідоцтво про реєстрац',
-  'пенсійн збір', 'договір купівлі-продажу', 'оцінк', 'оціночн',
-  'експертн огляд', 'сертифікат відповідн', 'eur.1', 'преференц',
-  'утилізаційн', 'вартісн поріг', 'пільг на авто', 'ставк акциз',
+export const STRONG_AUTO = [
+  'акциз', 'розмитн', 'митне оформленн', 'митна деклараці', 'електромобіл', 'електрокар',
+  'транспортн засоб', 'автомобіл', 'номерн знак', 'свідоцтво про реєстрац',
+  'пенсійн збір', 'договір купівлі-продажу', 'експертн огляд', 'eur.1',
+  'утилізаційн', 'оцінка майна', 'оцінки майна', 'оцінку майна',
+  'оцінка транспортн', 'оцінки транспортн', 'оціночн діяльн', 'оціночної діяльн',
+  'товарознавч', 'сертифікат відповідн', 'ввезення на митну територію',
+  'технічний контроль', 'посвідчення водія', 'сервісн центр мвс',
 ];
 
-export const KEYWORDS_TAX = [
-  'пдфо', 'військов збір', 'єдиний податок', 'єсв', 'фоп',
-  'податков накладн', 'рро', 'прро', 'декларац', 'ставк податк',
-  'звітн період', 'мінімальн заробітн плат', 'прожитков мінімум',
+export const STRONG_TAX = [
+  'пдфо', 'військовий збір', 'військового збору', 'єдиний податок', 'єдиного податку',
+  'єсв', 'єдиного внеску', 'фоп', 'податков накладн', 'рро', 'прро',
+  'податкова деклараці', 'податкової деклараці', 'податковий кодекс', 'податкового кодексу',
+  'мінімальн заробітн плат', 'прожитков мінімум',
 ];
 
-// ---------- СЛОВА-ВИКЛЮЧЕННЯ ----------
-// Якщо є в заголовку — новина ігнорується навіть за збігу.
+// ── РІВЕНЬ 2: багатозначні слова. Потрібен ще й контекст ──
+
+export const WEAK = [
+  'оцінк', 'мито', 'пільг', 'реєстрац', 'перереєстрац', 'зняття з обліку',
+  'деклараці', 'ставк', 'преференц', 'вартісн поріг', 'імпорт', 'ввезенн', 'вивезенн',
+];
+
+export const CONTEXT = [
+  'авто', 'транспортн', 'митн', 'майна', 'майно', 'податк', 'збір', 'збору',
+  'оцінювач', 'водій', 'кузов', 'двигун', 'причеп', 'мотоцикл', 'вантажівк',
+];
+
+// Контекст, який означає «це податкова тема, не автомобільна»
+const TAX_CONTEXT = ['податк', 'збір', 'збору', 'деклараці', 'фоп', 'єсв'];
+
+// ── СТОП-СЛОВА: якщо є — новина відкидається завжди ──
 
 export const STOPWORDS = [
-  'вакансі', 'безбар', 'конкурс на зайняття', 'закупівл', 'нагородж',
-  'привітан', 'флешмоб', 'екзаменаційн квитк', 'правила дорожнього руху',
-  'соціальн мереж', 'день народжен', 'експорт транспортних засобів',
+  // адміністративний шум
+  'вакансі', 'безбар', 'конкурс на зайняття', 'закупівл', 'нагородж', 'привітан',
+  'флешмоб', 'екзаменаційн', 'правила дорожнього руху', 'соціальн мереж',
+  'день народжен', 'меморандум про співпрац', 'робоча зустріч', 'вебінар',
+  // не наша галузь
+  'ефективності діяльності', 'ефективност діяльност', 'антикорупц', 'назк', 'набу',
+  'склад комісії', 'комісії з проведення', 'секретаріат', 'аудиту) ефективності',
+  'приватизац', 'аукціон', 'оренди державного майна', 'оренда державного майна',
+  'земельн банк', 'прозорро',
+  // не наш бік процесу
+  'експорт транспортних засобів', 'вітчизняного виробництва',
 ];
 
-// ---------- ДОПОМІЖНЕ ----------
+// ── Допоміжне ──
 
 const ENTITIES = {
   '&amp;': '&', '&quot;': '"', '&apos;': "'", '&#039;': "'", '&#39;': "'",
@@ -68,12 +86,23 @@ function pickTag(block, tag) {
   return decode(m[1].replace(/<!\[CDATA\[/g, '').replace(/\]\]>/g, ''));
 }
 
+// Заголовки, максимально схожі на справжній браузер — проти 403
 async function grab(url) {
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; NewsMonitor/1.0)',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'uk-UA,uk;q=0.9',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+      'Accept-Language': 'uk-UA,uk;q=0.9,en-US;q=0.8,en;q=0.7',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Sec-Ch-Ua': '"Chromium";v="126", "Not:A-Brand";v="24"',
+      'Sec-Ch-Ua-Mobile': '?0',
+      'Sec-Ch-Ua-Platform': '"macOS"',
+      'Sec-Fetch-Dest': 'document',
+      'Sec-Fetch-Mode': 'navigate',
+      'Sec-Fetch-Site': 'none',
+      'Sec-Fetch-User': '?1',
+      'Upgrade-Insecure-Requests': '1',
     },
     redirect: 'follow',
   });
@@ -81,7 +110,7 @@ async function grab(url) {
   return await res.text();
 }
 
-// ---------- ПАРСЕРИ ----------
+// ── Парсери ──
 
 function parseRss(xml) {
   const out = [];
@@ -93,8 +122,8 @@ function parseRss(xml) {
       const g = raw.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i);
       link = g ? decode(g[1]) : '';
     }
-    const pub = pickTag(raw, 'pubDate');
     if (!title || !link) continue;
+    const pub = pickTag(raw, 'pubDate');
     let published = null;
     const d = new Date(pub);
     if (pub && !isNaN(d)) published = d.toISOString().slice(0, 10);
@@ -111,13 +140,11 @@ function parseHtml(html, baseUrl) {
   let m;
   while ((m = re.exec(html)) !== null) {
     const title = stripTags(m[2]);
-    if (title.length < 25 || title.length > 300) continue;
+    if (title.length < 12 || title.length > 300) continue;
     let abs;
     try {
       abs = new URL(m[1], base).href;
-    } catch {
-      continue;
-    }
+    } catch { continue; }
     if (new URL(abs).hostname !== base.hostname) continue;
     if (seen.has(abs)) continue;
     seen.add(abs);
@@ -126,23 +153,36 @@ function parseHtml(html, baseUrl) {
   return out;
 }
 
-// ---------- ФІЛЬТР ----------
+// ── Двоступеневий фільтр ──
 
 function classify(title) {
   const t = title.toLowerCase();
   if (STOPWORDS.some((w) => t.includes(w))) return null;
 
-  const auto = KEYWORDS_AUTO.filter((w) => t.includes(w));
-  const tax = KEYWORDS_TAX.filter((w) => t.includes(w));
-  if (!auto.length && !tax.length) return null;
+  const sa = STRONG_AUTO.filter((w) => t.includes(w));
+  const st = STRONG_TAX.filter((w) => t.includes(w));
 
+  if (sa.length || st.length) {
+    return {
+      category: sa.length >= st.length ? 'auto' : 'tax',
+      matched: [...new Set([...sa, ...st])],
+    };
+  }
+
+  // Нічого однозначного — пробуємо пару «багатозначне слово + контекст»
+  const weak = WEAK.filter((w) => t.includes(w));
+  if (!weak.length) return null;
+  const ctx = CONTEXT.filter((w) => t.includes(w));
+  if (!ctx.length) return null;
+
+  const isTax = TAX_CONTEXT.some((w) => t.includes(w));
   return {
-    category: auto.length >= tax.length ? 'auto' : 'tax',
-    matched: [...new Set([...auto, ...tax])],
+    category: isTax ? 'tax' : 'auto',
+    matched: [...new Set([...weak, ...ctx])],
   };
 }
 
-// ---------- ЗАПИС У SUPABASE ----------
+// ── Запис у Supabase ──
 
 async function saveRows(rows) {
   if (!rows.length) return 0;
@@ -166,7 +206,7 @@ async function saveRows(rows) {
   return Array.isArray(saved) ? saved.length : 0;
 }
 
-// ---------- ГОЛОВНА ФУНКЦІЯ ----------
+// ── Головна ──
 
 export async function runMonitor() {
   const report = [];
