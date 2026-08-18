@@ -74,7 +74,7 @@ function looksLikeArticle(url) {
   const low = url.toLowerCase();
   if (URL_DENY.some((d) => low.includes(d))) return false;
   // У справжніх публікацій в адресі майже завжди є дата або числовий ідентифікатор
-  return /\d{3,}/.test(low);
+    return true;
 }
 
 // ── Допоміжне ──
