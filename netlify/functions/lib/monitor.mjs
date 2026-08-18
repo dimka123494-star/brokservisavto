@@ -1,6 +1,6 @@
-// netlify/functions/lib/monitor.mjs — версія 2
-// Зміни: двоступеневий фільтр, ширші стоп-слова, браузерні заголовки,
-// виправлена адреса ФДМУ, менший поріг довжини заголовка.
+// netlify/functions/lib/monitor.mjs — версія 3
+// Нове: автоматичний обхід 403 через читальний проксі r.jina.ai,
+// відсів навігаційних посилань і назв постійних розділів.
 
 export const SOURCES = [
   { id: 'hsc',     name: 'ГСЦ МВС',              type: 'rss',  url: 'https://hsc.gov.ua/category/novini/feed/' },
@@ -11,16 +11,17 @@ export const SOURCES = [
   { id: 'rada',    name: 'Нове в законодавстві', type: 'html', url: 'https://zakon.rada.gov.ua/laws/main/new' },
 ];
 
-// ── РІВЕНЬ 1: однозначні слова, спрацьовують самі по собі ──
+// ── Слова-тригери ──
 
 export const STRONG_AUTO = [
   'акциз', 'розмитн', 'митне оформленн', 'митна деклараці', 'електромобіл', 'електрокар',
   'транспортн засоб', 'автомобіл', 'номерн знак', 'свідоцтво про реєстрац',
   'пенсійн збір', 'договір купівлі-продажу', 'експертн огляд', 'eur.1',
   'утилізаційн', 'оцінка майна', 'оцінки майна', 'оцінку майна',
-  'оцінка транспортн', 'оцінки транспортн', 'оціночн діяльн', 'оціночної діяльн',
+  'оцінка транспортн', 'оцінки транспортн', 'методик оцінк',
   'товарознавч', 'сертифікат відповідн', 'ввезення на митну територію',
   'технічний контроль', 'посвідчення водія', 'сервісн центр мвс',
+  'кваліфікаційн свідоцтв', 'оцінювач',
 ];
 
 export const STRONG_TAX = [
@@ -29,8 +30,6 @@ export const STRONG_TAX = [
   'податкова деклараці', 'податкової деклараці', 'податковий кодекс', 'податкового кодексу',
   'мінімальн заробітн плат', 'прожитков мінімум',
 ];
-
-// ── РІВЕНЬ 2: багатозначні слова. Потрібен ще й контекст ──
 
 export const WEAK = [
   'оцінк', 'мито', 'пільг', 'реєстрац', 'перереєстрац', 'зняття з обліку',
@@ -42,24 +41,41 @@ export const CONTEXT = [
   'оцінювач', 'водій', 'кузов', 'двигун', 'причеп', 'мотоцикл', 'вантажівк',
 ];
 
-// Контекст, який означає «це податкова тема, не автомобільна»
 const TAX_CONTEXT = ['податк', 'збір', 'збору', 'деклараці', 'фоп', 'єсв'];
-
-// ── СТОП-СЛОВА: якщо є — новина відкидається завжди ──
 
 export const STOPWORDS = [
   // адміністративний шум
   'вакансі', 'безбар', 'конкурс на зайняття', 'закупівл', 'нагородж', 'привітан',
   'флешмоб', 'екзаменаційн', 'правила дорожнього руху', 'соціальн мереж',
-  'день народжен', 'меморандум про співпрац', 'робоча зустріч', 'вебінар',
+  'день народжен', 'меморандум', 'робоча зустріч', 'вебінар',
   // не наша галузь
   'ефективності діяльності', 'ефективност діяльност', 'антикорупц', 'назк', 'набу',
-  'склад комісії', 'комісії з проведення', 'секретаріат', 'аудиту) ефективності',
+  'склад комісії', 'комісії з проведення', 'секретаріат',
   'приватизац', 'аукціон', 'оренди державного майна', 'оренда державного майна',
   'земельн банк', 'прозорро',
+  // назви постійних розділів, а не новини
+  'розділ державного реєстру', 'рішення про видачу сертифікат',
+  'рішення про відкликання', 'рішення про анулювання', 'листи про відкликання',
+  'інформаційні листи', 'накази про включення', 'яким зупинено доступ',
+  'діяльність суб', 'перелік суб',
   // не наш бік процесу
   'експорт транспортних засобів', 'вітчизняного виробництва',
 ];
+
+// ── Посилання, які точно не є новиною ──
+
+const URL_DENY = [
+  '/category/', '/tag/', '/page/', '/author/', '/documents/', '/content/',
+  '/regions/', '/about', '/contact', '/faq', '/search', '/rss', '/feed',
+  '.pdf', '.doc', '.xls', '.zip', '.rar', '.jpg', '.png',
+];
+
+function looksLikeArticle(url) {
+  const low = url.toLowerCase();
+  if (URL_DENY.some((d) => low.includes(d))) return false;
+  // У справжніх публікацій в адресі майже завжди є дата або числовий ідентифікатор
+  return /\d{3,}/.test(low);
+}
 
 // ── Допоміжне ──
 
@@ -86,27 +102,30 @@ function pickTag(block, tag) {
   return decode(m[1].replace(/<!\[CDATA\[/g, '').replace(/\]\]>/g, ''));
 }
 
-// Заголовки, максимально схожі на справжній браузер — проти 403
-async function grab(url) {
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-      'Accept-Language': 'uk-UA,uk;q=0.9,en-US;q=0.8,en;q=0.7',
-      'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Sec-Ch-Ua': '"Chromium";v="126", "Not:A-Brand";v="24"',
-      'Sec-Ch-Ua-Mobile': '?0',
-      'Sec-Ch-Ua-Platform': '"macOS"',
-      'Sec-Fetch-Dest': 'document',
-      'Sec-Fetch-Mode': 'navigate',
-      'Sec-Fetch-Site': 'none',
-      'Sec-Fetch-User': '?1',
-      'Upgrade-Insecure-Requests': '1',
-    },
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'uk-UA,uk;q=0.9,en;q=0.8',
+  'Sec-Fetch-Dest': 'document',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Site': 'none',
+  'Upgrade-Insecure-Requests': '1',
+};
+
+// Пряме звернення
+async function grabDirect(url) {
+  const res = await fetch(url, { headers: BROWSER_HEADERS, redirect: 'follow' });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.text();
+}
+
+// Обхід через читальний проксі — повертає сторінку у вигляді markdown
+async function grabViaReader(url) {
+  const res = await fetch(`https://r.jina.ai/${url}`, {
+    headers: { 'User-Agent': BROWSER_HEADERS['User-Agent'], 'Accept': 'text/plain' },
     redirect: 'follow',
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error(`Проксі HTTP ${res.status}`);
   return await res.text();
 }
 
@@ -140,12 +159,11 @@ function parseHtml(html, baseUrl) {
   let m;
   while ((m = re.exec(html)) !== null) {
     const title = stripTags(m[2]);
-    if (title.length < 12 || title.length > 300) continue;
+    if (title.length < 15 || title.length > 300) continue;
     let abs;
-    try {
-      abs = new URL(m[1], base).href;
-    } catch { continue; }
+    try { abs = new URL(m[1], base).href; } catch { continue; }
     if (new URL(abs).hostname !== base.hostname) continue;
+    if (!looksLikeArticle(abs)) continue;
     if (seen.has(abs)) continue;
     seen.add(abs);
     out.push({ title, url: abs, published_at: null });
@@ -153,7 +171,28 @@ function parseHtml(html, baseUrl) {
   return out;
 }
 
-// ── Двоступеневий фільтр ──
+// Проксі віддає markdown: [заголовок](адреса)
+function parseMarkdown(text, baseUrl) {
+  const out = [];
+  const seen = new Set();
+  const host = new URL(baseUrl).hostname;
+  const re = /\[([^\]\n]{15,300})\]\((https?:\/\/[^\s)]+)\)/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const title = decode(m[1]);
+    const url = m[2];
+    let h;
+    try { h = new URL(url).hostname; } catch { continue; }
+    if (h !== host) continue;
+    if (!looksLikeArticle(url)) continue;
+    if (seen.has(url)) continue;
+    seen.add(url);
+    out.push({ title, url, published_at: null });
+  }
+  return out;
+}
+
+// ── Фільтр ──
 
 function classify(title) {
   const t = title.toLowerCase();
@@ -169,15 +208,13 @@ function classify(title) {
     };
   }
 
-  // Нічого однозначного — пробуємо пару «багатозначне слово + контекст»
   const weak = WEAK.filter((w) => t.includes(w));
   if (!weak.length) return null;
   const ctx = CONTEXT.filter((w) => t.includes(w));
   if (!ctx.length) return null;
 
-  const isTax = TAX_CONTEXT.some((w) => t.includes(w));
   return {
-    category: isTax ? 'tax' : 'auto',
+    category: TAX_CONTEXT.some((w) => t.includes(w)) ? 'tax' : 'auto',
     matched: [...new Set([...weak, ...ctx])],
   };
 }
@@ -214,32 +251,47 @@ export async function runMonitor() {
   const seenUrls = new Set();
 
   for (const src of SOURCES) {
+    const note = { source: src.name };
+    let items = [];
+
     try {
-      const body = await grab(src.url);
-      const items = src.type === 'rss' ? parseRss(body) : parseHtml(body, src.url);
-
-      let hits = 0;
-      for (const item of items) {
-        const cls = classify(item.title);
-        if (!cls) continue;
-        if (seenUrls.has(item.url)) continue;
-        seenUrls.add(item.url);
-        hits++;
-        all.push({
-          title: item.title.slice(0, 500),
-          url: item.url,
-          source: src.name,
-          source_id: src.id,
-          category: cls.category,
-          matched: cls.matched,
-          published_at: item.published_at,
-        });
-      }
-
-      report.push({ source: src.name, знайдено: items.length, підійшло: hits });
+      const body = await grabDirect(src.url);
+      items = src.type === 'rss' ? parseRss(body) : parseHtml(body, src.url);
+      note.спосіб = 'прямо';
     } catch (e) {
-      report.push({ source: src.name, помилка: String(e.message || e) });
+      // Сайт відмовив — пробуємо через читальний проксі
+      try {
+        const body = await grabViaReader(src.url);
+        items = parseMarkdown(body, src.url);
+        note.спосіб = 'через проксі';
+      } catch (e2) {
+        note.помилка = `${e.message} → ${e2.message}`;
+        report.push(note);
+        continue;
+      }
     }
+
+    let hits = 0;
+    for (const item of items) {
+      const cls = classify(item.title);
+      if (!cls) continue;
+      if (seenUrls.has(item.url)) continue;
+      seenUrls.add(item.url);
+      hits++;
+      all.push({
+        title: item.title.slice(0, 500),
+        url: item.url,
+        source: src.name,
+        source_id: src.id,
+        category: cls.category,
+        matched: cls.matched,
+        published_at: item.published_at,
+      });
+    }
+
+    note.знайдено = items.length;
+    note.підійшло = hits;
+    report.push(note);
   }
 
   let saved = 0;
