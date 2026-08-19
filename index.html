@@ -60,18 +60,37 @@
 }
 </script>
 
-<!-- Google Tag Manager / Ads (Optimized Loading) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
+<!-- Google Ads / gtag — черга dataLayer доступна одразу, сам скрипт вантажиться відкладено -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'AW-18171698074');
+
+  (function(){
+    var loaded = false;
+    function loadGtag(){
+      if (loaded) return;
+      loaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18171698074';
+      document.head.appendChild(s);
+    }
+    window.__loadGtag = loadGtag;
+    ['pointerdown','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
+      window.addEventListener(ev, loadGtag, {once:true, passive:true});
+    });
+    setTimeout(loadGtag, 2500);
+  })();
+
   function gtagCallConversion() {
+    if (window.__loadGtag) window.__loadGtag();
     gtag('event', 'conversion', {'send_to':'AW-18171698074/call','event_category':'contact','event_label':'phone_call'});
     return true;
   }
   function gtagTelegramConversion() {
+    if (window.__loadGtag) window.__loadGtag();
     gtag('event', 'conversion', {'send_to':'AW-18171698074/telegram','event_category':'contact','event_label':'telegram_click'});
     return true;
   }
@@ -79,36 +98,49 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     color-scheme: light only;
     --blue: #378ADD;
+    --blue-btn: #1a6ab0;      /* фон кнопок — контраст 5.6:1 з білим текстом (WCAG AA) */
+    --blue-btn-hover: #14568f;
     --blue-dark: #14508e;
+    --blue-light: #85B7EB;
     --navy: #0a0f1e;
     --white: #ffffff;
     --off-white: #f5f6fa;
     --text: #111827;
-    --text-muted: #4b5563; /* Покращено контрастність для Google Accessibility */
+    --text-muted: #4b5563;
     --border: rgba(0,0,0,0.12);
     --radius: 12px;
   }
 
   html { scroll-behavior: smooth; }
-  body { font-family:'Manrope',sans-serif; background:var(--off-white); color:var(--text); line-height:1.6; overflow-x:hidden; }
+  body { font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif; background:var(--off-white); color:var(--text); line-height:1.6; overflow-x:hidden; }
+
+  /* ІКОНКИ — inline SVG-спрайт, жодних зовнішніх шрифтів іконок */
+  .ico {
+    width:1em; height:1em; display:inline-block; vertical-align:-0.14em;
+    flex:0 0 auto;
+    fill:none; stroke:currentColor; stroke-width:1.9;
+    stroke-linecap:round; stroke-linejoin:round;
+  }
+  .icon-sprite { position:absolute; width:0; height:0; overflow:hidden; }
 
   /* NAV */
   nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,15,30,0.95); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; height:64px; border-bottom:0.5px solid rgba(255,255,255,0.08); }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; display:inline-flex; align-items:center; height:100%; }
+  .nav-logo { font-family:'Bebas Neue',Impact,sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; display:inline-flex; align-items:center; height:100%; }
   .nav-logo span { color:#fff; }
   .nav-links { display:flex; gap:1.5rem; list-style:none; }
   .nav-links a { color:rgba(255,255,255,0.75); text-decoration:none; font-size:14px; letter-spacing:0.5px; transition:color 0.2s; padding:10px 4px; display:inline-block; }
   .nav-links a:hover { color:#fff; }
-  .nav-cta { background:var(--blue); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:opacity 0.2s; min-height:40px; }
-  .nav-cta:hover { opacity:0.88; }
+  .nav-cta { background:var(--blue-btn); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:background 0.2s; min-height:40px; }
+  .nav-cta:hover { background:var(--blue-btn-hover); }
 
   /* HERO */
   .hero { background:var(--navy); min-height:100vh; display:flex; align-items:center; padding:110px 2rem 4rem; position:relative; overflow:hidden; }
@@ -118,28 +150,28 @@
   .hero-bg-ring.r3 { width:180px; height:180px; bottom:80px; right:120px; border-width:18px; opacity:0.3; }
   .hero-inner { max-width:1100px; margin:0 auto; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; position:relative; z-index:1; }
   .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(55,138,221,0.15); color:#9dc4f0; border:0.5px solid rgba(55,138,221,0.4); border-radius:20px; padding:6px 14px; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:1.5rem; }
-  .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(44px,6.5vw,76px); line-height:0.97; color:#fff; margin-bottom:1.25rem; letter-spacing:1px; }
+  .hero-title { font-family:'Bebas Neue',Impact,sans-serif; font-size:clamp(44px,6.5vw,76px); line-height:0.97; color:#fff; margin-bottom:1.25rem; letter-spacing:1px; }
   .hero-title span { color:var(--blue); }
   .hero-sub { font-size:16px; color:rgba(255,255,255,0.8); margin-bottom:1.5rem; max-width:440px; line-height:1.7; }
   .hero-prices { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:2rem; }
   .hero-price { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.08); border:0.5px solid rgba(255,255,255,0.2); border-radius:9px; padding:10px 14px; font-size:13px; color:#e0e9f5; }
-  .hero-price i { color:#85B7EB; font-size:16px; }
+  .hero-price .ico { color:var(--blue-light); font-size:16px; }
   .hero-price b { color:#fff; font-weight:700; }
   .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
-  .btn-primary { background:var(--blue); color:#fff; border:none; padding:14px 28px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:opacity 0.2s, transform 0.15s; min-height:48px; }
-  .btn-primary:hover { opacity:0.9; transform:translateY(-1px); }
-  .btn-ghost { background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.4); padding:14px 28px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:border-color 0.2s,color 0.2s; min-height:48px; }
+  .btn-primary { background:var(--blue-btn); color:#fff; border:none; padding:14px 28px; border-radius:9px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:background 0.2s, transform 0.15s; min-height:48px; }
+  .btn-primary:hover { background:var(--blue-btn-hover); transform:translateY(-1px); }
+  .btn-ghost { background:transparent; color:#ffffff; border:1px solid rgba(255,255,255,0.4); padding:14px 28px; border-radius:9px; font-family:inherit; font-size:15px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:border-color 0.2s,background 0.2s; min-height:48px; }
   .btn-ghost:hover { border-color:#fff; background:rgba(255,255,255,0.05); }
   .hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .stat-card { background:rgba(255,255,255,0.05); border:0.5px solid rgba(255,255,255,0.15); border-radius:var(--radius); padding:1.5rem; }
-  .stat-number { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--blue); line-height:1; margin-bottom:4px; }
+  .stat-number { font-family:'Bebas Neue',Impact,sans-serif; font-size:48px; color:var(--blue); line-height:1; margin-bottom:4px; }
   .stat-label { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.4; }
 
   /* SECTIONS */
   section { padding:5rem 2rem; }
   .container { max-width:1100px; margin:0 auto; }
   .section-eyebrow { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--blue-dark); font-weight:700; margin-bottom:0.5rem; }
-  .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,5vw,48px); line-height:1; margin-bottom:1rem; letter-spacing:0.5px; }
+  .section-title { font-family:'Bebas Neue',Impact,sans-serif; font-size:clamp(32px,5vw,48px); line-height:1; margin-bottom:1rem; letter-spacing:0.5px; }
   .section-sub { font-size:15px; color:var(--text-muted); max-width:560px; line-height:1.7; margin-bottom:3rem; }
 
   /* SERVICES */
@@ -153,7 +185,7 @@
   .service-title { font-size:17px; font-weight:700; margin-bottom:6px; color:var(--text); }
   .service-price { font-size:13.5px; font-weight:700; color:var(--blue-dark); margin-bottom:6px; }
   .service-desc { font-size:13.5px; color:var(--text-muted); line-height:1.6; margin-bottom:1rem; }
-  .service-more { font-size:13.5px; color:var(--blue-dark); display:flex; align-items:center; gap:4px; font-weight:600; }
+  .service-more { font-size:13.5px; color:var(--blue-dark); display:flex; align-items:center; gap:5px; font-weight:600; }
 
   /* HOW */
   .how { background:var(--navy); color:#fff; }
@@ -162,7 +194,8 @@
   .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0; position:relative; }
   .step { padding:2rem 1.5rem; position:relative; }
   .step:not(:last-child)::after { content:''; position:absolute; top:2.75rem; right:0; width:1px; height:32px; background:rgba(55,138,221,0.3); }
-  .step-num { font-family:'Bebas Neue',sans-serif; font-size:56px; color:rgba(55,138,221,0.35); line-height:1; margin-bottom:0.5rem; }
+  /* контраст 9:1 з navy замість rgba(...,0.35) */
+  .step-num { font-family:'Bebas Neue',Impact,sans-serif; font-size:56px; color:var(--blue-light); line-height:1; margin-bottom:0.5rem; }
   .step-title { font-size:16px; font-weight:600; color:#fff; margin-bottom:6px; }
   .step-desc { font-size:13.5px; color:rgba(255,255,255,0.7); line-height:1.5; }
 
@@ -171,7 +204,7 @@
   .promo-box { background:linear-gradient(135deg,#0f1c33,#0a0f1e); border-radius:18px; padding:2.5rem; color:#fff; display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap; position:relative; overflow:hidden; }
   .promo-box::before { content:''; position:absolute; width:280px; height:280px; border-radius:50%; border:36px solid rgba(55,138,221,0.09); top:-90px; right:-70px; pointer-events:none; }
   .promo-text { flex:1; min-width:260px; position:relative; z-index:1; }
-  .promo-text h3 { font-family:'Bebas Neue',sans-serif; font-size:clamp(26px,3.5vw,36px); color:#fff; line-height:1.05; margin-bottom:0.6rem; }
+  .promo-text h3 { font-family:'Bebas Neue',Impact,sans-serif; font-size:clamp(26px,3.5vw,36px); color:#fff; line-height:1.05; margin-bottom:0.6rem; }
   .promo-text p { font-size:14.5px; color:rgba(255,255,255,0.75); line-height:1.65; max-width:480px; }
   .promo-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:1.1rem; }
   .promo-tag { font-size:12.5px; color:#D5E2F2; background:rgba(255,255,255,0.12); border:0.5px solid rgba(255,255,255,0.2); border-radius:8px; padding:6px 12px; }
@@ -203,16 +236,19 @@
   .sub-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
   .sub-card { background:var(--off-white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.5rem; text-decoration:none; color:var(--text); display:block; transition:transform 0.2s,border-color 0.2s; }
   .sub-card:hover { transform:translateY(-4px); border-color:rgba(55,138,221,0.4); }
-  .sub-ic { font-size:24px; color:var(--blue-dark); margin-bottom:0.75rem; }
+  .sub-ic { font-size:24px; color:var(--blue-dark); margin-bottom:0.75rem; line-height:1; }
   .sub-t { font-size:16px; font-weight:700; margin-bottom:4px; }
   .sub-d { font-size:13.5px; color:var(--text-muted); line-height:1.5; margin-bottom:1rem; }
-  .sub-more { font-size:13.5px; color:var(--blue-dark); display:flex; align-items:center; gap:4px; font-weight:600; }
+  .sub-more { font-size:13.5px; color:var(--blue-dark); display:flex; align-items:center; gap:5px; font-weight:600; }
 
   /* FOOTER */
   footer { background:var(--navy); color:rgba(255,255,255,0.65); text-align:center; padding:2.5rem 2rem; font-size:13.5px; }
   footer span { color:var(--blue); font-weight:600; }
   footer a { color:rgba(255,255,255,0.85); text-decoration:none; padding:6px 2px; display:inline-block; }
   footer a:hover { color:#fff; text-decoration:underline; }
+
+  /* видимий фокус з клавіатури */
+  a:focus-visible, button:focus-visible { outline:3px solid var(--blue-light); outline-offset:3px; border-radius:6px; }
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
   .hero-badge { animation:fadeUp 0.5s ease both; }
@@ -221,7 +257,7 @@
   .hero-prices { animation:fadeUp 0.5s 0.25s ease both; }
   .hero-btns { animation:fadeUp 0.5s 0.3s ease both; }
   .hero-stats { animation:fadeUp 0.5s 0.2s ease both; }
-  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} html{scroll-behavior:auto} }
 
   @media (max-width:768px) {
     section { padding:3.5rem 1.25rem; }
@@ -248,6 +284,22 @@
 </head>
 <body>
 
+<!-- SVG-СПРАЙТ ІКОНОК (замінює 796 KiB tabler-icons з jsDelivr) -->
+<svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M12 11a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"/><path d="M17.657 16.657 13.414 20.9a2 2 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0"/></symbol>
+  <symbol id="i-chart-bar" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 20v-6"/><path d="M12 20V9"/><path d="M18 20V4"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2"/><path d="M9 13h6"/><path d="M9 17h4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18"/><path d="M12 7v5l3 3"/></symbol>
+  <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6l-6 6"/></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-8.5 15a12 12 0 0 1-8.5-15a12 12 0 0 0 8.5-3"/><path d="M9 12l2 2l4-4"/></symbol>
+  <symbol id="i-world" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18"/><path d="M3.6 9h16.8"/><path d="M3.6 15h16.8"/><path d="M11.5 3a17 17 0 0 0 0 18"/><path d="M12.5 3a17 17 0 0 1 0 18"/></symbol>
+  <symbol id="i-calculator" viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1"/><path d="M8 7h8v3H8z"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 17h.01"/><path d="M12 17h.01"/><path d="M16 17h.01"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><path d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5"/><path d="M12 15a3 3 0 1 0 0-6a3 3 0 0 0 0 6"/><path d="M16.5 7.5v.01"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M7 10v4h3v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V3h-3a5 5 0 0 0-5 5v2z"/></symbol>
+</defs></svg>
+
 <!-- NAV -->
 <nav>
   <a href="/" class="nav-logo">BROK<span>SERVIS</span>AVTO</a>
@@ -260,11 +312,10 @@
     <li><a href="#contacts">Контакти</a></li>
   </ul>
   <a href="tel:+380981722342" onclick="gtagCallConversion()" class="nav-cta">
-    <i class="ti ti-phone" aria-hidden="true"></i>+38 098 172 23 42
+    <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>+38 098 172 23 42
   </a>
 </nav>
 
-<!-- MAIN WRAPPER FOR SEO ACCESSIBILITY -->
 <main>
 
   <!-- HERO -->
@@ -274,17 +325,17 @@
     <div class="hero-bg-ring r3"></div>
     <div class="hero-inner">
       <div>
-        <div class="hero-badge"><i class="ti ti-map-pin" aria-hidden="true"></i> Київ · Солом'янська, 5</div>
+        <div class="hero-badge"><svg class="ico" aria-hidden="true"><use href="#i-map-pin"/></svg> Київ · Солом'янська, 5</div>
         <h1 class="hero-title">Розмитнення, оцінка та<br><span>договір купівлі-продажу авто</span></h1>
         <p class="hero-sub">Митне оформлення, офіційна оцінка та юридичне оформлення угод з автомобілями в Києві. Швидко, з юридичною силою документа.</p>
         <div class="hero-prices">
-          <div class="hero-price"><i class="ti ti-chart-bar" aria-hidden="true"></i>Оцінка від <b>2 000 грн</b></div>
-          <div class="hero-price"><i class="ti ti-file-description" aria-hidden="true"></i>Договір від <b>2 500 грн</b></div>
-          <div class="hero-price"><i class="ti ti-clock" aria-hidden="true"></i>Від <b>30 хвилин</b></div>
+          <div class="hero-price"><svg class="ico" aria-hidden="true"><use href="#i-chart-bar"/></svg>Оцінка від <b>2 000 грн</b></div>
+          <div class="hero-price"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg>Договір від <b>2 500 грн</b></div>
+          <div class="hero-price"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>Від <b>30 хвилин</b></div>
         </div>
         <div class="hero-btns">
-          <a href="tel:+380981722342" onclick="gtagCallConversion()" class="btn-primary"><i class="ti ti-phone" aria-hidden="true"></i>Зателефонувати</a>
-          <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="btn-ghost" target="_blank" rel="noopener"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Написати в Telegram</a>
+          <a href="tel:+380981722342" onclick="gtagCallConversion()" class="btn-primary"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Зателефонувати</a>
+          <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="btn-ghost" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-telegram"/></svg>Написати в Telegram</a>
         </div>
       </div>
       <div class="hero-stats">
@@ -304,32 +355,32 @@
       <p class="section-sub">Все необхідне для придбання, перевірки та легалізації автомобіля — в одному місці.</p>
       <div class="services-grid">
         <a href="/dogovir" class="service-card">
-          <div class="service-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
+          <div class="service-icon"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg></div>
           <div class="service-title">Договір купівлі-продажу</div>
           <div class="service-price">від 2 500 грн · за 30 хвилин</div>
           <div class="service-desc">Складання ДКП, перевірка авто по базах МВС та Interpol, супровід угоди в сервісному центрі або в нотаріуса.</div>
-          <div class="service-more">Детальніше про ДКП <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="service-more">Детальніше про ДКП <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
         <a href="/rozmytnennya" class="service-card">
-          <div class="service-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+          <div class="service-icon"><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg></div>
           <div class="service-title">Розмитнення авто</div>
           <div class="service-price">оформлення 1–5 днів</div>
           <div class="service-desc">Повний супровід митного оформлення: розрахунок акцизу, мита та ПДВ, декларація, супровід на митниці.</div>
-          <div class="service-more">Калькулятор і деталі <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="service-more">Калькулятор і деталі <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
         <a href="/otsinka" class="service-card">
-          <div class="service-icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+          <div class="service-icon"><svg class="ico" aria-hidden="true"><use href="#i-chart-bar"/></svg></div>
           <div class="service-title">Оцінка транспортних засобів</div>
           <div class="service-price">від 2 000 грн · звіт за 2 години</div>
           <div class="service-desc">Офіційна ринкова оцінка авто для митниці, банку, страхової, суду, нотаріуса або продажу.</div>
-          <div class="service-more">Детальніше про оцінку <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="service-more">Детальніше про оцінку <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
         <a href="/avto-ssha" class="service-card">
-          <div class="service-icon"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="service-icon"><svg class="ico" aria-hidden="true"><use href="#i-world"/></svg></div>
           <div class="service-title">Авто зі США під ключ</div>
           <div class="service-price">Copart · IAAI · Manheim</div>
           <div class="service-desc">Підбір на американських аукціонах, перевірка VIN, доставка та розмитнення — весь цикл в одних руках.</div>
-          <div class="service-more">Детальніше про авто зі США <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="service-more">Детальніше про авто зі США <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
       </div>
     </div>
@@ -367,7 +418,7 @@
           </div>
         </div>
         <div class="promo-cta">
-          <a href="/rozmytnennya#kalkulyator" class="btn-primary"><i class="ti ti-calculator" aria-hidden="true"></i>Відкрити калькулятор</a>
+          <a href="/rozmytnennya#kalkulyator" class="btn-primary"><svg class="ico" aria-hidden="true"><use href="#i-calculator"/></svg>Відкрити калькулятор</a>
         </div>
       </div>
     </div>
@@ -383,17 +434,17 @@
         <div class="contact-block">
           <div class="contact-block-title">Прямий зв'язок</div>
           <div class="contact-item">
-            <div class="contact-icon-wrap"><i class="ti ti-phone" aria-hidden="true"></i></div>
+            <div class="contact-icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></div>
             <div><div class="contact-label">Телефон</div>
               <a href="tel:+380981722342" onclick="gtagCallConversion()" class="contact-value">+38 098 172 23 42</a></div>
           </div>
           <div class="contact-item">
-            <div class="contact-icon-wrap"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+            <div class="contact-icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-telegram"/></svg></div>
             <div><div class="contact-label">Telegram</div>
               <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="contact-value" target="_blank" rel="noopener">@Dimakrykun95</a></div>
           </div>
           <div class="contact-item">
-            <div class="contact-icon-wrap"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+            <div class="contact-icon-wrap"><svg class="ico" aria-hidden="true"><use href="#i-map-pin"/></svg></div>
             <div><div class="contact-label">Адреса</div>
               <span class="contact-value">вул. Солом'янська, 5, Київ</span></div>
           </div>
@@ -402,15 +453,15 @@
           <div class="contact-block-title">Соціальні мережі</div>
           <div class="socials-grid">
             <a href="https://t.me/Dimakrykun95" onclick="gtagTelegramConversion()" class="social-card" target="_blank" rel="noopener">
-              <div class="social-icon tg"><i class="ti ti-brand-telegram" aria-hidden="true"></i></div>
+              <div class="social-icon tg"><svg class="ico" aria-hidden="true"><use href="#i-telegram"/></svg></div>
               <div><div class="social-net">Telegram</div><div class="social-handle">@Dimakrykun95</div></div>
             </a>
             <a href="https://instagram.com/brokservisavto" class="social-card" target="_blank" rel="noopener">
-              <div class="social-icon ig"><i class="ti ti-brand-instagram" aria-hidden="true"></i></div>
+              <div class="social-icon ig"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg></div>
               <div><div class="social-net">Instagram</div><div class="social-handle">@brokservisavto</div></div>
             </a>
             <a href="https://www.facebook.com/search/top?q=%D0%84%D0%B2%D1%80%D0%BE%D0%BF%D0%B0%20%D1%82%D1%80%D0%B0%D0%BD%D1%81%20%D0%B3%D1%80%D1%83%D0%BF" class="social-card" target="_blank" rel="noopener" style="grid-column:span 2;">
-              <div class="social-icon fb"><i class="ti ti-brand-facebook" aria-hidden="true"></i></div>
+              <div class="social-icon fb"><svg class="ico" aria-hidden="true"><use href="#i-facebook"/></svg></div>
               <div><div class="social-net">Facebook</div><div class="social-handle">Європа транс груп</div></div>
             </a>
           </div>
@@ -427,28 +478,28 @@
       <p class="section-sub">Детальні сторінки з цінами, документами, FAQ та покроковими інструкціями.</p>
       <div class="sub-grid">
         <a href="/rozmytnennya" class="sub-card">
-          <div class="sub-ic"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+          <div class="sub-ic"><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg></div>
           <div class="sub-t">Розмитнення авто</div>
           <div class="sub-d">Калькулятор, формули акцизу, документи, FAQ — усе, що потрібно знати.</div>
-          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="sub-more">Читати детальніше <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
         <a href="/otsinka" class="sub-card">
-          <div class="sub-ic"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+          <div class="sub-ic"><svg class="ico" aria-hidden="true"><use href="#i-chart-bar"/></svg></div>
           <div class="sub-t">Оцінка авто</div>
           <div class="sub-d">Від 2 000 грн: для митниці, банку, страхової, суду або продажу.</div>
-          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="sub-more">Читати детальніше <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
         <a href="/dogovir" class="sub-card">
-          <div class="sub-ic"><i class="ti ti-file-description" aria-hidden="true"></i></div>
+          <div class="sub-ic"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg></div>
           <div class="sub-t">Договір купівлі-продажу</div>
           <div class="sub-d">Від 2 500 грн, безкоштовний зразок ДКП 2026 і супровід угоди.</div>
-          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="sub-more">Читати детальніше <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
         <a href="/avto-ssha" class="sub-card">
-          <div class="sub-ic"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="sub-ic"><svg class="ico" aria-hidden="true"><use href="#i-world"/></svg></div>
           <div class="sub-t">Авто зі США під ключ</div>
           <div class="sub-d">Copart, IAAI, доставка, розмитнення — весь процес від А до Я.</div>
-          <div class="sub-more">Читати детальніше <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+          <div class="sub-more">Читати детальніше <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></div>
         </a>
       </div>
     </div>
