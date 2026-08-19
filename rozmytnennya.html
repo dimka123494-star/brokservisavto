@@ -17,8 +17,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap">
 <!-- Іконки: локальний /icons.js замість @tabler/icons-webfont (підключений перед </body>) -->
 
 <script>
@@ -296,7 +295,7 @@
   .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
   footer { background:#060a14; color:rgba(255,255,255,0.6); text-align:center; padding:1.5rem; font-size:13px; }
   footer span { color:var(--blue); }
-  footer a { color:rgba(255,255,255,0.75); text-decoration:none; }
+  footer a { color:rgba(255,255,255,0.9); text-decoration:underline; }
   .back-link { display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,0.72); text-decoration:none; font-size:13px; margin-bottom:1.5rem; }
   .back-link:hover { color:#fff; }
   .internal-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-top:2rem; }
@@ -386,14 +385,14 @@
           <span>Курс НБУ:</span>
           <label>EUR <input type="number" id="rateEur" step="0.01" value="48.00" aria-label="Курс євро НБУ"></label>
           <label>USD <input type="number" id="rateUsd" step="0.01" value="42.00" aria-label="Курс долара НБУ"></label>
-          <span id="rateStatus" style="flex-basis:100%;" role="status"></span>
+          <span id="rateStatus" style="flex-basis:100%;min-height:1.35em;display:block;" role="status">Завантажуємо курс НБУ…</span>
         </div>
 
-        <div class="fuel-tabs" id="fuelTabs" role="tablist" aria-label="Тип пального">
-          <button type="button" class="fuel-tab active" data-fuel="petrol">Бензин</button>
-          <button type="button" class="fuel-tab" data-fuel="diesel">Дизель</button>
-          <button type="button" class="fuel-tab" data-fuel="hybrid">Гібрид</button>
-          <button type="button" class="fuel-tab" data-fuel="electric">Електро</button>
+        <div class="fuel-tabs" id="fuelTabs" role="group" aria-label="Тип пального">
+          <button type="button" class="fuel-tab active" data-fuel="petrol" aria-pressed="true">Бензин</button>
+          <button type="button" class="fuel-tab" data-fuel="diesel" aria-pressed="false">Дизель</button>
+          <button type="button" class="fuel-tab" data-fuel="hybrid" aria-pressed="false">Гібрид</button>
+          <button type="button" class="fuel-tab" data-fuel="electric" aria-pressed="false">Електро</button>
         </div>
 
         <div class="calc-row">
@@ -742,8 +741,12 @@ loadRates();
 document.getElementById('fuelTabs').addEventListener('click', function(e){
   const btn = e.target.closest('.fuel-tab');
   if(!btn) return;
-  document.querySelectorAll('.fuel-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.fuel-tab').forEach(function(t){
+    t.classList.remove('active');
+    t.setAttribute('aria-pressed','false');
+  });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed','true');
   currentFuel = btn.dataset.fuel;
   const isEv = currentFuel === 'electric';
   document.getElementById('engineField').style.display  = isEv ? 'none' : 'flex';
