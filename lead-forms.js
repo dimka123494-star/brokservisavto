@@ -122,6 +122,8 @@
   .bsa-alt{text-align:center;margin-top:16px;font-size:13px;color:#94a6c4}
   .bsa-alt a{color:#93b8ff;font-weight:600;text-decoration:underline}
   .bsa-note{font-size:11.5px;color:#7c8aa6;text-align:center;margin-top:14px}
+  /* honeypot: невидимий для людей, доступний ботам. Не display:none — деякі боти це розпізнають */
+  .bsa-hp{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
   .bsa-err{background:#3a1620;border:1px solid #7f1d2e;color:#fda4af;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px;display:none}
   .bsa-ok{text-align:center;padding:12px 0}
   .bsa-ok .ic{width:70px;height:70px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#22c55e,#15803d);box-shadow:0 12px 30px #16a34a55}
@@ -174,6 +176,7 @@
       <button type="button" class="bsa-btn" data-submit>${P.cta}</button>
       <div class="bsa-alt">Або одразу — <a href="${CONFIG.TELEGRAM}" target="_blank" rel="noopener">написати в Telegram</a></div>
       <div class="bsa-note">Надсилаючи заявку, ви погоджуєтесь на обробку контактних даних.</div>
+      <div class="bsa-hp" aria-hidden="true"><label>Не заповнюйте це поле</label><input type="text" name="website" data-hp tabindex="-1" autocomplete="off"></div>
     </div>
     <div class="bsa-ok" data-ok style="display:none">
       <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -256,8 +259,26 @@
     const errBox = scope.querySelector("[data-err]");
     const btn = scope.querySelector("[data-submit]");
 
+    const openedAt = Date.now();
+
     async function submit() {
       errBox.style.display = "none";
+
+      // Honeypot: люди цього поля не бачать, боти заповнюють усе.
+      const hp = scope.querySelector("[data-hp]");
+      if (hp && hp.value.trim() !== "") {
+        // Показуємо "успіх", але нічого не надсилаємо — бот не дізнається, що його відсіяли.
+        scope.querySelector("[data-form]").style.display = "none";
+        scope.querySelector("[data-ok]").style.display = "block";
+        return;
+      }
+      // Людина не заповнить форму швидше за 2 секунди.
+      if (Date.now() - openedAt < 2000) {
+        scope.querySelector("[data-form]").style.display = "none";
+        scope.querySelector("[data-ok]").style.display = "block";
+        return;
+      }
+
       const lead = { source: "Сайт", stage: "Новий лід", client_type: "Фіз. особа", service: P.service || "Інше" };
       const svc = scope.querySelector("[data-service]"); if (svc) lead.service = svc.value;
       const noteLines = [];
