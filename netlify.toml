@@ -1,0 +1,27 @@
+# Кешування на CDN — прибирає повільну першу відповідь з "холодних" edge-вузлів
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate, s-maxage=3600"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate, s-maxage=3600"
+
+[[headers]]
+  for = "/icons.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/lead-forms.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, s-maxage=86400"
+
+[[headers]]
+  for = "/llms.txt"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Cache-Control = "public, max-age=3600, s-maxage=86400"
