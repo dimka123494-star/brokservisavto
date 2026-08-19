@@ -17,15 +17,43 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
 
-<!-- Google Ads -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
+<!-- Google Ads: gtag.js вантажиться після взаємодії або через 2,5 с -->
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'AW-18171698074');
+
+(function(){
+  var loaded = false;
+  function loadGtag(){
+    if (loaded) return;
+    loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18171698074';
+    document.head.appendChild(s);
+  }
+  window.__loadGtag = loadGtag;
+  ['pointerdown','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
+    window.addEventListener(ev, loadGtag, {once:true, passive:true});
+  });
+  setTimeout(loadGtag, 2500);
+})();
+
+function gtagCallConversion() {
+  if (window.__loadGtag) window.__loadGtag();
+  gtag('event','conversion',{'send_to':'AW-18171698074/call'});
+  return true;
+}
+function gtagTelegramConversion() {
+  if (window.__loadGtag) window.__loadGtag();
+  gtag('event','conversion',{'send_to':'AW-18171698074/telegram'});
+  return true;
+}
 </script>
 
 <!-- Schema.org: Послуга -->
@@ -110,17 +138,17 @@ gtag('config', 'AW-18171698074');
   color-scheme: light only;
   --navy:#0B1F3A;
   --navy-2:#122B4F;
-  --blue:#1E6FD9;
+  --blue:#1E6FD9;        /* 4.9:1 з білим — проходить AA */
   --blue-light:#EAF2FD;
-  --viber:#7360F2;
+  --viber:#6551E0;       /* було #7360F2 — 4.5:1 не дотягував */
   --text:#22293A;
   --muted:#5B6478;
   --line:#E3E8F0;
   --white:#FFFFFF;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Manrope',sans-serif;color:var(--text);background:var(--white);line-height:1.65}
-h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;color:var(--navy);font-weight:400}
+body{font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--text);background:var(--white);line-height:1.65}
+h1,h2,h3{font-family:'Bebas Neue',Impact,sans-serif;letter-spacing:.5px;color:var(--navy);font-weight:400}
 h1{font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.08}
 h2{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:18px}
 h3{font-size:1.35rem;margin-bottom:10px}
@@ -132,20 +160,20 @@ section{padding:56px 0}
 
 header{background:var(--navy);position:sticky;top:0;z-index:50}
 .nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 20px;max-width:1080px;margin:0 auto}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#fff;text-decoration:none;letter-spacing:1px}
-.logo span{color:var(--blue)}
+.logo{font-family:'Bebas Neue',Impact,sans-serif;font-size:1.5rem;color:#fff;text-decoration:none;letter-spacing:1px}
+.logo span{color:#5B9BEB}
 .nav-links{display:flex;flex-wrap:wrap;gap:18px;font-size:.92rem;font-weight:600}
 .nav-links a{color:#C9D6EA;text-decoration:none}
-.nav-links a.active{color:#fff;border-bottom:2px solid var(--blue);padding-bottom:2px}
-.nav a.phone{color:#fff;text-decoration:none;font-weight:700;font-size:.95rem;white-space:nowrap}
+.nav-links a.active{color:#fff;border-bottom:2px solid #5B9BEB;padding-bottom:2px}
+.nav a.phone{color:#fff;text-decoration:none;font-weight:700;font-size:.95rem;white-space:nowrap;padding:8px 0}
 
 .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 70%);color:#fff;padding:64px 0}
 .hero h1{color:#fff}
 .hero p.lead{font-size:1.1rem;color:#C9D6EA;max-width:660px;margin:18px 0 26px}
-.crumbs{font-size:.85rem;color:#8FA6C6;margin-bottom:16px}
+.crumbs{font-size:.85rem;color:#9DB2CE;margin-bottom:16px}
 .crumbs a{color:#8FBBF5;text-decoration:none}
-.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:8px;font-size:1rem;margin:0 8px 10px 0}
-.btn.ghost{background:transparent;border:2px solid #3D5B8C}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:15px 28px;border-radius:8px;font-size:1rem;margin:0 8px 10px 0;min-height:48px}
+.btn.ghost{background:transparent;border:2px solid #5B7CB0}
 .btn.viber{background:var(--viber)}
 .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
 .badge{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 14px;font-size:.85rem;color:#C9D6EA}
@@ -153,7 +181,7 @@ header{background:var(--navy);position:sticky;top:0;z-index:50}
 /* Кроки процесу */
 .process{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:10px}
 .step{border:1px solid var(--line);border-radius:12px;padding:24px;background:#fff}
-.step .n{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--blue);line-height:1;margin-bottom:6px}
+.step .n{font-family:'Bebas Neue',Impact,sans-serif;font-size:1.6rem;color:var(--blue);line-height:1;margin-bottom:6px}
 .step h3{font-family:'Manrope',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0;margin-bottom:6px}
 .step p{font-size:.9rem;color:var(--muted);margin:0}
 
@@ -161,7 +189,7 @@ header{background:var(--navy);position:sticky;top:0;z-index:50}
 .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:10px}
 .price-card{border:1px solid var(--line);border-radius:12px;padding:24px;background:#fff}
 .price-card.featured{border:2px solid var(--blue);box-shadow:0 4px 20px rgba(30,111,217,.12)}
-.price-card .amount{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--navy);line-height:1;margin:6px 0 4px}
+.price-card .amount{font-family:'Bebas Neue',Impact,sans-serif;font-size:2.4rem;color:var(--navy);line-height:1;margin:6px 0 4px}
 .price-card .amount small{font-family:'Manrope',sans-serif;font-size:.82rem;color:var(--muted);font-weight:600}
 .price-card .note{font-size:.88rem;color:var(--muted)}
 
@@ -183,13 +211,16 @@ ul.checks li::before{content:"✓";position:absolute;left:0;color:var(--blue);fo
 
 details{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:#fff}
 summary{cursor:pointer;padding:16px 18px;font-weight:700;list-style:none;position:relative;padding-right:40px}
+summary::-webkit-details-marker{display:none}
 summary::after{content:"+";position:absolute;right:18px;top:14px;font-size:1.3rem;color:var(--blue)}
 details[open] summary::after{content:"−"}
 details .answer{padding:0 18px 16px;color:var(--muted)}
 
 .form-box{max-width:520px}
 .form-box input,
-.form-box textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:'Manrope',sans-serif;font-size:1rem}
+.form-box textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:inherit;font-size:16px}
+.form-box input:focus,
+.form-box textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
 .form-box textarea{resize:vertical;min-height:92px;line-height:1.5}
 .form-box .field-hint{font-size:.82rem;color:var(--muted);margin:-6px 0 14px}
 .form-box button{border:none;cursor:pointer;width:100%}
@@ -209,11 +240,15 @@ footer ul{list-style:none}
 footer li{margin-bottom:6px}
 footer .bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:28px;padding-top:16px;font-size:.85rem}
 
+/* видимий фокус з клавіатури */
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #5B9BEB;outline-offset:3px;border-radius:6px}
+
 @media(max-width:600px){
   section{padding:40px 0}
   .cta{padding:30px 20px}
   .nav-links{width:100%;gap:14px;font-size:.86rem}
 }
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
 
 /* ── Контраст на темних блоках ── */
 header, header *,
@@ -225,7 +260,7 @@ footer, footer *{
 .hero p.lead,
 .cta p,
 .badge{color:#D5E2F2}
-.crumbs{color:#8FA6C6}
+.crumbs{color:#9DB2CE}
 .nav-links a{color:#C9D6EA}
 footer{color:#B8C7DC}
 footer a,
@@ -276,7 +311,7 @@ footer a,
       <a href="/dogovir" class="active">Договір</a>
       <a href="/avto-ssha">Авто зі США</a>
     </div>
-    <a class="phone" href="tel:+380981722342">+38 098 172 23 42</a>
+    <a class="phone" href="tel:+380981722342" onclick="gtagCallConversion()">+38 098 172 23 42</a>
   </nav>
 </header>
 
@@ -287,7 +322,7 @@ footer a,
     <h1>Договір купівлі-продажу авто в Києві</h1>
     <p class="lead">Складемо ДКП під конкретне авто, перевіримо його за реєстрами обтяжень і базами МВС до підписання і супроводимо угоду. Оформлення за 30 хвилин на вул. Солом'янській, 5. Супровід від 2 500 грн.</p>
     <a class="btn" href="#zayavka">Залишити заявку</a>
-    <a class="btn viber" href="viber://chat?number=%2B380981722342">Viber</a>
+    <a class="btn viber" href="viber://chat?number=%2B380981722342" onclick="gtagCallConversion()">Viber</a>
     <a class="btn ghost" href="/dogovir/zrazok">Безкоштовний зразок ДКП</a>
     <div class="badges">
       <div class="badge">Супровід від 2 500 грн</div>
@@ -511,13 +546,20 @@ footer a,
     <h2>Залишити заявку на оформлення ДКП</h2>
     <p>Зателефонуємо протягом 15 хвилин, прорахуємо вартість і запишемо на зручний час. Що більше деталей по авто вкажете, то точніше прорахуємо угоду.</p>
     <div class="form-box">
-      <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name">
-      <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel">
-      <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email">
-      <textarea id="lead-details" placeholder="Деталі по авто: марка, модель, рік, VIN, місто угоди (необов'язково)"></textarea>
-      <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати вам прорахунок і зразок договору.</p>
-      <button class="btn" onclick="sendLead()">Надіслати заявку</button>
-      <p id="lead-status"></p>
+      <form id="lead-form" onsubmit="event.preventDefault(); sendLead();">
+        <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name" aria-label="Ваше ім'я" required>
+        <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" inputmode="tel" aria-label="Ваш номер телефону" required>
+        <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email" aria-label="Ваш Email">
+        <textarea id="lead-details" placeholder="Деталі по авто: марка, модель, рік, VIN, місто угоди (необов'язково)" aria-label="Деталі по авто"></textarea>
+        <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати вам прорахунок і зразок договору.</p>
+        <!-- honeypot -->
+        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+          <label for="lead-website">Не заповнюйте це поле</label>
+          <input id="lead-website" type="text" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <button type="submit" class="btn">Надіслати заявку</button>
+      </form>
+      <p id="lead-status" role="status"></p>
     </div>
   </div>
 </section>
@@ -528,11 +570,11 @@ footer a,
     <h2>Оформили ДКП? Залишилось оформити ОСЦПВ</h2>
     <p class="lead-text">Перед першою реєстрацією нового авто в сервісному центрі МВС знадобиться поліс автоцивілки. Залиште номер — підберемо ОСЦПВ і зв'яжемось протягом дня. Поліс одразу у застосунку «Дія», без черг.</p>
     <div class="form-box">
-      <input id="osago-name" type="text" placeholder="Ваше ім'я" autocomplete="name">
-      <input id="osago-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel">
-      <p class="field-hint" id="osago-error" style="display:none;color:#C0392B;">Введіть номер телефону</p>
-      <button class="btn" id="osago-submit">Розрахувати вартість поліса</button>
-      <p id="osago-status"></p>
+      <input id="osago-name" type="text" placeholder="Ваше ім'я" autocomplete="name" aria-label="Ваше ім'я">
+      <input id="osago-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" inputmode="tel" aria-label="Ваш номер телефону">
+      <p class="field-hint" id="osago-error" style="display:none;color:#B02A1E;" role="alert">Введіть номер телефону</p>
+      <button type="button" class="btn" id="osago-submit">Розрахувати вартість поліса</button>
+      <p id="osago-status" role="status"></p>
     </div>
   </div>
 </section>
@@ -543,9 +585,9 @@ footer a,
     <div class="cta">
       <h2>Оформимо ваш ДКП сьогодні</h2>
       <p>Складемо договір, перевіримо авто по базах і супроводимо угоду в Києві. Консультація безкоштовна.</p>
-      <a class="btn" href="tel:+380981722342">+38 098 172 23 42</a>
-      <a class="btn viber" href="viber://chat?number=%2B380981722342">Viber</a>
-      <a class="btn ghost" href="https://t.me/Dimakrykun95" rel="noopener">Telegram</a>
+      <a class="btn" href="tel:+380981722342" onclick="gtagCallConversion()">+38 098 172 23 42</a>
+      <a class="btn viber" href="viber://chat?number=%2B380981722342" onclick="gtagCallConversion()">Viber</a>
+      <a class="btn ghost" href="https://t.me/Dimakrykun95" target="_blank" rel="noopener" onclick="gtagTelegramConversion()">Telegram</a>
     </div>
   </div>
 </section>
@@ -556,9 +598,9 @@ footer a,
       <div>
         <h4>BROKSERVISAVTO</h4>
         вул. Солом'янська, 5, Київ<br>
-        <a href="tel:+380981722342">+38 098 172 23 42</a><br>
+        <a href="tel:+380981722342" onclick="gtagCallConversion()">+38 098 172 23 42</a><br>
         <a href="mailto:custom@forwardcarua.com">custom@forwardcarua.com</a><br>
-        <a href="https://t.me/Dimakrykun95" rel="noopener">Telegram</a>
+        <a href="https://t.me/Dimakrykun95" target="_blank" rel="noopener" onclick="gtagTelegramConversion()">Telegram</a>
       </div>
       <div>
         <h4>Послуги</h4>
@@ -598,6 +640,13 @@ footer a,
 const SUPABASE_URL = 'https://rhduokjaawmorcyiuviy.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg';
 
+/* Мітка конверсії Google Ads для надісланої заявки.
+   Створіть у Google Ads конверсію «Надсилання форми» і впишіть її мітку,
+   напр. 'AW-18171698074/AbC-D_efGh'. Порожнє значення = конверсія не надсилається. */
+const ADS_LEAD_LABEL = '';
+
+const pageOpenedAt = Date.now();
+
 function normalizePhone(raw){
   let p = (raw || '').replace(/[^\d+]/g, '');
   if(p.startsWith('+380')) return p;
@@ -612,11 +661,19 @@ async function sendLead(){
   const phoneRaw = document.getElementById('lead-phone').value.trim();
   const email    = document.getElementById('lead-email').value.trim();
   const details  = document.getElementById('lead-details').value.trim();
+  const hp       = document.getElementById('lead-website').value.trim();
   const status   = document.getElementById('lead-status');
+
+  /* Honeypot і мінімальний час заповнення — відсікаємо ботів */
+  if(hp !== '' || Date.now() - pageOpenedAt < 2000){
+    status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
+    status.style.color = '#17753A';
+    return;
+  }
 
   if(!name || !phoneRaw){
     status.textContent = 'Заповніть ім\'я та телефон';
-    status.style.color = '#C0392B';
+    status.style.color = '#B02A1E';
     return;
   }
 
@@ -645,21 +702,20 @@ async function sendLead(){
     if(!res.ok) throw new Error(await res.text());
 
     status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
-    status.style.color = '#1E8E3E';
-    document.getElementById('lead-name').value = '';
-    document.getElementById('lead-phone').value = '';
-    document.getElementById('lead-email').value = '';
-    document.getElementById('lead-details').value = '';
+    status.style.color = '#17753A';
+    document.getElementById('lead-form').reset();
 
+    if(window.__loadGtag) window.__loadGtag();
     if(typeof gtag === 'function'){
       const userData = { phone_number: phone };
       if(email) userData.email = email;
       gtag('set', 'user_data', userData);
-      gtag('event', 'conversion', { 'send_to': 'AW-18171698074' });
+      gtag('event', 'generate_lead', { event_category:'lead', event_label:'Договір купівлі-продажу' });
+      if(ADS_LEAD_LABEL) gtag('event', 'conversion', { 'send_to': ADS_LEAD_LABEL });
     }
   }catch(e){
     status.textContent = 'Помилка надсилання. Зателефонуйте нам: +38 098 172 23 42';
-    status.style.color = '#C0392B';
+    status.style.color = '#B02A1E';
   }
 }
 
@@ -672,10 +728,11 @@ async function sendLead(){
   const submitBtn = document.getElementById('osago-submit');
   if(!submitBtn) return;
 
-  submitBtn.addEventListener('click', async function(){
+  async function submitOsago(){
     const phoneRaw = phoneInput.value.trim();
     if(!phoneRaw){
       errorMsg.style.display = 'block';
+      phoneInput.focus();
       return;
     }
     errorMsg.style.display = 'none';
@@ -693,7 +750,8 @@ async function sendLead(){
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
-          name: nameInput.value.trim() || null,
+          /* name у таблиці NOT NULL — раніше тут ішов null і заявка не зберігалась */
+          name: nameInput.value.trim() || 'Без імені',
           phone: phone,
           email: null,
           notes: 'Заявка на розрахунок ОСЦПВ (блок після форми договору)',
@@ -706,16 +764,30 @@ async function sendLead(){
       if(!res.ok) throw new Error(await res.text());
 
       statusMsg.textContent = 'Дякуємо! Зв\'яжемось з вами найближчим часом.';
-      statusMsg.style.color = '#1E8E3E';
+      statusMsg.style.color = '#17753A';
       nameInput.value = '';
       phoneInput.value = '';
       submitBtn.style.display = 'none';
+
+      if(window.__loadGtag) window.__loadGtag();
+      if(typeof gtag === 'function'){
+        gtag('event', 'generate_lead', { event_category:'lead', event_label:'ОСЦПВ' });
+        if(ADS_LEAD_LABEL) gtag('event', 'conversion', { 'send_to': ADS_LEAD_LABEL });
+      }
     }catch(e){
       submitBtn.disabled = false;
       submitBtn.textContent = 'Розрахувати вартість поліса';
       statusMsg.textContent = 'Сталася помилка. Спробуйте ще раз або зателефонуйте нам.';
-      statusMsg.style.color = '#C0392B';
+      statusMsg.style.color = '#B02A1E';
     }
+  }
+
+  submitBtn.addEventListener('click', submitOsago);
+  phoneInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); submitOsago(); }
+  });
+  nameInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
   });
 })();
 </script>
