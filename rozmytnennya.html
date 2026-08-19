@@ -17,17 +17,45 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap"></noscript>
+<!-- Іконки: локальний /icons.js замість @tabler/icons-webfont (підключений перед </body>) -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'AW-18171698074');
-  function gtagCallConversion() { gtag('event','conversion',{'send_to':'AW-18171698074/call'}); return true; }
-  function gtagTelegramConversion() { gtag('event','conversion',{'send_to':'AW-18171698074/telegram'}); return true; }
+
+  /* gtag.js вантажиться після першої взаємодії або через 2,5 с.
+     Події, надіслані раніше, чекають у dataLayer і йдуть при завантаженні. */
+  (function(){
+    var loaded = false;
+    function loadGtag(){
+      if (loaded) return;
+      loaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18171698074';
+      document.head.appendChild(s);
+    }
+    window.__loadGtag = loadGtag;
+    ['pointerdown','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
+      window.addEventListener(ev, loadGtag, {once:true, passive:true});
+    });
+    setTimeout(loadGtag, 2500);
+  })();
+
+  function gtagCallConversion() {
+    if (window.__loadGtag) window.__loadGtag();
+    gtag('event','conversion',{'send_to':'AW-18171698074/call'});
+    return true;
+  }
+  function gtagTelegramConversion() {
+    if (window.__loadGtag) window.__loadGtag();
+    gtag('event','conversion',{'send_to':'AW-18171698074/telegram'});
+    return true;
+  }
 </script>
 
 <script type="application/ld+json">
@@ -112,41 +140,55 @@
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { color-scheme: light only; --blue:#378ADD; --navy:#0a0f1e; --white:#fff; --off:#f5f6fa; --text:#111827; --muted:#6b7280; --border:rgba(0,0,0,0.08); --r:12px; }
+  :root {
+    color-scheme: light only;
+    --blue:#378ADD;        /* акцент на темному navy — 5.3:1 */
+    --blue-btn:#1a6ab0;    /* фон кнопок з білим текстом — 5.6:1 */
+    --blue-btn-hover:#14568f;
+    --blue-ink:#14508e;    /* синій текст та іконки на світлому — 8.2:1 */
+    --navy:#0a0f1e;
+    --white:#fff;
+    --off:#f5f6fa;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:rgba(0,0,0,0.08);
+    --r:12px;
+  }
   html { scroll-behavior: smooth; }
-  body { font-family:'Manrope',sans-serif; background:var(--off); color:var(--text); line-height:1.6; overflow-x:hidden; }
+  body { font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif; background:var(--off); color:var(--text); line-height:1.6; overflow-x:hidden; }
   nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,15,30,0.96); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; height:64px; border-bottom:0.5px solid rgba(255,255,255,0.08); }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; }
+  .nav-logo { font-family:'Bebas Neue',Impact,sans-serif; font-size:22px; letter-spacing:2px; color:var(--blue); text-decoration:none; }
   .nav-logo span { color:#fff; }
   .nav-links { display:flex; gap:2rem; list-style:none; }
-  .nav-links a { color:rgba(255,255,255,0.6); text-decoration:none; font-size:13px; transition:color 0.2s; }
+  .nav-links a { color:rgba(255,255,255,0.72); text-decoration:none; font-size:13px; transition:color 0.2s; }
   .nav-links a:hover, .nav-links a.active { color:#fff; }
-  .nav-cta { background:var(--blue); color:#fff; border:none; padding:9px 20px; border-radius:8px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+  .nav-cta { background:var(--blue-btn); color:#fff; border:none; padding:9px 20px; border-radius:8px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; min-height:40px; transition:background 0.2s; }
+  .nav-cta:hover { background:var(--blue-btn-hover); }
   .hero { background:var(--navy); padding:120px 2rem 4rem; position:relative; overflow:hidden; }
   .hero::before { content:''; position:absolute; top:-80px; right:-100px; width:400px; height:400px; border-radius:50%; border:40px solid rgba(55,138,221,0.08); pointer-events:none; }
   .hero-inner { max-width:860px; margin:0 auto; position:relative; z-index:1; }
   .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(55,138,221,0.15); color:#85B7EB; border:0.5px solid rgba(55,138,221,0.3); border-radius:20px; padding:5px 14px; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:1.5rem; }
-  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(38px,5.5vw,64px); line-height:1.02; color:#fff; margin-bottom:1rem; }
+  h1 { font-family:'Bebas Neue',Impact,sans-serif; font-size:clamp(38px,5.5vw,64px); line-height:1.02; color:#fff; margin-bottom:1rem; }
   h1 span { color:var(--blue); }
-  .hero-sub { font-size:16px; color:rgba(255,255,255,0.72); max-width:600px; line-height:1.7; margin-bottom:1.5rem; }
+  .hero-sub { font-size:16px; color:rgba(255,255,255,0.78); max-width:600px; line-height:1.7; margin-bottom:1.5rem; }
   .hero-facts { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:2rem; }
   .hero-fact { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.07); border:0.5px solid rgba(255,255,255,0.16); border-radius:9px; padding:8px 14px; font-size:13px; color:#D5E2F2; }
-  .hero-fact i { color:#85B7EB; font-size:16px; }
+  .hero-fact .ico { color:#85B7EB; font-size:16px; }
   .hero-fact b { color:#fff; font-weight:600; }
   .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
-  .btn-primary { background:var(--blue); color:#fff; border:none; padding:13px 26px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:opacity 0.2s; }
-  .btn-primary:hover { opacity:0.88; }
-  .btn-ghost { background:transparent; color:rgba(255,255,255,0.85); border:0.5px solid rgba(255,255,255,0.3); padding:13px 26px; border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; cursor:pointer; }
-  .btn-ghost:hover { border-color:rgba(255,255,255,0.6); color:#fff; }
+  .btn-primary { background:var(--blue-btn); color:#fff; border:none; padding:14px 26px; border-radius:9px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:background 0.2s; min-height:48px; }
+  .btn-primary:hover { background:var(--blue-btn-hover); }
+  .btn-ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.4); padding:14px 26px; border-radius:9px; font-family:inherit; font-size:15px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; cursor:pointer; min-height:48px; }
+  .btn-ghost:hover { border-color:#fff; background:rgba(255,255,255,0.06); }
   section { padding:4rem 2rem; }
   .container { max-width:900px; margin:0 auto; }
-  .eyebrow { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--blue); font-weight:600; margin-bottom:0.5rem; }
-  h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,4vw,42px); margin-bottom:0.75rem; }
+  .eyebrow { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--blue-ink); font-weight:700; margin-bottom:0.5rem; }
+  h2 { font-family:'Bebas Neue',Impact,sans-serif; font-size:clamp(28px,4vw,42px); margin-bottom:0.75rem; }
   h3 { font-size:16px; font-weight:600; }
   .lead { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:2.5rem; max-width:640px; }
   .text-block p { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:1rem; max-width:720px; }
   .updated { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted); background:var(--white); border:0.5px solid var(--border); border-radius:20px; padding:5px 13px; margin-bottom:1.25rem; }
-  .updated i { color:var(--blue); font-size:15px; }
+  .updated .ico { color:var(--blue-ink); font-size:15px; }
 
   /* ── Калькулятор ── */
   .calc { background:var(--white); border:0.5px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:0 2px 18px rgba(10,15,30,0.06); }
@@ -154,41 +196,43 @@
   .calc-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
   .calc-field { display:flex; flex-direction:column; }
   .calc-field label { font-size:12.5px; font-weight:600; color:var(--text); margin-bottom:6px; }
-  .calc-field input, .calc-field select { padding:12px 14px; border:0.5px solid var(--border); border-radius:9px; font-family:'Manrope',sans-serif; font-size:15px; background:var(--white); color:var(--text); width:100%; }
-  .calc-field input:focus, .calc-field select:focus { outline:2px solid rgba(55,138,221,0.35); outline-offset:1px; border-color:var(--blue); }
+  /* font-size 16px — інакше iOS Safari зумить сторінку при фокусі на полі */
+  .calc-field input, .calc-field select { padding:12px 14px; border:0.5px solid var(--border); border-radius:9px; font-family:inherit; font-size:16px; background:var(--white); color:var(--text); width:100%; }
+  .calc-field input:focus, .calc-field select:focus { outline:2px solid var(--blue-btn); outline-offset:1px; border-color:var(--blue-btn); }
   .calc-field .hint { font-size:11.5px; color:var(--muted); margin-top:4px; line-height:1.4; }
   .fuel-tabs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:16px; background:var(--off); padding:5px; border-radius:11px; }
-  .fuel-tab { padding:9px 4px; border:none; background:transparent; border-radius:8px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all 0.15s; }
-  .fuel-tab.active { background:var(--white); color:var(--blue); font-weight:600; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
-  .calc-btn { width:100%; background:var(--blue); color:#fff; border:none; padding:14px; border-radius:10px; font-family:'Manrope',sans-serif; font-size:15px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; margin-top:4px; }
-  .calc-btn:hover { opacity:0.9; }
-  .calc-error { color:#C0392B; font-size:13.5px; margin-top:10px; display:none; }
+  .fuel-tab { padding:11px 4px; border:none; background:transparent; border-radius:8px; font-family:inherit; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all 0.15s; min-height:40px; }
+  .fuel-tab.active { background:var(--white); color:var(--blue-ink); font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+  .calc-btn { width:100%; background:var(--blue-btn); color:#fff; border:none; padding:15px; border-radius:10px; font-family:inherit; font-size:15px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; margin-top:4px; min-height:48px; transition:background 0.2s; }
+  .calc-btn:hover { background:var(--blue-btn-hover); }
+  .calc-error { color:#B02A1E; font-size:13.5px; margin-top:10px; display:none; }
 
   .calc-result { background:var(--navy); color:#fff; padding:1.75rem; display:none; }
   .calc-result.show { display:block; }
   .res-total { text-align:center; padding-bottom:1.25rem; border-bottom:0.5px solid rgba(255,255,255,0.13); margin-bottom:1.25rem; }
   .res-total .rt-label { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#85B7EB; margin-bottom:6px; }
-  .res-total .rt-value { font-family:'Bebas Neue',sans-serif; font-size:clamp(38px,7vw,56px); line-height:1; color:#fff; }
+  .res-total .rt-value { font-family:'Bebas Neue',Impact,sans-serif; font-size:clamp(38px,7vw,56px); line-height:1; color:#fff; }
   .res-lines { display:flex; flex-direction:column; gap:9px; margin-bottom:1.25rem; }
   .res-line { display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-size:14.5px; }
-  .res-line .rl-name { color:rgba(255,255,255,0.72); }
-  .res-line .rl-name small { display:block; font-size:11.5px; color:rgba(255,255,255,0.42); margin-top:1px; }
+  .res-line .rl-name { color:rgba(255,255,255,0.8); }
+  .res-line .rl-name small { display:block; font-size:11.5px; color:rgba(255,255,255,0.6); margin-top:1px; }
   .res-line .rl-val { color:#fff; font-weight:600; white-space:nowrap; }
   .res-extra { background:rgba(255,255,255,0.06); border-radius:10px; padding:1rem 1.15rem; margin-bottom:1.25rem; }
   .res-extra .re-title { font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:#85B7EB; margin-bottom:9px; }
   .res-extra .res-line { font-size:13.5px; }
-  .res-note { font-size:12.5px; color:rgba(255,255,255,0.5); line-height:1.6; margin-bottom:1.25rem; }
+  .res-note { font-size:12.5px; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:1.25rem; }
   .res-cta { display:flex; gap:10px; flex-wrap:wrap; }
   .res-cta a { flex:1; min-width:150px; justify-content:center; }
 
   .rate-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); background:var(--off); border-radius:9px; padding:10px 14px; margin-bottom:16px; }
-  .rate-bar i { color:var(--blue); font-size:15px; }
-  .rate-bar input { width:78px; padding:5px 8px; border:0.5px solid var(--border); border-radius:6px; font-family:'Manrope',sans-serif; font-size:13px; background:var(--white); color:var(--text); }
+  .rate-bar .ico { color:var(--blue-ink); font-size:15px; }
+  .rate-bar input { width:88px; padding:7px 8px; border:0.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:16px; background:var(--white); color:var(--text); }
 
-  .formula-box { background:var(--white); border:0.5px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:1.15rem 1.35rem; margin-bottom:1rem; }
+  .formula-box { background:var(--white); border:0.5px solid var(--border); border-left:3px solid var(--blue-ink); border-radius:10px; padding:1.15rem 1.35rem; margin-bottom:1rem; }
   .formula-box h4 { font-size:14.5px; font-weight:600; margin-bottom:6px; }
   .formula-box code { display:block; background:var(--off); border-radius:7px; padding:9px 12px; font-size:13.5px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--navy); margin:8px 0; overflow-x:auto; }
   .formula-box p { font-size:13.5px; color:var(--muted); line-height:1.6; }
+  .formula-box a { color:var(--blue-ink); font-weight:600; }
 
   .table-wrap { overflow-x:auto; margin-bottom:1.5rem; }
   .rate-table { width:100%; border-collapse:collapse; font-size:14px; background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); overflow:hidden; min-width:480px; }
@@ -200,35 +244,36 @@
   /* ── Хаб дочірніх сторінок ── */
   .hub { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
   .hub a { background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); padding:1.25rem 1.4rem; text-decoration:none; display:block; transition:border-color 0.2s; }
-  .hub a:hover { border-color:var(--blue); }
+  .hub a:hover { border-color:var(--blue-ink); }
   .hub a .hub-top { display:flex; align-items:center; gap:9px; margin-bottom:6px; }
-  .hub a i { color:var(--blue); font-size:19px; }
+  .hub a .ico { color:var(--blue-ink); font-size:19px; }
   .hub a strong { color:var(--text); font-size:15px; font-weight:600; }
   .hub a span { color:var(--muted); font-size:13px; line-height:1.55; display:block; }
 
   .steps-grid { display:flex; flex-direction:column; gap:12px; margin-bottom:2rem; }
   .step-card { background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); padding:1.25rem 1.5rem; display:flex; gap:1.25rem; align-items:flex-start; }
-  .step-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--blue); line-height:1; min-width:32px; }
+  .step-num { font-family:'Bebas Neue',Impact,sans-serif; font-size:28px; color:var(--blue-ink); line-height:1; min-width:32px; }
   .step-body h3 { font-size:15px; font-weight:600; margin-bottom:4px; }
   .step-body p { font-size:13px; color:var(--muted); line-height:1.55; }
   .docs-list { display:flex; flex-direction:column; gap:10px; margin-bottom:2rem; }
   .doc-item { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:1rem 1.25rem; display:flex; align-items:center; gap:12px; font-size:14px; font-weight:500; }
-  .doc-item i { color:var(--blue); font-size:18px; flex-shrink:0; }
+  .doc-item .ico { color:var(--blue-ink); font-size:18px; flex-shrink:0; }
   .elec-box { background:#EAF3DE; border-radius:var(--r); padding:1.25rem 1.5rem; display:flex; gap:12px; align-items:flex-start; margin-bottom:1rem; }
-  .elec-box i { color:#3B6D11; font-size:22px; flex-shrink:0; margin-top:2px; }
+  .elec-box .ico { color:#2F5A0D; font-size:22px; flex-shrink:0; margin-top:2px; }
   .elec-box h4 { font-size:15px; font-weight:600; color:#27500A; margin-bottom:4px; }
-  .elec-box p { font-size:13.5px; color:#3B6D11; line-height:1.6; }
+  .elec-box p { font-size:13.5px; color:#315C0E; line-height:1.6; }
   .elec-box a { color:#27500A; font-weight:600; }
   .warn-box { background:#FEF3E2; border-radius:var(--r); padding:1.25rem 1.5rem; display:flex; gap:12px; align-items:flex-start; margin-bottom:2rem; }
-  .warn-box i { color:#9A5B00; font-size:22px; flex-shrink:0; margin-top:2px; }
+  .warn-box .ico { color:#8A5100; font-size:22px; flex-shrink:0; margin-top:2px; }
   .warn-box h4 { font-size:15px; font-weight:600; color:#7A4700; margin-bottom:4px; }
-  .warn-box p { font-size:13.5px; color:#9A5B00; line-height:1.6; }
+  .warn-box p { font-size:13.5px; color:#7F4B00; line-height:1.6; }
   .warn-box a { color:#7A4700; font-weight:600; }
 
   .src-list { display:flex; flex-direction:column; gap:8px; margin-bottom:1.5rem; }
   .src-item { display:flex; gap:10px; align-items:flex-start; font-size:14px; color:var(--muted); }
-  .src-item i { color:var(--blue); font-size:17px; flex-shrink:0; margin-top:2px; }
-  .src-item a { color:var(--blue); text-decoration:none; font-weight:500; }
+  .src-item .ico { color:var(--blue-ink); font-size:17px; flex-shrink:0; margin-top:2px; }
+  .src-item a { color:var(--blue-ink); text-decoration:none; font-weight:600; }
+  .src-item a:hover { text-decoration:underline; }
   .author-box { background:var(--white); border:0.5px solid var(--border); border-radius:var(--r); padding:1.15rem 1.35rem; font-size:13px; color:var(--muted); line-height:1.65; }
   .author-box b { color:var(--text); }
 
@@ -238,7 +283,8 @@
   .faq-a { font-size:14px; color:var(--muted); line-height:1.6; }
 
   .form-box { max-width:520px; }
-  .form-box input, .form-box textarea { width:100%; padding:13px 15px; border:0.5px solid var(--border); border-radius:10px; margin-bottom:10px; font-family:'Manrope',sans-serif; font-size:15px; background:var(--white); color:var(--text); }
+  .form-box input, .form-box textarea { width:100%; padding:13px 15px; border:0.5px solid var(--border); border-radius:10px; margin-bottom:10px; font-family:inherit; font-size:16px; background:var(--white); color:var(--text); }
+  .form-box input:focus, .form-box textarea:focus { outline:2px solid var(--blue-btn); outline-offset:1px; border-color:var(--blue-btn); }
   .form-box textarea { resize:vertical; min-height:88px; line-height:1.5; }
   .form-box .field-hint { font-size:12.5px; color:var(--muted); margin:2px 0 12px; }
   .form-box button { width:100%; justify-content:center; }
@@ -246,17 +292,20 @@
 
   .cta-section { background:var(--navy); color:#fff; text-align:center; }
   .cta-section h2 { color:#fff; }
-  .cta-section p { color:rgba(255,255,255,0.65); margin-bottom:2rem; font-size:15px; }
+  .cta-section p { color:rgba(255,255,255,0.72); margin-bottom:2rem; font-size:15px; }
   .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-  footer { background:#060a14; color:rgba(255,255,255,0.45); text-align:center; padding:1.5rem; font-size:13px; }
+  footer { background:#060a14; color:rgba(255,255,255,0.6); text-align:center; padding:1.5rem; font-size:13px; }
   footer span { color:var(--blue); }
-  footer a { color:rgba(255,255,255,0.6); text-decoration:none; }
-  .back-link { display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,0.6); text-decoration:none; font-size:13px; margin-bottom:1.5rem; }
+  footer a { color:rgba(255,255,255,0.75); text-decoration:none; }
+  .back-link { display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,0.72); text-decoration:none; font-size:13px; margin-bottom:1.5rem; }
   .back-link:hover { color:#fff; }
   .internal-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-top:2rem; }
   .internal-link { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:1rem 1.25rem; text-decoration:none; color:var(--text); display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500; transition:border-color 0.2s; }
-  .internal-link:hover { border-color:var(--blue); }
-  .internal-link i { color:var(--blue); font-size:18px; }
+  .internal-link:hover { border-color:var(--blue-ink); }
+  .internal-link .ico { color:var(--blue-ink); font-size:18px; }
+
+  /* видимий фокус з клавіатури */
+  a:focus-visible, button:focus-visible { outline:3px solid #85B7EB; outline-offset:3px; border-radius:6px; }
 
   @media(max-width:768px){
     .nav-links { display:none; }
@@ -266,6 +315,7 @@
     .calc-form, .calc-result { padding:1.35rem; }
     .fuel-tabs { grid-template-columns:repeat(2,1fr); }
   }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important} html{scroll-behavior:auto} }
 
   @media (prefers-color-scheme: dark){
     html, body { background:var(--off) !important; color:var(--text) !important; }
@@ -274,7 +324,7 @@
     .form-box textarea, .fuel-tab.active, .updated { background:var(--white) !important; color:var(--text) !important; }
     .calc-form { background:var(--white) !important; }
     .fuel-tabs, .rate-bar, .formula-box code { background:var(--off) !important; }
-    .fuel-tab.active { color:var(--blue) !important; }
+    .fuel-tab.active { color:var(--blue-ink) !important; }
     .faq-a, .step-body p, .lead, .text-block p, .rate-table td, .calc-field .hint,
     .hub a span, .src-item, .author-box, .updated { color:var(--muted) !important; }
     h2, h3, .faq-q, .calc-field label, .hub a strong { color:var(--navy) !important; }
@@ -332,12 +382,12 @@
         <div class="rate-bar">
           <i class="ti ti-currency-euro"></i>
           <span>Курс НБУ:</span>
-          <label>EUR <input type="number" id="rateEur" step="0.01" value="48.00"></label>
-          <label>USD <input type="number" id="rateUsd" step="0.01" value="42.00"></label>
-          <span id="rateStatus" style="flex-basis:100%;"></span>
+          <label>EUR <input type="number" id="rateEur" step="0.01" value="48.00" aria-label="Курс євро НБУ"></label>
+          <label>USD <input type="number" id="rateUsd" step="0.01" value="42.00" aria-label="Курс долара НБУ"></label>
+          <span id="rateStatus" style="flex-basis:100%;" role="status"></span>
         </div>
 
-        <div class="fuel-tabs" id="fuelTabs">
+        <div class="fuel-tabs" id="fuelTabs" role="tablist" aria-label="Тип пального">
           <button type="button" class="fuel-tab active" data-fuel="petrol">Бензин</button>
           <button type="button" class="fuel-tab" data-fuel="diesel">Дизель</button>
           <button type="button" class="fuel-tab" data-fuel="hybrid">Гібрид</button>
@@ -347,17 +397,17 @@
         <div class="calc-row">
           <div class="calc-field" id="engineField">
             <label for="engine">Об'єм двигуна, см³</label>
-            <input type="number" id="engine" placeholder="2000" min="0" step="1">
+            <input type="number" id="engine" placeholder="2000" min="0" step="1" inputmode="numeric">
             <span class="hint">Наприклад, 2.0 л = 2000 см³</span>
           </div>
           <div class="calc-field" id="batteryField" style="display:none;">
             <label for="battery">Ємність батареї, кВт·год</label>
-            <input type="number" id="battery" placeholder="75" min="0" step="0.1">
+            <input type="number" id="battery" placeholder="75" min="0" step="0.1" inputmode="decimal">
             <span class="hint">Вказана в характеристиках моделі</span>
           </div>
           <div class="calc-field">
             <label for="year">Рік випуску</label>
-            <input type="number" id="year" placeholder="2021" min="1980" max="2030" step="1">
+            <input type="number" id="year" placeholder="2021" min="1980" max="2030" step="1" inputmode="numeric">
             <span class="hint" id="ageHint">Впливає на розмір акцизу</span>
           </div>
         </div>
@@ -376,7 +426,7 @@
         <div class="calc-row">
           <div class="calc-field">
             <label for="price">Митна вартість авто</label>
-            <input type="number" id="price" placeholder="10000" min="0" step="1">
+            <input type="number" id="price" placeholder="10000" min="0" step="1" inputmode="numeric">
             <span class="hint">Ціна за інвойсом або аукціонним листом</span>
           </div>
           <div class="calc-field">
@@ -391,7 +441,7 @@
         </div>
 
         <button type="button" class="calc-btn" id="calcBtn"><i class="ti ti-calculator"></i>Розрахувати розмитнення</button>
-        <p class="calc-error" id="calcError"></p>
+        <p class="calc-error" id="calcError" role="alert"></p>
       </div>
 
       <div class="calc-result" id="calcResult">
@@ -407,7 +457,7 @@
         <p class="res-note">Розрахунок орієнтовний. Митниця визначає митну вартість за власними базами і може скоригувати її вгору — тоді зростуть і мито, і ПДВ. Точну суму під ваше авто порахуємо безкоштовно за 15 хвилин.</p>
         <div class="res-cta">
           <a href="tel:+380981722342" class="btn-primary" onclick="gtagCallConversion()"><i class="ti ti-phone"></i>Уточнити суму</a>
-          <a href="#zayavka" class="btn-primary" style="background:rgba(255,255,255,0.14);"><i class="ti ti-mail"></i>Залишити заявку</a>
+          <a href="#zayavka" class="btn-primary" style="background:rgba(255,255,255,0.18);"><i class="ti ti-mail"></i>Залишити заявку</a>
         </div>
       </div>
     </div>
@@ -522,7 +572,7 @@
   <div class="container">
     <div class="eyebrow">Документи</div>
     <h2>Що потрібно для розмитнення авто зі США</h2>
-    <p class="lead">Стандартний пакет для митного оформлення американського авто. Для Європи пакет інший — див. <a href="/rozmytnennya/z-yevropy">розмитнення з Європи</a>.</p>
+    <p class="lead">Стандартний пакет для митного оформлення американського авто. Для Європи пакет інший — див. <a href="/rozmytnennya/z-yevropy" style="color:var(--blue-ink);font-weight:600;">розмитнення з Європи</a>.</p>
     <div class="docs-list">
       <div class="doc-item"><i class="ti ti-file-certificate"></i>Title — свідоцтво про право власності на авто в США</div>
       <div class="doc-item"><i class="ti ti-ship"></i>Bill of Lading — коносамент, документ про морське перевезення</div>
@@ -591,13 +641,20 @@
     <h2>Замовити розрахунок і розмитнення</h2>
     <p class="lead">Залиште контакти — зателефонуємо протягом 15 хвилин, перевіримо розрахунок і назвемо підсумкову суму з усіма платежами.</p>
     <div class="form-box">
-      <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name">
-      <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel">
-      <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email">
-      <textarea id="lead-details" placeholder="Марка, модель, рік, двигун, VIN і країна, звідки авто"></textarea>
-      <p class="field-hint">Поля з * — обов'язкові. Якщо вже рахували в калькуляторі, ми додамо результат до заявки автоматично.</p>
-      <button class="btn-primary" onclick="sendLead()"><i class="ti ti-send"></i>Надіслати заявку</button>
-      <p id="lead-status"></p>
+      <form id="lead-form" onsubmit="event.preventDefault(); sendLead();">
+        <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name" aria-label="Ваше ім'я" required>
+        <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" inputmode="tel" aria-label="Ваш номер телефону" required>
+        <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email" aria-label="Ваш Email">
+        <textarea id="lead-details" placeholder="Марка, модель, рік, двигун, VIN і країна, звідки авто" aria-label="Деталі про авто"></textarea>
+        <p class="field-hint">Поля з * — обов'язкові. Якщо вже рахували в калькуляторі, ми додамо результат до заявки автоматично.</p>
+        <!-- honeypot -->
+        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+          <label for="lead-website">Не заповнюйте це поле</label>
+          <input id="lead-website" type="text" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <button type="submit" class="btn-primary"><i class="ti ti-send"></i>Надіслати заявку</button>
+      </form>
+      <p id="lead-status" role="status"></p>
     </div>
   </div>
 </section>
@@ -617,12 +674,12 @@
           </div>
           <div class="calc-field">
             <label for="osago-phone">Телефон *</label>
-            <input type="tel" id="osago-phone" placeholder="+38 (0__) ___ __ __" autocomplete="tel">
+            <input type="tel" id="osago-phone" placeholder="+38 (0__) ___ __ __" autocomplete="tel" inputmode="tel">
           </div>
         </div>
-        <p class="calc-error" id="osago-error">Введіть номер телефону</p>
+        <p class="calc-error" id="osago-error" role="alert">Введіть номер телефону</p>
         <button type="button" class="calc-btn" id="osago-submit"><i class="ti ti-send"></i>Розрахувати вартість поліса</button>
-        <p id="osago-status" style="margin-top:10px;font-size:14px;"></p>
+        <p id="osago-status" style="margin-top:10px;font-size:14px;" role="status"></p>
       </div>
     </div>
   </div>
@@ -669,10 +726,10 @@ async function loadRates(){
     if(eur) document.getElementById('rateEur').value = eur.rate.toFixed(2);
     if(usd) document.getElementById('rateUsd').value = usd.rate.toFixed(2);
     status.textContent = 'Курс НБУ на ' + (eur ? eur.exchangedate : 'сьогодні');
-    status.style.color = '#1E8E3E';
+    status.style.color = '#17753A';
   }catch(e){
     status.textContent = 'Курс НБУ не завантажився — перевірте значення вручну на bank.gov.ua';
-    status.style.color = '#9A5B00';
+    status.style.color = '#8A5100';
   }
 }
 loadRates();
@@ -791,12 +848,20 @@ document.getElementById('calcBtn').addEventListener('click', function(){
              ', ' + year + ' р., вартість ' + price + ' ' + currency +
              ' → мито ' + fmt(duty) + ', акциз ' + fmt(excise) + ', ПДВ ' + fmt(vat) + ', разом ' + fmt(total);
 
+  if(window.__loadGtag) window.__loadGtag();
   if(typeof gtag === 'function'){ gtag('event','calculator_use',{ 'fuel':currentFuel }); }
 });
 
 /* ═══════════ ФОРМА ЗАЯВКИ ═══════════ */
 const SUPABASE_URL = 'https://rhduokjaawmorcyiuviy.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg';
+
+/* Мітка конверсії Google Ads для надісланої заявки.
+   Створіть у Google Ads конверсію «Надсилання форми» і впишіть її мітку,
+   напр. 'AW-18171698074/AbC-D_efGh'. Порожнє значення = конверсія не надсилається. */
+const ADS_LEAD_LABEL = '';
+
+const pageOpenedAt = Date.now();
 
 function normalizePhone(raw){
   let p = (raw || '').replace(/[^\d+]/g, '');
@@ -812,11 +877,19 @@ async function sendLead(){
   const phoneRaw = document.getElementById('lead-phone').value.trim();
   const email    = document.getElementById('lead-email').value.trim();
   const details  = document.getElementById('lead-details').value.trim();
+  const hp       = document.getElementById('lead-website').value.trim();
   const status   = document.getElementById('lead-status');
+
+  /* Honeypot і мінімальний час заповнення — відсікаємо ботів */
+  if(hp !== '' || Date.now() - pageOpenedAt < 2000){
+    status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
+    status.style.color = '#17753A';
+    return;
+  }
 
   if(!name || !phoneRaw){
     status.textContent = 'Заповніть ім\'я та телефон';
-    status.style.color = '#C0392B';
+    status.style.color = '#B02A1E';
     return;
   }
 
@@ -846,21 +919,20 @@ async function sendLead(){
     if(!res.ok) throw new Error(await res.text());
 
     status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
-    status.style.color = '#1E8E3E';
-    document.getElementById('lead-name').value = '';
-    document.getElementById('lead-phone').value = '';
-    document.getElementById('lead-email').value = '';
-    document.getElementById('lead-details').value = '';
+    status.style.color = '#17753A';
+    document.getElementById('lead-form').reset();
 
+    if(window.__loadGtag) window.__loadGtag();
     if(typeof gtag === 'function'){
       const userData = { phone_number: phone };
       if(email) userData.email = email;
       gtag('set', 'user_data', userData);
-      gtag('event', 'conversion', { 'send_to': 'AW-18171698074' });
+      gtag('event', 'generate_lead', { event_category:'lead', event_label:'Розмитнення' });
+      if(ADS_LEAD_LABEL) gtag('event', 'conversion', { 'send_to': ADS_LEAD_LABEL });
     }
   }catch(e){
     status.textContent = 'Помилка надсилання. Зателефонуйте нам: +38 098 172 23 42';
-    status.style.color = '#C0392B';
+    status.style.color = '#B02A1E';
   }
 }
 
@@ -877,6 +949,7 @@ async function sendLead(){
     const phoneRaw = phoneInput.value.trim();
     if(!phoneRaw){
       errorMsg.style.display = 'block';
+      phoneInput.focus();
       return;
     }
     errorMsg.style.display = 'none';
@@ -894,7 +967,7 @@ async function sendLead(){
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
-          name: nameInput.value.trim() || null,
+          name: nameInput.value.trim() || 'Без імені',
           phone: phone,
           email: null,
           notes: 'Заявка на розрахунок ОСЦПВ (блок після форми розмитнення)',
@@ -907,19 +980,28 @@ async function sendLead(){
       if(!res.ok) throw new Error(await res.text());
 
       statusMsg.textContent = 'Дякуємо! Зв\'яжемось з вами найближчим часом.';
-      statusMsg.style.color = '#1E8E3E';
+      statusMsg.style.color = '#17753A';
       nameInput.value = '';
       phoneInput.value = '';
       submitBtn.style.display = 'none';
+
+      if(window.__loadGtag) window.__loadGtag();
+      if(typeof gtag === 'function'){
+        gtag('event', 'generate_lead', { event_category:'lead', event_label:'ОСЦПВ' });
+        if(ADS_LEAD_LABEL) gtag('event', 'conversion', { 'send_to': ADS_LEAD_LABEL });
+      }
     }catch(e){
       submitBtn.disabled = false;
       submitBtn.textContent = 'Розрахувати вартість поліса';
       statusMsg.textContent = 'Сталася помилка. Спробуйте ще раз або зателефонуйте нам.';
-      statusMsg.style.color = '#C0392B';
+      statusMsg.style.color = '#B02A1E';
     }
   });
 })();
 </script>
+
+<!-- Локальні іконки замість @tabler/icons-webfont. Має бути перед </body> -->
+<script src="/icons.js"></script>
 
 </body>
 </html>
