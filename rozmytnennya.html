@@ -229,7 +229,7 @@
   .rate-bar input { width:88px; padding:7px 8px; border:0.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:16px; background:var(--white); color:var(--text); }
 
   .formula-box { background:var(--white); border:0.5px solid var(--border); border-left:3px solid var(--blue-ink); border-radius:10px; padding:1.15rem 1.35rem; margin-bottom:1rem; }
-  .formula-box h4 { font-size:14.5px; font-weight:600; margin-bottom:6px; }
+  .formula-box h3 { font-size:14.5px; font-weight:600; margin-bottom:6px; }
   .formula-box code { display:block; background:var(--off); border-radius:7px; padding:9px 12px; font-size:13.5px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--navy); margin:8px 0; overflow-x:auto; }
   .formula-box p { font-size:13.5px; color:var(--muted); line-height:1.6; }
   .formula-box a { color:var(--blue-ink); font-weight:600; }
@@ -260,12 +260,12 @@
   .doc-item .ico { color:var(--blue-ink); font-size:18px; flex-shrink:0; }
   .elec-box { background:#EAF3DE; border-radius:var(--r); padding:1.25rem 1.5rem; display:flex; gap:12px; align-items:flex-start; margin-bottom:1rem; }
   .elec-box .ico { color:#2F5A0D; font-size:22px; flex-shrink:0; margin-top:2px; }
-  .elec-box h4 { font-size:15px; font-weight:600; color:#27500A; margin-bottom:4px; }
+  .elec-box h3 { font-size:15px; font-weight:600; color:#27500A; margin-bottom:4px; }
   .elec-box p { font-size:13.5px; color:#315C0E; line-height:1.6; }
   .elec-box a { color:#27500A; font-weight:600; }
   .warn-box { background:#FEF3E2; border-radius:var(--r); padding:1.25rem 1.5rem; display:flex; gap:12px; align-items:flex-start; margin-bottom:2rem; }
   .warn-box .ico { color:#8A5100; font-size:22px; flex-shrink:0; margin-top:2px; }
-  .warn-box h4 { font-size:15px; font-weight:600; color:#7A4700; margin-bottom:4px; }
+  .warn-box h3 { font-size:15px; font-weight:600; color:#7A4700; margin-bottom:4px; }
   .warn-box p { font-size:13.5px; color:#7F4B00; line-height:1.6; }
   .warn-box a { color:#7A4700; font-weight:600; }
 
@@ -350,6 +350,8 @@
   </ul>
   <a href="tel:+380981722342" class="nav-cta" onclick="gtagCallConversion()"><i class="ti ti-phone"></i>+38 098 172 23 42</a>
 </nav>
+
+<main>
 
 <div class="hero">
   <div class="hero-inner">
@@ -472,19 +474,19 @@
     <p class="lead">Три обов'язкові платежі. Кожен рахується окремо, а ПДВ — в останню чергу, від суми всіх попередніх.</p>
 
     <div class="formula-box">
-      <h4>1. Ввізне мито</h4>
+      <h3>1. Ввізне мито</h3>
       <code>Мито = Митна вартість × 10%</code>
       <p>Стандартна ставка для легкових авто — 10%. Для електромобілів мито нульове. За наявності сертифіката EUR.1 на авто європейського походження мито також нульове — <a href="/rozmytnennya/z-yevropy">як це працює</a>.</p>
     </div>
 
     <div class="formula-box">
-      <h4>2. Акцизний збір</h4>
+      <h3>2. Акцизний збір</h3>
       <code>Акциз = Базова ставка × (Об'єм двигуна ÷ 1000) × Коефіцієнт віку</code>
       <p>Акциз не залежить від ціни авто — лише від двигуна, типу пального та віку. Для електромобілів рахується інакше: 1 € за кВт·год батареї. Готові таблиці сум за об'ємами й роками — на сторінці <a href="/rozmytnennya/aktsyz">акциз і коефіцієнт віку</a>.</p>
     </div>
 
     <div class="formula-box">
-      <h4>3. ПДВ</h4>
+      <h3>3. ПДВ</h3>
       <code>ПДВ = (Митна вартість + Мито + Акциз) × 20%</code>
       <p>ПДВ нараховується не на ціну авто, а на суму разом з митом і акцизом. Через це кожне євро акцизу тягне ще 20 центів податку.</p>
     </div>
@@ -503,7 +505,7 @@
     <div class="warn-box">
       <i class="ti ti-alert-triangle"></i>
       <div>
-        <h4>Для вантажного транспорту формула інша</h4>
+        <h3>Для вантажного транспорту формула інша</h3>
         <p>Акциз за кодом 8704 встановлений у євро за кубічний сантиметр, а вік дає не плавне зростання, а стрибки з коефіцієнтами 40 і 50 після п'яти й восьми років. Детально — <a href="/rozmytnennya/vantazhni">розмитнення вантажного транспорту</a>.</p>
       </div>
     </div>
@@ -585,7 +587,7 @@
     <div class="elec-box">
       <i class="ti ti-bolt"></i>
       <div>
-        <h4>Купуєте електромобіль?</h4>
+        <h3>Купуєте електромобіль?</h3>
         <p>З 1 січня 2026 року пільга з нульового ПДВ більше не діє, але мито залишилося нульовим, акциз символічним, а пенсійний збір не сплачується взагалі. Розбір з калькулятором — <a href="/rozmytnennya/elektromobil">розмитнення електромобіля 2026</a>.</p>
       </div>
     </div>
@@ -697,6 +699,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <footer><p>© 2026 <span>BROKSERVISAVTO</span> · вул. Солом'янська, 5, Київ · <a href="tel:+380981722342">+38 098 172 23 42</a></p></footer>
 
