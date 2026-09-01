@@ -1,0 +1,39 @@
+# =====================================================================
+# 301: прибираємо .html-дублі
+# Знак ! обов'язковий — без нього Netlify віддасть існуючий файл
+# і редирект не спрацює.
+# Файл кладеться в корінь того каталогу, який публікується
+# (там же, де index.html).
+# =====================================================================
+
+/index.html                              /                              301!
+
+# --- Оцінка ---
+/otsinka.html                            /otsinka                       301!
+/otsinka/dlya-prodazhu.html              /otsinka/dlya-prodazhu         301!
+/otsinka/tsina.html                      /otsinka/tsina                 301!
+/otsinka/dokumenty.html                  /otsinka/dokumenty             301!
+/otsinka/ekspertyza.html                 /otsinka/ekspertyza            301!
+
+# --- Договір ---
+/dogovir.html                            /dogovir                       301!
+/dogovir/zrazok.html                     /dogovir/zrazok                301!
+/dogovir/de-oformyty.html                /dogovir/de-oformyty           301!
+/dogovir/podatky.html                    /dogovir/podatky               301!
+/dogovir/tsina.html                      /dogovir/tsina                 301!
+/dogovir/dokumenty.html                  /dogovir/dokumenty             301!
+/dogovir/pereoformlennya.html            /dogovir/pereoformlennya       301!
+/dogovir/yurosoba.html                   /dogovir/yurosoba              301!
+/dogovir/pomylky.html                    /dogovir/pomylky               301!
+
+# --- Розмитнення ---
+/rozmytnennya.html                       /rozmytnennya                  301!
+/rozmytnennya/z-yevropy.html             /rozmytnennya/z-yevropy        301!
+/rozmytnennya/elektromobil.html          /rozmytnennya/elektromobil     301!
+/rozmytnennya/vantazhni.html             /rozmytnennya/vantazhni        301!
+/rozmytnennya/aktsyz.html                /rozmytnennya/aktsyz           301!
+/rozmytnennya/sertyfikat-vidpovidnosti.html  /rozmytnennya/sertyfikat-vidpovidnosti  301!
+/rozmytnennya/poshkodzhene.html          /rozmytnennya/poshkodzhene     301!
+
+# --- Інше ---
+/avto-ssha.html                          /avto-ssha                     301!
