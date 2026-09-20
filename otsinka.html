@@ -355,6 +355,201 @@
   </div>
 </section>
 
+<!-- =====================================================================
+     БЛОК «ШВИДКИЙ РОЗРАХУНОК ВАРТОСТІ АВТО» для сторінки /otsinka
+     Вставте цілком (від цього коментаря до кінця) ПІСЛЯ секції «ЦІНА»
+     (перед коментарем <!-- ДОЧІРНІ СТОРІНКИ -->)
+     Нічого більше в сторінці змінювати не потрібно.
+     Ціни лежать у таблиці vehicle_prices (Supabase) і НЕ доступні з браузера;
+     розрахунок робить Edge Function vehicle-calc.
+     ===================================================================== -->
+<style>
+  .vc-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+  @media(max-width:768px){.vc-grid{grid-template-columns:1fr}}
+  .vc-card,.vc-card *,.vc-result,.vc-result *{box-sizing:border-box}
+  .vc-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:1.5rem}
+  .vc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:480px){.vc-row{grid-template-columns:1fr}}
+  .vc-card label{display:block;font-size:13px;color:var(--muted);margin:0 0 4px}
+  .vc-card select,.vc-card input[type=number]{width:100%;padding:12px 14px;border:0.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:16px;background:var(--white);color:var(--text);margin-bottom:12px;min-height:48px}
+  .vc-card select:focus,.vc-card input:focus{outline:2px solid var(--blue-btn);outline-offset:1px;border-color:var(--blue-btn)}
+  .vc-result{background:linear-gradient(160deg,#1a6ab0 0%,#14508e 100%);color:#fff;border-radius:var(--r);padding:1.5rem;position:sticky;top:80px;box-shadow:0 12px 32px rgba(0,0,0,0.35)}
+  @media(max-width:768px){.vc-result{position:static}}
+  .vc-result .vc-label{font-size:13px;color:rgba(255,255,255,0.85)}
+  .vc-result .vc-big{font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;line-height:1.05;color:#fff;margin:4px 0 6px}
+  .vc-result .vc-big small{font-size:24px;color:#cfe3f8}
+  .vc-result p{font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6}
+  .vc-result .vc-msg{font-size:14px;color:#D5E2F2;line-height:1.6}
+  .vc-result .btn-primary{margin-top:14px;width:100%;justify-content:center;background:#fff;color:var(--navy)}
+  .vc-result .btn-primary:hover{background:#eaf2fb}
+  .vc-note{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .vc-off-msg .btn-primary{margin-top:12px}
+  .vc-hidden{display:none!important}
+  @media (prefers-color-scheme: dark){
+    #kalkulyator h2{color:#fff!important}
+    #kalkulyator .lead{color:rgba(255,255,255,0.75)!important}
+    .vc-card,.vc-card select,.vc-card input[type=number]{background:var(--white)!important;color:var(--text)!important}
+  }
+</style>
+
+<section style="background:var(--navy);" id="kalkulyator">
+  <div class="container">
+    <div class="eyebrow" style="color:#85B7EB;">Калькулятор</div>
+    <h2 style="color:#fff;">Швидкий розрахунок вартості авто</h2>
+    <p class="lead" style="color:rgba(255,255,255,0.75);">Вкажіть марку, рік і пробіг — за секунду побачите орієнтовну ринкову вартість. Для офіційного звіту зі підписом і печаткою залиште заявку.</p>
+
+    <div class="vc-grid">
+      <div class="vc-card">
+        <div class="vc-row">
+          <div><label for="vc-make">Марка</label><select id="vc-make" aria-label="Марка"><option>Завантаження…</option></select></div>
+          <div><label for="vc-model">Модель</label><select id="vc-model" aria-label="Модель"></select></div>
+        </div>
+        <div class="vc-row">
+          <div><label for="vc-year">Рік випуску</label><select id="vc-year" aria-label="Рік випуску"></select></div>
+          <div><label for="vc-km">Пробіг, км</label><input id="vc-km" type="number" min="0" step="1000" inputmode="numeric" placeholder="напр. 120000" aria-label="Пробіг, км"></div>
+        </div>
+        <div class="vc-row">
+          <div><label for="vc-body">Кузов</label>
+            <select id="vc-body" aria-label="Кузов">
+              <option value="0">Без ремонту, фарбування</option>
+              <option value="4">Ремонтувалося до 2 деталей</option>
+              <option value="10">Ремонтувалося 3 і більше деталей</option>
+            </select></div>
+          <div><label for="vc-tech">Технічний стан</label>
+            <select id="vc-tech" aria-label="Технічний стан">
+              <option value="0">Справний, без зауважень</option>
+              <option value="5">Є несправності (підтікання, шум тощо)</option>
+              <option value="10">Потребує суттєвого ремонту</option>
+            </select></div>
+        </div>
+        <label class="vc-check" style="display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--text);margin:0 0 4px">
+          <input id="vc-taxi" type="checkbox" style="margin-top:4px;width:auto;min-height:0"> Авто використовувалося як таксі
+        </label>
+        <p class="vc-note">Розрахунок за Методикою товарознавчої експертизи (наказ № 142/5/2092) на основі довідникових цін.</p>
+      </div>
+
+      <div class="vc-result" aria-live="polite">
+        <div id="vc-ok">
+          <div class="vc-label">Орієнтовна ринкова вартість</div>
+          <div class="vc-big" id="vc-value">—</div>
+          <p id="vc-hint">Заповніть марку, модель, рік і пробіг.</p>
+          <p id="vc-warn" class="vc-hidden" style="margin-top:8px;color:#ffe1a3"></p>
+          <a href="#zayavka" class="btn-primary vc-hidden" id="vc-cta"><i class="ti ti-file-certificate"></i>Замовити офіційну оцінку</a>
+        </div>
+        <div id="vc-off" class="vc-hidden">
+          <div class="vc-label">Калькулятор</div>
+          <p class="vc-msg" id="vc-offmsg">Розрахунок тимчасово недоступний. Зателефонуйте — назвемо вартість авто за 5 хвилин.</p>
+          <a href="tel:+380981722342" class="btn-primary" onclick="gtagCallConversion()"><i class="ti ti-phone"></i>+38 098 172 23 42</a>
+        </div>
+        <p style="margin-top:12px;font-size:12px">Це орієнтовна цифра, не звіт про оцінку майна. Фактична вартість залежить від огляду авто та документів.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  "use strict";
+  /* Ціни та формули лишаються на сервері (Supabase Edge Function vehicle-calc).
+     Браузер отримує лише каталог марок/моделей і розраховану цифру. */
+  var VC_FN  = "https://rhduokjaawmorcyiuviy.supabase.co/functions/v1/vehicle-calc";
+  var VC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg";
+  var SHOW_DEMO = /[?&#]admin/.test(location.href); /* демо-ціни бачить лише оцінювач */
+
+  var $ = function(id){return document.getElementById(id)};
+  var CAT = [], ready = false, seq = 0, timer = null;
+
+  function fmt(n){return new Intl.NumberFormat("uk-UA",{maximumFractionDigits:0}).format(n)}
+  function uniq(a){return a.filter(function(v,i){return a.indexOf(v)===i})}
+  function opt(sel,vals){sel.innerHTML="";vals.forEach(function(v){var o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o)})}
+
+  function api(payload){
+    payload.demo = SHOW_DEMO;
+    return fetch(VC_FN,{
+      method:"POST",
+      headers:{"Content-Type":"application/json",apikey:VC_KEY,Authorization:"Bearer "+VC_KEY},
+      body:JSON.stringify(payload)
+    }).then(function(r){return r.json()});
+  }
+
+  function off(msg){
+    $("vc-ok").classList.add("vc-hidden");$("vc-off").classList.remove("vc-hidden");
+    if(msg)$("vc-offmsg").textContent=msg;
+  }
+
+  function load(){
+    api({action:"catalog"}).then(function(j){
+      if(!j||!j.ok||!j.items||!j.items.length){off("Калькулятор наповнюється. Зателефонуйте — назвемо вартість авто за 5 хвилин.");return}
+      CAT=j.items;ready=true;fillMakes();recalc();
+    }).catch(function(){off()});
+  }
+
+  function fillMakes(){opt($("vc-make"),uniq(CAT.map(function(r){return r.make})).sort());fillModels()}
+  function fillModels(){
+    var mk=$("vc-make").value;
+    opt($("vc-model"),uniq(CAT.filter(function(r){return r.make===mk}).map(function(r){return r.model})).sort());
+    fillYears();
+  }
+  function fillYears(){
+    var it=CAT.filter(function(r){return r.make===$("vc-make").value&&r.model===$("vc-model").value})[0];
+    if(!it)return;
+    var cur=new Date().getFullYear(),list=[],prev=$("vc-year").value;
+    for(var y=Math.min(cur,it.maxYear);y>=it.minYear;y--)list.push(y);
+    opt($("vc-year"),list);
+    if(prev&&list.indexOf(+prev)>=0)$("vc-year").value=prev;
+  }
+
+  function show(valHtml,hint,warnTxt,ctaSummary){
+    $("vc-value").innerHTML=valHtml;$("vc-hint").textContent=hint;
+    var w=$("vc-warn"),c=$("vc-cta");
+    if(warnTxt){w.textContent=warnTxt;w.classList.remove("vc-hidden")}else w.classList.add("vc-hidden");
+    if(ctaSummary){c.dataset.summary=ctaSummary;c.classList.remove("vc-hidden")}else c.classList.add("vc-hidden");
+  }
+
+  function recalc(){
+    if(!ready)return;
+    var make=$("vc-make").value,model=$("vc-model").value,year=+$("vc-year").value,kmRaw=$("vc-km").value;
+    if(!make||!model||!year||kmRaw===""||+kmRaw<0){show("—","Заповніть марку, модель, рік і пробіг.");return}
+    var km=+kmRaw,my=++seq;
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      api({action:"calc",make:make,model:model,year:year,km:km,
+           body:+$("vc-body").value,tech:+$("vc-tech").value,taxi:$("vc-taxi").checked})
+      .then(function(j){
+        if(my!==seq)return; /* застаріла відповідь */
+        if(j&&j.ok){
+          show(fmt(j.value)+" <small>грн</small>","Ціни довідника на "+year+" р. з урахуванням пробігу та стану авто.",
+               j.interpolated?"Ціну для цього року інтерпольовано між сусідніми роками.":"",
+               "Калькулятор: "+make+" "+model+", "+year+" р., "+fmt(km)+" км, орієнтовно "+fmt(j.value)+" грн");
+        }else{
+          var m={no_data:"Для цієї комплектації немає даних. Зателефонуйте — розрахуємо вручну.",
+                 rate_unavailable:"Не вдалося отримати курс НБУ. Спробуйте за хвилину або зателефонуйте.",
+                 rate_limited:"Забагато запитів. Спробуйте за хвилину.",
+                 bad_input:"Перевірте введені дані."};
+          show("—",m[j&&j.code]||"Розрахунок тимчасово недоступний. Зателефонуйте нам.");
+        }
+      }).catch(function(){if(my===seq)show("—","Розрахунок тимчасово недоступний. Зателефонуйте нам.")});
+    },300);
+  }
+
+  document.addEventListener("DOMContentLoaded",function(){
+    $("vc-make").addEventListener("change",function(){fillModels();recalc()});
+    $("vc-model").addEventListener("change",function(){fillYears();recalc()});
+    ["vc-year","vc-km","vc-body","vc-tech","vc-taxi"].forEach(function(id){
+      $(id).addEventListener("input",recalc);$(id).addEventListener("change",recalc);
+    });
+    $("vc-cta").addEventListener("click",function(){
+      var t=$("lead-details");
+      if(t&&this.dataset.summary&&t.value.indexOf("Калькулятор:")<0){t.value=(this.dataset.summary+(t.value?"\n"+t.value:""))}
+      if(typeof gtag==="function"){if(window.__loadGtag)window.__loadGtag();gtag("event","calculator_cta_click",{event_category:"lead",event_label:"Калькулятор"})}
+    });
+    load();
+  });
+})();
+</script>
+<!-- ===================== кінець блоку калькулятора ===================== -->
+
+
 <!-- ДОЧІРНІ СТОРІНКИ -->
 <section style="background:var(--white);">
   <div class="container">
