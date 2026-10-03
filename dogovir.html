@@ -17,42 +17,15 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- Google Ads: gtag.js вантажиться після взаємодії або через 2,5 с -->
+<!-- Google Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18171698074"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'AW-18171698074');
-
-(function(){
-  var loaded = false;
-  function loadGtag(){
-    if (loaded) return;
-    loaded = true;
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18171698074';
-    document.head.appendChild(s);
-  }
-  window.__loadGtag = loadGtag;
-  ['pointerdown','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
-    window.addEventListener(ev, loadGtag, {once:true, passive:true});
-  });
-  setTimeout(loadGtag, 2500);
-})();
-
-function gtagCallConversion() {
-  if (window.__loadGtag) window.__loadGtag();
-  gtag('event','conversion',{'send_to':'AW-18171698074/call'});
-  return true;
-}
-function gtagTelegramConversion() {
-  if (window.__loadGtag) window.__loadGtag();
-  gtag('event','conversion',{'send_to':'AW-18171698074/telegram'});
-  return true;
-}
 </script>
 
 <!-- Schema.org: Послуга -->
@@ -137,17 +110,17 @@ function gtagTelegramConversion() {
   color-scheme: light only;
   --navy:#0B1F3A;
   --navy-2:#122B4F;
-  --blue:#1E6FD9;        /* 4.9:1 з білим — проходить AA */
+  --blue:#1E6FD9;
   --blue-light:#EAF2FD;
-  --viber:#6551E0;       /* було #7360F2 — 4.5:1 не дотягував */
+  --viber:#7360F2;
   --text:#22293A;
   --muted:#5B6478;
   --line:#E3E8F0;
   --white:#FFFFFF;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--text);background:var(--white);line-height:1.65}
-h1,h2,h3{font-family:'Bebas Neue',Impact,sans-serif;letter-spacing:.5px;color:var(--navy);font-weight:400}
+body{font-family:'Manrope',sans-serif;color:var(--text);background:var(--white);line-height:1.65}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;color:var(--navy);font-weight:400}
 h1{font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.08}
 h2{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:18px}
 h3{font-size:1.35rem;margin-bottom:10px}
@@ -159,20 +132,20 @@ section{padding:56px 0}
 
 header{background:var(--navy);position:sticky;top:0;z-index:50}
 .nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 20px;max-width:1080px;margin:0 auto}
-.logo{font-family:'Bebas Neue',Impact,sans-serif;font-size:1.5rem;color:#fff;text-decoration:none;letter-spacing:1px}
-.logo span{color:#5B9BEB}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#fff;text-decoration:none;letter-spacing:1px}
+.logo span{color:var(--blue)}
 .nav-links{display:flex;flex-wrap:wrap;gap:18px;font-size:.92rem;font-weight:600}
 .nav-links a{color:#C9D6EA;text-decoration:none}
-.nav-links a.active{color:#fff;border-bottom:2px solid #5B9BEB;padding-bottom:2px}
-.nav a.phone{color:#fff;text-decoration:none;font-weight:700;font-size:.95rem;white-space:nowrap;padding:8px 0}
+.nav-links a.active{color:#fff;border-bottom:2px solid var(--blue);padding-bottom:2px}
+.nav a.phone{color:#fff;text-decoration:none;font-weight:700;font-size:.95rem;white-space:nowrap}
 
 .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 70%);color:#fff;padding:64px 0}
 .hero h1{color:#fff}
 .hero p.lead{font-size:1.1rem;color:#C9D6EA;max-width:660px;margin:18px 0 26px}
-.crumbs{font-size:.85rem;color:#9DB2CE;margin-bottom:16px}
+.crumbs{font-size:.85rem;color:#8FA6C6;margin-bottom:16px}
 .crumbs a{color:#8FBBF5;text-decoration:none}
-.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:15px 28px;border-radius:8px;font-size:1rem;margin:0 8px 10px 0;min-height:48px}
-.btn.ghost{background:transparent;border:2px solid #5B7CB0}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:8px;font-size:1rem;margin:0 8px 10px 0}
+.btn.ghost{background:transparent;border:2px solid #3D5B8C}
 .btn.viber{background:var(--viber)}
 .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
 .badge{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 14px;font-size:.85rem;color:#C9D6EA}
@@ -180,7 +153,7 @@ header{background:var(--navy);position:sticky;top:0;z-index:50}
 /* Кроки процесу */
 .process{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:10px}
 .step{border:1px solid var(--line);border-radius:12px;padding:24px;background:#fff}
-.step .n{font-family:'Bebas Neue',Impact,sans-serif;font-size:1.6rem;color:var(--blue);line-height:1;margin-bottom:6px}
+.step .n{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--blue);line-height:1;margin-bottom:6px}
 .step h3{font-family:'Manrope',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0;margin-bottom:6px}
 .step p{font-size:.9rem;color:var(--muted);margin:0}
 
@@ -188,7 +161,7 @@ header{background:var(--navy);position:sticky;top:0;z-index:50}
 .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:10px}
 .price-card{border:1px solid var(--line);border-radius:12px;padding:24px;background:#fff}
 .price-card.featured{border:2px solid var(--blue);box-shadow:0 4px 20px rgba(30,111,217,.12)}
-.price-card .amount{font-family:'Bebas Neue',Impact,sans-serif;font-size:2.4rem;color:var(--navy);line-height:1;margin:6px 0 4px}
+.price-card .amount{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--navy);line-height:1;margin:6px 0 4px}
 .price-card .amount small{font-family:'Manrope',sans-serif;font-size:.82rem;color:var(--muted);font-weight:600}
 .price-card .note{font-size:.88rem;color:var(--muted)}
 
@@ -210,16 +183,13 @@ ul.checks li::before{content:"✓";position:absolute;left:0;color:var(--blue);fo
 
 details{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:#fff}
 summary{cursor:pointer;padding:16px 18px;font-weight:700;list-style:none;position:relative;padding-right:40px}
-summary::-webkit-details-marker{display:none}
 summary::after{content:"+";position:absolute;right:18px;top:14px;font-size:1.3rem;color:var(--blue)}
 details[open] summary::after{content:"−"}
 details .answer{padding:0 18px 16px;color:var(--muted)}
 
 .form-box{max-width:520px}
 .form-box input,
-.form-box textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:inherit;font-size:16px}
-.form-box input:focus,
-.form-box textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.form-box textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:'Manrope',sans-serif;font-size:1rem}
 .form-box textarea{resize:vertical;min-height:92px;line-height:1.5}
 .form-box .field-hint{font-size:.82rem;color:var(--muted);margin:-6px 0 14px}
 .form-box button{border:none;cursor:pointer;width:100%}
@@ -232,22 +202,18 @@ details .answer{padding:0 18px 16px;color:var(--muted)}
 .alt{background:#F7FAFE}
 
 footer{background:var(--navy);color:#9FB0C9;padding:40px 0 30px;font-size:.9rem}
-footer a{color:#D5E2F2;text-decoration:underline}
+footer a{color:#C9D6EA;text-decoration:none}
 footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
-footer .fcol-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.8px;color:#fff;margin-bottom:10px}
+footer h4{font-family:'Manrope',sans-serif;font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.8px;color:#fff;margin-bottom:10px}
 footer ul{list-style:none}
 footer li{margin-bottom:6px}
 footer .bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:28px;padding-top:16px;font-size:.85rem}
-
-/* видимий фокус з клавіатури */
-a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #5B9BEB;outline-offset:3px;border-radius:6px}
 
 @media(max-width:600px){
   section{padding:40px 0}
   .cta{padding:30px 20px}
   .nav-links{width:100%;gap:14px;font-size:.86rem}
 }
-@media (prefers-reduced-motion: reduce){*{transition:none !important}}
 
 /* ── Контраст на темних блоках ── */
 header, header *,
@@ -259,7 +225,7 @@ footer, footer *{
 .hero p.lead,
 .cta p,
 .badge{color:#D5E2F2}
-.crumbs{color:#9DB2CE}
+.crumbs{color:#8FA6C6}
 .nav-links a{color:#C9D6EA}
 footer{color:#B8C7DC}
 footer a,
@@ -310,11 +276,9 @@ footer a,
       <a href="/dogovir" class="active">Договір</a>
       <a href="/avto-ssha">Авто зі США</a>
     </div>
-    <a class="phone" href="tel:+380981722342" onclick="gtagCallConversion()">+38 098 172 23 42</a>
+    <a class="phone" href="tel:+380981722342">+38 098 172 23 42</a>
   </nav>
 </header>
-
-<main>
 
 <!-- HERO -->
 <div class="hero">
@@ -323,7 +287,7 @@ footer a,
     <h1>Договір купівлі-продажу авто в Києві</h1>
     <p class="lead">Складемо ДКП під конкретне авто, перевіримо його за реєстрами обтяжень і базами МВС до підписання і супроводимо угоду. Оформлення за 30 хвилин на вул. Солом'янській, 5. Супровід від 2 500 грн.</p>
     <a class="btn" href="#zayavka">Залишити заявку</a>
-    <a class="btn viber" href="viber://chat?number=%2B380981722342" onclick="gtagCallConversion()">Viber</a>
+    <a class="btn viber" href="viber://chat?number=%2B380981722342">Viber</a>
     <a class="btn ghost" href="/dogovir/zrazok">Безкоштовний зразок ДКП</a>
     <div class="badges">
       <div class="badge">Супровід від 2 500 грн</div>
@@ -547,38 +511,143 @@ footer a,
     <h2>Залишити заявку на оформлення ДКП</h2>
     <p>Зателефонуємо протягом 15 хвилин, прорахуємо вартість і запишемо на зручний час. Що більше деталей по авто вкажете, то точніше прорахуємо угоду.</p>
     <div class="form-box">
-      <form id="lead-form" onsubmit="event.preventDefault(); sendLead();">
-        <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name" aria-label="Ваше ім'я" required>
-        <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" inputmode="tel" aria-label="Ваш номер телефону" required>
-        <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email" aria-label="Ваш Email">
-        <textarea id="lead-details" placeholder="Деталі по авто: марка, модель, рік, VIN, місто угоди (необов'язково)" aria-label="Деталі по авто"></textarea>
-        <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати вам прорахунок і зразок договору.</p>
-        <!-- honeypot -->
-        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
-          <label for="lead-website">Не заповнюйте це поле</label>
-          <input id="lead-website" type="text" name="website" tabindex="-1" autocomplete="off">
-        </div>
-        <button type="submit" class="btn">Надіслати заявку</button>
-      </form>
-      <p id="lead-status" role="status"></p>
+      <input id="lead-name" type="text" placeholder="Ваше ім'я *" autocomplete="name">
+      <input id="lead-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel">
+      <input id="lead-email" type="email" placeholder="Email (необов'язково)" autocomplete="email">
+      <textarea id="lead-details" placeholder="Деталі по авто: марка, модель, рік, VIN, місто угоди (необов'язково)"></textarea>
+      <p class="field-hint">Поля з * — обов'язкові. Email допомагає швидше надіслати вам прорахунок і зразок договору.</p>
+      <button class="btn" onclick="sendLead()">Надіслати заявку</button>
+      <p id="lead-status"></p>
     </div>
   </div>
 </section>
 
-<!-- ОСЦПВ UPSELL -->
+<!-- ОСЦПВ UPSELL — повний віджет оформлення поліса -->
 <section class="alt" id="osago">
   <div class="container">
     <h2>Оформили ДКП? Залишилось оформити ОСЦПВ</h2>
-    <p class="lead-text">Перед першою реєстрацією нового авто в сервісному центрі МВС знадобиться поліс автоцивілки. Залиште номер — підберемо ОСЦПВ і зв'яжемось протягом дня. Поліс одразу у застосунку «Дія», без черг.</p>
-    <div class="form-box">
-      <input id="osago-name" type="text" placeholder="Ваше ім'я" autocomplete="name" aria-label="Ваше ім'я">
-      <input id="osago-phone" type="tel" placeholder="Телефон * +38 (0__) ___ __ __" autocomplete="tel" inputmode="tel" aria-label="Ваш номер телефону">
-      <p class="field-hint" id="osago-error" style="display:none;color:#B02A1E;" role="alert">Введіть номер телефону</p>
-      <button type="button" class="btn" id="osago-submit">Розрахувати вартість поліса</button>
-      <p id="osago-status" role="status"></p>
-    </div>
+    <p class="lead-text">Розрахуй вартість поліса автоцивілки та оформи його одразу онлайн — без черг, з оплатою карткою.</p>
+    <div id="ukasko-widget-root"></div>
   </div>
 </section>
+
+<style>
+  #ukasko-widget-root {
+    --uw-navy: #0a0f1e;
+    --uw-blue: #378ADD;
+    --uw-off: #f5f6fa;
+    --uw-white: #fff;
+    --uw-border: rgba(0,0,0,0.1);
+    --uw-text: #111827;
+    --uw-muted: #6b7280;
+    --uw-ok: #1E8E3E;
+    --uw-err: #C0392B;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Manrope, sans-serif;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  #ukasko-widget-root * { box-sizing: border-box; }
+  .uw-card {
+    background: var(--uw-white);
+    border: 1px solid var(--uw-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 24px rgba(10,15,30,0.06);
+  }
+  .uw-progress {
+    display: flex; gap: 4px; margin-bottom: 20px;
+  }
+  .uw-progress i {
+    flex: 1; height: 4px; border-radius: 2px; background: var(--uw-border);
+  }
+  .uw-progress i.done { background: var(--uw-blue); }
+  .uw-step-title {
+    font-size: 18px; font-weight: 700; color: var(--uw-navy); margin: 0 0 4px;
+  }
+  .uw-step-sub {
+    font-size: 13.5px; color: var(--uw-muted); margin: 0 0 18px; line-height: 1.5;
+  }
+  .uw-field { margin-bottom: 14px; }
+  .uw-field label {
+    display: block; font-size: 12.5px; font-weight: 600; color: var(--uw-text); margin-bottom: 6px;
+  }
+  .uw-field input, .uw-field select {
+    width: 100%; padding: 11px 13px; border: 1px solid var(--uw-border);
+    border-radius: 9px; font-size: 15px; font-family: inherit; background: var(--uw-white); color: var(--uw-text);
+  }
+  .uw-field input:focus, .uw-field select:focus { outline: 2px solid rgba(55,138,221,0.35); border-color: var(--uw-blue); }
+  .uw-row { display: flex; gap: 10px; }
+  .uw-row > .uw-field { flex: 1; min-width: 0; }
+  .uw-hint { font-size: 11.5px; color: var(--uw-muted); margin-top: 3px; }
+  .uw-btn {
+    width: 100%; background: var(--uw-blue); color: #fff; border: none; padding: 13px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .uw-btn:hover { opacity: 0.92; }
+  .uw-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .uw-btn-ghost {
+    width: 100%; background: transparent; color: var(--uw-blue); border: 1px solid var(--uw-blue);
+    padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 8px;
+  }
+  .uw-error {
+    background: #FEECEC; color: var(--uw-err); border-radius: 8px; padding: 10px 13px;
+    font-size: 13.5px; margin-bottom: 14px; display: none;
+  }
+  .uw-error.show { display: block; }
+  .uw-warning {
+    background: #FEF3E2; color: #7A4700; border-radius: 8px; padding: 12px 14px;
+    font-size: 13.5px; margin-bottom: 14px; line-height: 1.5;
+  }
+  .uw-offer {
+    border: 1px solid var(--uw-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .uw-offer:hover { border-color: var(--uw-blue); }
+  .uw-offer.selected { border-color: var(--uw-blue); border-width: 2px; background: rgba(55,138,221,0.04); }
+  .uw-offer-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .uw-offer-company { font-size: 14.5px; font-weight: 600; color: var(--uw-navy); }
+  .uw-offer-price { font-size: 20px; font-weight: 700; color: var(--uw-blue); }
+  .uw-offer-price small { font-size: 12px; font-weight: 500; color: var(--uw-muted); }
+  .uw-loading { text-align: center; padding: 30px 0; color: var(--uw-muted); font-size: 14px; }
+  .uw-spinner {
+    width: 28px; height: 28px; border: 3px solid var(--uw-border); border-top-color: var(--uw-blue);
+    border-radius: 50%; margin: 0 auto 12px; animation: uw-spin 0.8s linear infinite;
+  }
+  @keyframes uw-spin { to { transform: rotate(360deg); } }
+  .uw-qr { text-align: center; margin: 16px 0; }
+  .uw-qr img { width: 180px; height: 180px; border: 1px solid var(--uw-border); border-radius: 10px; }
+  .uw-success-icon {
+    width: 56px; height: 56px; border-radius: 50%; background: rgba(30,142,62,0.1); color: var(--uw-ok);
+    display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;
+  }
+  .uw-doc-link {
+    display: block; text-align: center; padding: 12px; border: 1px solid var(--uw-border); border-radius: 9px;
+    margin-bottom: 8px; text-decoration: none; color: var(--uw-navy); font-size: 14px; font-weight: 500;
+  }
+  .uw-doc-link:hover { border-color: var(--uw-blue); }
+  .uw-back { background: none; border: none; color: var(--uw-muted); font-size: 13px; cursor: pointer; padding: 0; margin-bottom: 14px; font-family: inherit; }
+
+  .uw-inline { display: flex; gap: 8px; }
+  .uw-inline input { flex: 1; min-width: 0; width: auto; padding: 11px 13px; border: 1px solid var(--uw-border); border-radius: 9px; font-size: 15px; font-family: inherit; background: var(--uw-white); color: var(--uw-text); }
+  .uw-btn-inline { width: auto; padding: 11px 18px; white-space: nowrap; }
+  .uw-btn-link { display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
+  .uw-dropdown { display: none; border: 1px solid var(--uw-border); border-radius: 9px; margin-top: 4px; max-height: 220px; overflow-y: auto; background: var(--uw-white); }
+  .uw-opt { padding: 9px 12px; cursor: pointer; font-size: 14px; border-bottom: 1px solid var(--uw-border); }
+  .uw-opt:last-child { border-bottom: none; }
+  .uw-opt:hover { background: var(--uw-off); }
+  .uw-opt.uw-muted { color: var(--uw-muted); cursor: default; }
+  .uw-section { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--uw-muted); margin: 22px 0 10px; }
+  .uw-hint.uw-ok { color: var(--uw-ok); }
+  .uw-hint.uw-bad { color: var(--uw-err); }
+  .uw-info { background: var(--uw-off); border-radius: 8px; padding: 10px 13px; font-size: 13.5px; margin-bottom: 14px; color: var(--uw-text); }
+  .uw-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--uw-muted); margin: 4px 0 16px; line-height: 1.45; cursor: pointer; }
+  .uw-check input { margin-top: 2px; }
+  @media (max-width: 420px) { .uw-row { flex-direction: column; gap: 0; } }
+</style>
+<style>
+  #ukasko-widget-root { --uw-blue: #1E6FD9; --uw-navy: #0B1F3A; }
+</style>
+
 
 <!-- CTA -->
 <section>
@@ -586,27 +655,25 @@ footer a,
     <div class="cta">
       <h2>Оформимо ваш ДКП сьогодні</h2>
       <p>Складемо договір, перевіримо авто по базах і супроводимо угоду в Києві. Консультація безкоштовна.</p>
-      <a class="btn" href="tel:+380981722342" onclick="gtagCallConversion()">+38 098 172 23 42</a>
-      <a class="btn viber" href="viber://chat?number=%2B380981722342" onclick="gtagCallConversion()">Viber</a>
-      <a class="btn ghost" href="https://t.me/Dimakrykun95" target="_blank" rel="noopener" onclick="gtagTelegramConversion()">Telegram</a>
+      <a class="btn" href="tel:+380981722342">+38 098 172 23 42</a>
+      <a class="btn viber" href="viber://chat?number=%2B380981722342">Viber</a>
+      <a class="btn ghost" href="https://t.me/Dimakrykun95" rel="noopener">Telegram</a>
     </div>
   </div>
 </section>
-
-</main>
 
 <footer>
   <div class="container">
     <div class="cols">
       <div>
-        <div class="fcol-title">BROKSERVISAVTO</div>
+        <h4>BROKSERVISAVTO</h4>
         вул. Солом'янська, 5, Київ<br>
-        <a href="tel:+380981722342" onclick="gtagCallConversion()">+38 098 172 23 42</a><br>
+        <a href="tel:+380981722342">+38 098 172 23 42</a><br>
         <a href="mailto:custom@forwardcarua.com">custom@forwardcarua.com</a><br>
-        <a href="https://t.me/Dimakrykun95" target="_blank" rel="noopener" onclick="gtagTelegramConversion()">Telegram</a>
+        <a href="https://t.me/Dimakrykun95" rel="noopener">Telegram</a>
       </div>
       <div>
-        <div class="fcol-title">Послуги</div>
+        <h4>Послуги</h4>
         <ul>
           <li><a href="/rozmytnennya">Розмитнення авто</a></li>
           <li><a href="/otsinka">Оцінка автомобіля</a></li>
@@ -615,7 +682,7 @@ footer a,
         </ul>
       </div>
       <div>
-        <div class="fcol-title">Про договір</div>
+        <h4>Про договір</h4>
         <ul>
           <li><a href="/dogovir/zrazok">Зразок ДКП 2026</a></li>
           <li><a href="/dogovir/tsina">Ціна оформлення</a></li>
@@ -624,7 +691,7 @@ footer a,
         </ul>
       </div>
       <div>
-        <div class="fcol-title">Корисне</div>
+        <h4>Корисне</h4>
         <ul>
           <li><a href="/dogovir/podatky">Податки при продажу</a></li>
           <li><a href="/dogovir/pereoformlennya">Переоформлення авто</a></li>
@@ -643,13 +710,6 @@ footer a,
 const SUPABASE_URL = 'https://rhduokjaawmorcyiuviy.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg';
 
-/* Мітка конверсії Google Ads для надісланої заявки.
-   Створіть у Google Ads конверсію «Надсилання форми» і впишіть її мітку,
-   напр. 'AW-18171698074/AbC-D_efGh'. Порожнє значення = конверсія не надсилається. */
-const ADS_LEAD_LABEL = '';
-
-const pageOpenedAt = Date.now();
-
 function normalizePhone(raw){
   let p = (raw || '').replace(/[^\d+]/g, '');
   if(p.startsWith('+380')) return p;
@@ -664,19 +724,11 @@ async function sendLead(){
   const phoneRaw = document.getElementById('lead-phone').value.trim();
   const email    = document.getElementById('lead-email').value.trim();
   const details  = document.getElementById('lead-details').value.trim();
-  const hp       = document.getElementById('lead-website').value.trim();
   const status   = document.getElementById('lead-status');
-
-  /* Honeypot і мінімальний час заповнення — відсікаємо ботів */
-  if(hp !== '' || Date.now() - pageOpenedAt < 2000){
-    status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
-    status.style.color = '#17753A';
-    return;
-  }
 
   if(!name || !phoneRaw){
     status.textContent = 'Заповніть ім\'я та телефон';
-    status.style.color = '#B02A1E';
+    status.style.color = '#C0392B';
     return;
   }
 
@@ -705,93 +757,694 @@ async function sendLead(){
     if(!res.ok) throw new Error(await res.text());
 
     status.textContent = 'Заявку надіслано! Зателефонуємо протягом 15 хвилин.';
-    status.style.color = '#17753A';
-    document.getElementById('lead-form').reset();
+    status.style.color = '#1E8E3E';
+    document.getElementById('lead-name').value = '';
+    document.getElementById('lead-phone').value = '';
+    document.getElementById('lead-email').value = '';
+    document.getElementById('lead-details').value = '';
 
-    if(window.__loadGtag) window.__loadGtag();
     if(typeof gtag === 'function'){
       const userData = { phone_number: phone };
       if(email) userData.email = email;
       gtag('set', 'user_data', userData);
-      gtag('event', 'generate_lead', { event_category:'lead', event_label:'Договір купівлі-продажу' });
-      if(ADS_LEAD_LABEL) gtag('event', 'conversion', { 'send_to': ADS_LEAD_LABEL });
+      gtag('event', 'conversion', { 'send_to': 'AW-18171698074' });
     }
   }catch(e){
     status.textContent = 'Помилка надсилання. Зателефонуйте нам: +38 098 172 23 42';
-    status.style.color = '#B02A1E';
+    status.style.color = '#C0392B';
   }
 }
 
-/* ═══════════ ОСЦПВ UPSELL ═══════════ */
-(function(){
-  const nameInput = document.getElementById('osago-name');
-  const phoneInput = document.getElementById('osago-phone');
-  const errorMsg = document.getElementById('osago-error');
-  const statusMsg = document.getElementById('osago-status');
-  const submitBtn = document.getElementById('osago-submit');
-  if(!submitBtn) return;
+/* ═══════════ ОСЦПВ UPSELL — повний віджет (v2, через ukasko-proxy) ═══════════ */
+(function () {
+  'use strict';
 
-  async function submitOsago(){
-    const phoneRaw = phoneInput.value.trim();
-    if(!phoneRaw){
-      errorMsg.style.display = 'block';
-      phoneInput.focus();
+  // Публічні налаштування. Логін і пароль Ukasko тут НЕ зберігаються —
+  // вони в секретах Supabase Edge Function «ukasko-proxy».
+  var CONFIG = {
+    proxyUrl: 'https://rhduokjaawmorcyiuviy.supabase.co/functions/v1/ukasko-proxy',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZHVva2phYXdtb3JjeWl1dml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDE1NDgsImV4cCI6MjA5NjQxNzU0OH0.usjLWtdJW0OJt8dgUfCnkVljKN6kpG7vJ907Y_XWieg'
+  };
+  var PENDING_KEY = 'uw_osago_pending_v1';
+
+  var root = document.getElementById('ukasko-widget-root');
+  if (!root) return;
+
+  // ─────────── довідники ───────────
+  var CATEGORIES = [
+    ['B1', 'Легковий, до 1600 см³'], ['B2', 'Легковий, 1601–2000 см³'],
+    ['B3', 'Легковий, 2001–3000 см³'], ['B4', 'Легковий, понад 3000 см³'],
+    ['B5', 'Електромобіль'], ['A1', 'Мотоцикл, до 300 см³'], ['A2', 'Мотоцикл, понад 300 см³'],
+    ['C1', 'Вантажний, до 2 т'], ['C2', 'Вантажний, понад 2 т'],
+    ['D1', 'Автобус, до 20 місць'], ['D2', 'Автобус, понад 20 місць'],
+    ['E', 'Причіп до вантажного'], ['F', 'Причіп до легкового']
+  ];
+  var TEMP_PERIODS = [[15, '15 днів'], [21, '21 день'], [1, '1 місяць'], [2, '2 місяці'], [3, '3 місяці'], [4, '4 місяці'], [5, '5 місяців']];
+  var PERIODS = { 1: [[12, '12 місяців'], [6, '6 місяців']], 2: TEMP_PERIODS, 3: TEMP_PERIODS };
+  var DOC_TYPES = {
+    DOCUMENT_ID_CARD: { id: 3, label: 'ID-картка', serialLabel: 'Запис № (УНЗР)', serialPh: '19900101-01234', issuedLabel: 'Орган, що видав (код)', issuedPh: '1234', hasExpiry: true },
+    DOCUMENT_PASSPORT: { id: 1, label: 'Паспорт (книжечка)', serialLabel: 'Серія', serialPh: 'АА', issuedLabel: 'Ким виданий', issuedPh: 'Як у паспорті', hasExpiry: false },
+    DOCUMENT_EXTERNAL_PASSPORT: { id: 2, label: 'Закордонний паспорт', serialLabel: 'Серія', serialPh: 'FA', issuedLabel: 'Орган, що видав', issuedPh: '1234', hasExpiry: true },
+    DOCUMENT_DRIVERS_LICENSE: { id: 4, label: 'Водійське посвідчення', serialLabel: 'Серія', serialPh: 'ВХХ', issuedLabel: 'Ким видане', issuedPh: 'ТСЦ 1234', hasExpiry: true }
+  };
+
+  // ─────────── стан ───────────
+  var state = {
+    f1: { plate: '', cat: 'B1', year: '', bday: '', reg: 1, period: 12 },
+    f3: null, car: {}, city: null, addrCity: null, calc: null, offers: [], offer: null,
+    orderId: null, leadId: null, otpSent: false, invoice: null, contractId: null,
+    draftId: null, draftOfferId: null, ukaskoId: null // чернетка, яку можна повторно заявити
+  };
+
+  // ─────────── утиліти ───────────
+  function $(id) { return document.getElementById(id); }
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+  function safeUrl(u) { return /^https?:\/\//i.test(String(u || '')) ? esc(u) : '#'; }
+  function safeQr(u) { return /^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(String(u || '')) ? u : ''; }
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function parseDate(s) {
+    var m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(String(s || '').trim());
+    if (!m) return null;
+    var d = +m[1], mo = +m[2], y = +m[3];
+    var dt = new Date(Date.UTC(y, mo - 1, d));
+    if (dt.getUTCDate() !== d || dt.getUTCMonth() !== mo - 1) return null;
+    return dt;
+  }
+  function fmtDate(dt) { return pad(dt.getUTCDate()) + '.' + pad(dt.getUTCMonth() + 1) + '.' + dt.getUTCFullYear(); }
+  function ts(dt) { return Math.floor(dt.getTime() / 1000); } // Ukasko чекає timestamp опівночі UTC
+  function tomorrowUTC() { var n = new Date(); return new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate() + 1)); }
+  function finishDate(start, periodId) {
+    var d = new Date(start.getTime());
+    if (periodId === 15 || periodId === 21) {
+      d.setUTCDate(d.getUTCDate() + periodId - 1);
+    } else {
+      d.setUTCMonth(d.getUTCMonth() + periodId);
+      d.setUTCDate(d.getUTCDate() - 1); // як у документації: 28.02.2025 → 27.02.2026
+    }
+    return d;
+  }
+  function age(bd) {
+    var n = new Date(), a = n.getFullYear() - bd.getUTCFullYear(), m = n.getMonth() - bd.getUTCMonth();
+    if (m < 0 || (m === 0 && n.getDate() < bd.getUTCDate())) a--;
+    return a;
+  }
+  function normPhone(raw) {
+    var d = String(raw || '').replace(/\D/g, '');
+    if (d.indexOf('380') === 0) d = d.slice(2);
+    else if (d.indexOf('80') === 0 && d.length === 11) d = d.slice(1);
+    if (d.length === 9) d = '0' + d;
+    if (!/^0\d{9}$/.test(d)) return null;
+    return '+38 (' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6, 8) + '-' + d.slice(8, 10);
+  }
+  function fmtPrice(p) { var n = Number(p); return isFinite(n) ? n.toLocaleString('uk-UA') : esc(p); }
+  function plural(n, one, few, many) {
+    var a = n % 10, b = n % 100;
+    if (a === 1 && b !== 11) return one;
+    if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+    return many;
+  }
+  function generateUlid() {
+    var ENC = '0123456789abcdefghjkmnpqrstvwxyz', t = Date.now(), out = '', i;
+    for (i = 0; i < 10; i++) { out = ENC[t % 32] + out; t = Math.floor(t / 32); }
+    var rnd = new Uint8Array(16);
+    (window.crypto || window.msCrypto).getRandomValues(rnd);
+    for (i = 0; i < 16; i++) out += ENC[rnd[i] % 32];
+    return out;
+  }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function todayKey() { var n = new Date(); return n.getFullYear() + '-' + (n.getMonth() + 1) + '-' + n.getDate(); }
+
+  // ─────────── незавершене оформлення (переживає перезавантаження сторінки) ───────────
+  function savePending() {
+    try {
+      localStorage.setItem(PENDING_KEY, JSON.stringify({
+        orderId: state.orderId, leadId: state.leadId, invoice: state.invoice,
+        contractId: state.contractId, day: todayKey()
+      }));
+    } catch (e) { /* storage недоступний — не критично */ }
+  }
+  function loadPending() {
+    try {
+      var p = JSON.parse(localStorage.getItem(PENDING_KEY) || 'null');
+      if (!p || !p.orderId) return null;
+      if (p.day !== todayKey()) { clearPending(); return null; } // неоплачена заявка не живе довше доби
+      return p;
+    } catch (e) { return null; }
+  }
+  function clearPending() { try { localStorage.removeItem(PENDING_KEY); } catch (e) { /* ignore */ } }
+
+  // ─────────── API через проксі ───────────
+  function api(action, payload) {
+    return fetch(CONFIG.proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: CONFIG.anonKey, Authorization: 'Bearer ' + CONFIG.anonKey },
+      body: JSON.stringify({ action: action, payload: payload || {} })
+    }).then(function (res) {
+      return res.json().catch(function () { return null; }).then(function (json) {
+        if (!json || json.ok !== true) throw new Error((json && json.error) || ('помилка сервера ' + res.status));
+        return json.data;
+      });
+    }, function () {
+      throw new Error('немає звʼязку з сервером. Перевірте інтернет і спробуйте ще раз');
+    });
+  }
+
+  // ─────────── рендер ───────────
+  function progress(step) {
+    var h = '<div class="uw-progress">';
+    for (var i = 1; i <= 5; i++) h += '<i class="' + (i <= step ? 'done' : '') + '"></i>';
+    return h + '</div>';
+  }
+  function render(html, scroll) {
+    root.innerHTML = '<div class="uw-card">' + html + '</div>';
+    if (scroll && root.getBoundingClientRect().top < 0) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function renderLoading(text) { render('<div class="uw-loading"><div class="uw-spinner"></div>' + esc(text) + '</div>'); }
+  function errBox(msg) { return '<div class="uw-error' + (msg ? ' show' : '') + '">' + esc(msg || '') + '</div>'; }
+
+  function attachCitySearch(input, box, onPick) {
+    var timer;
+    input.addEventListener('input', function () {
+      onPick(null);
+      var q = input.value.trim();
+      clearTimeout(timer);
+      if (q.length < 2) { box.style.display = 'none'; return; }
+      timer = setTimeout(function () {
+        api('cities', { q: q }).then(function (list) {
+          if (!list || !list.length) {
+            box.innerHTML = '<div class="uw-opt uw-muted">Нічого не знайдено</div>';
+          } else {
+            box.innerHTML = list.map(function (c, i) {
+              return '<div class="uw-opt" data-i="' + i + '">' + esc(c.name_full_name_ua || c.name_ua) + '</div>';
+            }).join('');
+            Array.prototype.forEach.call(box.querySelectorAll('.uw-opt[data-i]'), function (el) {
+              el.onclick = function () {
+                var c = list[+el.getAttribute('data-i')];
+                input.value = c.name_full_name_ua || c.name_ua;
+                box.style.display = 'none';
+                onPick(c);
+              };
+            });
+          }
+          box.style.display = 'block';
+        }).catch(function () {
+          box.innerHTML = '<div class="uw-opt uw-muted">Не вдалося завантажити міста</div>';
+          box.style.display = 'block';
+        });
+      }, 300);
+    });
+  }
+
+  // ═════════ КРОК 1 — розрахунок ═════════
+  function renderStep1(errMsg) {
+    var f = state.f1;
+    render(
+      progress(1) +
+      '<p class="uw-step-title">Розрахунок ОСЦПВ</p>' +
+      '<p class="uw-step-sub">Введіть держномер — підтягнемо дані авто автоматично. Або заповніть вручну.</p>' +
+      errBox(errMsg) +
+      '<div class="uw-field"><label>Державний номер</label>' +
+        '<div class="uw-inline"><input id="uw-plate" type="text" placeholder="АА1234ВВ" autocomplete="off" value="' + esc(f.plate) + '">' +
+        '<button class="uw-btn uw-btn-inline" id="uw-lookup" type="button">Знайти</button></div>' +
+        '<div class="uw-hint" id="uw-lookup-note"></div></div>' +
+      '<div class="uw-field"><label>Тип транспорту</label><select id="uw-cat">' +
+        CATEGORIES.map(function (c) { return '<option value="' + c[0] + '"' + (c[0] === f.cat ? ' selected' : '') + '>' + c[1] + '</option>'; }).join('') +
+      '</select></div>' +
+      '<div class="uw-row">' +
+        '<div class="uw-field"><label>Рік випуску</label><input id="uw-year" type="number" inputmode="numeric" placeholder="2015" value="' + esc(f.year) + '"></div>' +
+        '<div class="uw-field"><label>Дата народження водія</label><input id="uw-bday" type="text" inputmode="numeric" placeholder="дд.мм.рррр" value="' + esc(f.bday) + '"></div>' +
+      '</div>' +
+      '<div class="uw-hint" style="margin:-8px 0 14px">Якщо водіїв кілька — вкажіть наймолодшого.</div>' +
+      '<div class="uw-field"><label>Місто реєстрації авто</label>' +
+        '<input id="uw-city" type="text" placeholder="Почніть вводити назву" autocomplete="off" value="' + esc(state.city ? (state.city.name_full_name_ua || state.city.name_ua) : '') + '">' +
+        '<div class="uw-dropdown" id="uw-city-box"></div></div>' +
+      '<div class="uw-row">' +
+        '<div class="uw-field"><label>Реєстрація</label><select id="uw-reg">' +
+          '<option value="1">Постійна</option><option value="2">Тимчасова</option><option value="3">Тимчасовий вʼїзд</option>' +
+        '</select></div>' +
+        '<div class="uw-field"><label>Строк</label><select id="uw-period"></select></div>' +
+      '</div>' +
+      '<p class="uw-hint" style="margin:-6px 0 16px">Поліс діятиме з ' + fmtDate(tomorrowUTC()) + '.</p>' +
+      '<button class="uw-btn" id="uw-calc" type="button">Розрахувати вартість</button>',
+      !!errMsg
+    );
+
+    var reg = $('uw-reg'), per = $('uw-period');
+    function fillPeriods(keep) {
+      var list = PERIODS[reg.value] || PERIODS[1];
+      per.innerHTML = list.map(function (p) { return '<option value="' + p[0] + '">' + p[1] + '</option>'; }).join('');
+      if (keep && list.some(function (p) { return String(p[0]) === String(keep); })) per.value = String(keep);
+    }
+    reg.value = String(f.reg);
+    fillPeriods(f.period);
+    reg.onchange = function () { fillPeriods(); };
+
+    attachCitySearch($('uw-city'), $('uw-city-box'), function (c) { state.city = c; });
+    $('uw-lookup').onclick = lookupCar;
+    $('uw-calc').onclick = calculate;
+  }
+
+  function lookupCar() {
+    var btn = $('uw-lookup'), note = $('uw-lookup-note');
+    var n = $('uw-plate').value.replace(/\s+/g, '').toUpperCase();
+    if (n.length < 4) { note.className = 'uw-hint uw-bad'; note.textContent = 'Введіть держномер, наприклад АА1234ВВ.'; return; }
+    btn.disabled = true; btn.textContent = '…';
+    api('carLookup', { number: n }).then(function (d) {
+      if (!d || typeof d !== 'object') throw new Error('empty');
+      state.car = { number: d.number || n, brand: d.mark || '', model: d.model || '', vin: d.vin || '', params: d.additionalParameters || {} };
+      if (d.year) $('uw-year').value = d.year;
+      var cat = d.autoCategory || d.type;
+      if (cat && CATEGORIES.some(function (c) { return c[0] === cat; })) $('uw-cat').value = cat;
+      if (d.city && d.city.id) {
+        state.city = { id: d.city.id, zone: d.city.zone, name_ua: d.city.name_ua, name_full_name_ua: d.city.name_full_name_ua };
+        $('uw-city').value = d.city.name_full_name_ua || d.city.name_ua || '';
+      }
+      note.className = 'uw-hint uw-ok';
+      note.textContent = 'Знайдено: ' + [d.mark, d.model, d.year].filter(Boolean).join(' ');
+    }).catch(function () {
+      state.car = { number: n };
+      note.className = 'uw-hint uw-bad';
+      note.textContent = 'Авто не знайдено в базі — заповніть поля вручну.';
+    }).then(function () { btn.disabled = false; btn.textContent = 'Знайти'; });
+  }
+
+  function calculate() {
+    var f = state.f1 = {
+      plate: $('uw-plate').value.trim(), cat: $('uw-cat').value, year: $('uw-year').value.trim(),
+      bday: $('uw-bday').value.trim(), reg: +$('uw-reg').value, period: +$('uw-period').value
+    };
+    var cityText = $('uw-city').value.trim();
+    var year = parseInt(f.year, 10), nowY = new Date().getFullYear();
+    if (!(year >= 1950 && year <= nowY + 1)) return renderStep1('Вкажіть рік випуску авто.');
+    var bd = parseDate(f.bday);
+    if (!bd) return renderStep1('Вкажіть дату народження водія у форматі дд.мм.рррр.');
+    if (age(bd) < 18) return renderStep1('Водію має бути щонайменше 18 років.');
+    if (!state.city) return renderStep1(cityText ? 'Оберіть місто зі списку підказок під полем.' : 'Вкажіть місто реєстрації авто.');
+
+    var start = tomorrowUTC();
+    state.calc = { autoCategoryType: f.cat, year: year, birthday: fmtDate(bd), registrationType: f.reg, period_id: f.period, start: start };
+    if (f.plate) state.car.number = f.plate.replace(/\s+/g, '').toUpperCase();
+
+    renderLoading('Рахуємо пропозиції страхових компаній…');
+    api('offers', {
+      autoCategoryType: f.cat, isTaxi: 0, isEuroCar: 0, customerType: 1,
+      registrationPlaceId: state.city.id, zone: state.city.zone,
+      startDate: fmtDate(start), customerPrivilege: 1, registrationType: f.reg,
+      period_id: f.period, carYear: year, carBirthdayAt: fmtDate(bd)
+    }).then(function (offers) {
+      state.offers = (Array.isArray(offers) ? offers : [])
+        .filter(function (o) { return o && o.offerId && o.companyId; })
+        .sort(function (a, b) { return Number(a.price) - Number(b.price); });
+      renderStep2();
+    }).catch(function (e) { renderStep1('Не вдалося розрахувати: ' + e.message); });
+  }
+
+  // ═════════ КРОК 2 — вибір пропозиції ═════════
+  function renderStep2() {
+    if (!state.offers.length) {
+      render(
+        progress(2) +
+        '<p class="uw-step-title">Пропозицій не знайдено</p>' +
+        '<p class="uw-step-sub">Для цих параметрів страхові компанії не повернули жодної пропозиції. Перевірте тип транспорту й місто реєстрації або зателефонуйте нам — підберемо поліс вручну.</p>' +
+        '<button class="uw-btn" id="uw-back" type="button">← Змінити параметри</button>', true);
+      $('uw-back').onclick = function () { renderStep1(); };
       return;
     }
-    errorMsg.style.display = 'none';
-    const phone = normalizePhone(phoneRaw);
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Надсилаємо…';
+    var n = state.offers.length;
+    render(
+      progress(2) +
+      '<button class="uw-back" id="uw-back" type="button">← Назад</button>' +
+      '<p class="uw-step-title">Оберіть страхову компанію</p>' +
+      '<p class="uw-step-sub">' + n + ' ' + plural(n, 'пропозиція', 'пропозиції', 'пропозицій') + ' · поліс з ' + fmtDate(state.calc.start) + '</p>' +
+      state.offers.map(function (o, i) {
+        return '<div class="uw-offer" data-i="' + i + '"><div class="uw-offer-top">' +
+          '<span class="uw-offer-company">' + esc(o.companyNamePublic || o.companyName || 'Страхова компанія') + '</span>' +
+          '<span class="uw-offer-price">' + fmtPrice(o.price) + ' <small>грн</small></span></div></div>';
+      }).join('') +
+      '<button class="uw-btn" id="uw-next" type="button" style="margin-top:8px" disabled>Продовжити</button>', true);
 
-    try{
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
+    var sel = null;
+    $('uw-back').onclick = function () { renderStep1(); };
+    Array.prototype.forEach.call(root.querySelectorAll('.uw-offer'), function (el) {
+      el.onclick = function () {
+        Array.prototype.forEach.call(root.querySelectorAll('.uw-offer'), function (x) { x.classList.remove('selected'); });
+        el.classList.add('selected');
+        sel = +el.getAttribute('data-i');
+        $('uw-next').disabled = false;
+      };
+    });
+    $('uw-next').onclick = function () {
+      if (!state.offer || state.offer.offerId !== state.offers[sel].offerId) { state.draftId = null; state.draftOfferId = null; }
+      state.offer = state.offers[sel];
+      if (!state.addrCity) state.addrCity = state.city;
+      renderStep3();
+    };
+  }
+
+  // ═════════ КРОК 3 — дані для поліса ═════════
+  function docOptions(o) {
+    var avail = Array.isArray(o.available_documents) ? o.available_documents : [];
+    var list = Object.keys(DOC_TYPES).filter(function (k) { return avail.indexOf(k) !== -1; });
+    return list.length ? list : ['DOCUMENT_ID_CARD', 'DOCUMENT_PASSPORT'];
+  }
+
+  function renderStep3(errMsg) {
+    var o = state.offer, f = state.f3 || {}, car = state.car || {}, p = car.params || {};
+    var cat = state.calc.autoCategoryType, isEv = cat === 'B5', isTrailer = cat === 'E' || cat === 'F';
+    var docs = docOptions(o);
+    var docType = (f.docType && docs.indexOf(f.docType) !== -1) ? f.docType : (docs.indexOf('DOCUMENT_ID_CARD') !== -1 ? 'DOCUMENT_ID_CARD' : docs[0]);
+    function v(key, fallback) { return esc(f[key] != null ? f[key] : (fallback != null ? fallback : '')); }
+    function input(id, label, key, fallback, attrs) {
+      return '<div class="uw-field"><label>' + label + '</label><input id="' + id + '" type="text" value="' + v(key, fallback) + '"' + (attrs || '') + '></div>';
+    }
+    var NUM = ' inputmode="numeric"', DATE = ' inputmode="numeric" placeholder="дд.мм.рррр"';
+
+    render(
+      progress(3) +
+      '<button class="uw-back" id="uw-back" type="button">← Назад</button>' +
+      '<p class="uw-step-title">Дані для поліса</p>' +
+      '<p class="uw-step-sub">' + esc(o.companyNamePublic || o.companyName) + ' · ' + fmtPrice(o.price) + ' грн</p>' +
+      errBox(errMsg) +
+
+      '<p class="uw-section">Страхувальник</p>' +
+      '<div class="uw-row">' + input('f-surname', 'Прізвище', 'surname', '', ' autocomplete="family-name"') + input('f-name', 'Імʼя', 'name', '', ' autocomplete="given-name"') + '</div>' +
+      '<div class="uw-row">' + input('f-patronymic', 'По батькові', 'patronymic', '') + input('f-bday', 'Дата народження', 'bday', state.calc.birthday, DATE) + '</div>' +
+      '<div class="uw-row">' + input('f-phone', 'Телефон', 'phone', '', ' type="tel" placeholder="+380…" autocomplete="tel"') + input('f-email', 'Email', 'email', '', ' autocomplete="email"') + '</div>' +
+      '<div class="uw-hint" style="margin:-8px 0 14px">На email прийде код підтвердження і договір.</div>' +
+      input('f-inn', 'ІПН (РНОКПП)', 'inn', '', NUM + ' maxlength="10"') +
+
+      '<p class="uw-section">Документ</p>' +
+      '<div class="uw-field"><label>Тип документа</label><select id="f-doctype">' +
+        docs.map(function (k) { return '<option value="' + k + '"' + (k === docType ? ' selected' : '') + '>' + DOC_TYPES[k].label + '</option>'; }).join('') +
+      '</select></div>' +
+      '<div class="uw-row">' +
+        '<div class="uw-field"><label id="f-serial-label">Серія</label><input id="f-serial" type="text" value="' + v('serial') + '"></div>' +
+        input('f-docnum', 'Номер документа', 'docNumber', '') +
+      '</div>' +
+      '<div class="uw-field"><label id="f-issued-label">Ким виданий</label><input id="f-issued" type="text" value="' + v('issuedBy') + '"></div>' +
+      '<div class="uw-row">' + input('f-issuedate', 'Дата видачі', 'issueDate', '', DATE) +
+        '<div class="uw-field" id="f-expiry-wrap"><label>Дійсний до</label><input id="f-expiry" type="text" value="' + v('expiry') + '"' + DATE + '></div>' +
+      '</div>' +
+
+      '<p class="uw-section">Адреса реєстрації страхувальника</p>' +
+      '<div class="uw-field"><label>Населений пункт</label>' +
+        '<input id="f-acity" type="text" autocomplete="off" value="' + esc(state.addrCity ? (state.addrCity.name_full_name_ua || state.addrCity.name_ua) : '') + '">' +
+        '<div class="uw-dropdown" id="f-acity-box"></div></div>' +
+      input('f-street', 'Вулиця', 'street', '') +
+      '<div class="uw-row">' + input('f-house', 'Будинок', 'house', '') + input('f-flat', 'Квартира', 'flat', '') + '</div>' +
+
+      '<p class="uw-section">Транспортний засіб</p>' +
+      '<div class="uw-row">' + input('f-brand', 'Марка', 'brand', car.brand) + input('f-model', 'Модель', 'model', car.model) + '</div>' +
+      '<div class="uw-row">' + input('f-vin', 'VIN', 'vin', car.vin, ' maxlength="20"') + input('f-number', 'Держномер', 'number', car.number) + '</div>' +
+      (isEv ? input('f-kvt', 'Потужність, кВт', 'kvt', p.kvt, NUM) : (isTrailer ? '' : input('f-capacity', 'Обʼєм двигуна, см³', 'capacity', p.capacity, NUM))) +
+      '<div class="uw-row">' + (isTrailer ? '' : input('f-seats', 'Кількість місць', 'seats', p.numberOfSeats, NUM)) + input('f-odometr', 'Пробіг, км', 'odometr', '', NUM) + '</div>' +
+      '<div class="uw-row">' + input('f-ownweight', 'Маса без навантаження, кг', 'ownWeight', p.ownWeight, NUM) + input('f-totalweight', 'Повна маса, кг', 'totalWeight', p.totalWeight, NUM) + '</div>' +
+      '<div class="uw-hint" style="margin:-8px 0 16px">Дані є у свідоцтві про реєстрацію: обʼєм — P.1, повна маса — F.1, маса без навантаження — G, місця — S.1.</div>' +
+
+      '<label class="uw-check"><input type="checkbox" id="f-agree"' + (f.agree ? ' checked' : '') + '> Погоджуюсь на обробку персональних даних для оформлення поліса</label>' +
+      '<button class="uw-btn" id="uw-submit" type="button">Оформити заявку</button>',
+      true
+    );
+
+    function updateDocLabels() {
+      var t = DOC_TYPES[$('f-doctype').value];
+      $('f-serial-label').textContent = t.serialLabel;
+      $('f-serial').placeholder = t.serialPh;
+      $('f-issued-label').textContent = t.issuedLabel;
+      $('f-issued').placeholder = t.issuedPh;
+      $('f-expiry-wrap').style.display = t.hasExpiry ? '' : 'none';
+    }
+    $('f-doctype').onchange = updateDocLabels;
+    updateDocLabels();
+    attachCitySearch($('f-acity'), $('f-acity-box'), function (c) { state.addrCity = c; });
+    $('uw-back').onclick = function () { state.f3 = collectStep3(); renderStep2(); };
+    $('uw-submit').onclick = submitStep3;
+  }
+
+  function collectStep3() {
+    function g(id) { var el = $(id); return el ? el.value.trim() : ''; }
+    return {
+      surname: g('f-surname'), name: g('f-name'), patronymic: g('f-patronymic'), bday: g('f-bday'),
+      phone: g('f-phone'), email: g('f-email'), inn: g('f-inn'),
+      docType: g('f-doctype'), serial: g('f-serial'), docNumber: g('f-docnum'), issuedBy: g('f-issued'),
+      issueDate: g('f-issuedate'), expiry: g('f-expiry'),
+      street: g('f-street'), house: g('f-house'), flat: g('f-flat'),
+      brand: g('f-brand'), model: g('f-model'), vin: g('f-vin').toUpperCase(),
+      number: g('f-number').replace(/\s+/g, '').toUpperCase(),
+      kvt: g('f-kvt'), capacity: g('f-capacity'), seats: g('f-seats'), odometr: g('f-odometr'),
+      ownWeight: g('f-ownweight'), totalWeight: g('f-totalweight'),
+      agree: !!($('f-agree') && $('f-agree').checked)
+    };
+  }
+
+  function submitStep3() {
+    var f = state.f3 = collectStep3();
+    function num(s) { return /^\d+$/.test(s) ? parseInt(s, 10) : NaN; }
+    var cat = state.calc.autoCategoryType, isEv = cat === 'B5', isTrailer = cat === 'E' || cat === 'F';
+
+    if (!f.surname || !f.name) return renderStep3('Вкажіть прізвище та імʼя.');
+    var bd = parseDate(f.bday);
+    if (!bd || age(bd) < 18) return renderStep3('Вкажіть дату народження страхувальника (дд.мм.рррр, 18+).');
+    var phone = normPhone(f.phone);
+    if (!phone) return renderStep3('Вкажіть телефон у форматі +380XXXXXXXXX.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) return renderStep3('Вкажіть коректний email — на нього прийде код підтвердження.');
+    if (!/^\d{10}$/.test(f.inn)) return renderStep3('ІПН має містити 10 цифр.');
+    var doc = DOC_TYPES[f.docType];
+    if (!doc) return renderStep3('Оберіть тип документа.');
+    if (!f.serial || !f.docNumber || !f.issuedBy) return renderStep3('Заповніть дані документа.');
+    var issued = parseDate(f.issueDate);
+    if (!issued) return renderStep3('Вкажіть дату видачі документа (дд.мм.рррр).');
+    var expiry = null;
+    if (doc.hasExpiry && f.expiry) {
+      expiry = parseDate(f.expiry);
+      if (!expiry) return renderStep3('Перевірте дату «Дійсний до» (дд.мм.рррр).');
+    }
+    if (!state.addrCity) return renderStep3('Оберіть населений пункт адреси зі списку підказок.');
+    if (!f.street || !f.house) return renderStep3('Вкажіть вулицю та номер будинку.');
+    if (!f.brand || !f.model) return renderStep3('Вкажіть марку та модель авто.');
+    if (f.vin.length < 5) return renderStep3('Вкажіть VIN-код авто.');
+    if (f.number.length < 4) return renderStep3('Вкажіть держномер авто.');
+    if (isEv && !(num(f.kvt) > 0)) return renderStep3('Вкажіть потужність електродвигуна, кВт.');
+    if (!isEv && !isTrailer && !(num(f.capacity) > 0)) return renderStep3('Вкажіть обʼєм двигуна, см³.');
+    if (!isTrailer && !(num(f.seats) > 0)) return renderStep3('Вкажіть кількість місць.');
+    if (!(num(f.odometr) >= 0)) return renderStep3('Вкажіть пробіг авто, км.');
+    if (!(num(f.ownWeight) > 0) || !(num(f.totalWeight) > 0)) return renderStep3('Вкажіть масу авто з техпаспорта.');
+    if (!f.agree) return renderStep3('Потрібна згода на обробку персональних даних.');
+
+    var c = state.calc, o = state.offer, city = state.city, ac = state.addrCity;
+    var params = { ownWeight: num(f.ownWeight), totalWeight: num(f.totalWeight) };
+    if (isEv) params.kvt = num(f.kvt); else if (!isTrailer) params.capacity = num(f.capacity);
+    if (!isTrailer) params.numberOfSeats = num(f.seats);
+
+    var order = {
+      productType: 'osago', franchise: 0, isTaxi: 0, isEuroCar: 0, withoutOtk: 1,
+      companyId: o.companyId, offerId: o.offerId, price: Number(o.price).toFixed(2),
+      autoCategoryType: cat, registrationPlaceId: city.id, zone: city.zone,
+      cityName: city.name_full_name_ua || city.name_ua,
+      customerPrivilege: 1, registrationType: c.registrationType, period_id: c.period_id,
+      startDate: ts(c.start), finishAt: ts(finishDate(c.start, c.period_id)),
+      ukasko_id: null, // підставляється нижче: один ID і для чернетки, і для заяви
+      car: {
+        brand: f.brand, model: f.model, vin: f.vin, number: f.number, year: c.year, withoutVin: 0,
+        birthdayAt: c.birthday, odometr: String(num(f.odometr)), kilometers: String(num(f.odometr)),
+        additional_parameters: params
+      },
+      customer: {
+        customerType: 1, surname: f.surname, name: f.name, patronymic: f.patronymic,
+        identificationCode: f.inn, withoutIdentificationCode: false, erdpyCode: null,
+        dateBirth: ts(bd), phone: phone, email: f.email,
+        documentation: {
+          type: doc.id, serial: f.serial, number: f.docNumber, issuedBy: f.issuedBy,
+          dateOfIssue: ts(issued), endDateOfIssue: expiry ? ts(expiry) : null
         },
-        body: JSON.stringify({
-          /* name у таблиці NOT NULL — раніше тут ішов null і заявка не зберігалась */
-          name: nameInput.value.trim() || 'Без імені',
-          phone: phone,
-          email: null,
-          notes: 'Заявка на розрахунок ОСЦПВ (блок після форми договору)',
-          source: 'Сайт',
-          client_type: 'Фіз. особа',
-          service: 'ОСЦПВ',
-          stage: 'Новий лід'
-        })
-      });
-      if(!res.ok) throw new Error(await res.text());
-
-      statusMsg.textContent = 'Дякуємо! Зв\'яжемось з вами найближчим часом.';
-      statusMsg.style.color = '#17753A';
-      nameInput.value = '';
-      phoneInput.value = '';
-      submitBtn.style.display = 'none';
-
-      if(window.__loadGtag) window.__loadGtag();
-      if(typeof gtag === 'function'){
-        gtag('event', 'generate_lead', { event_category:'lead', event_label:'ОСЦПВ' });
-        if(ADS_LEAD_LABEL) gtag('event', 'conversion', { 'send_to': ADS_LEAD_LABEL });
+        address: {
+          cityId: ac.id, cityName: ac.name_ua || '', full: ac.name_full_name_ua || ac.name_ua || '',
+          street: f.street, house: f.house, number: f.flat
+        }
       }
-    }catch(e){
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Розрахувати вартість поліса';
-      statusMsg.textContent = 'Сталася помилка. Спробуйте ще раз або зателефонуйте нам.';
-      statusMsg.style.color = '#B02A1E';
+    };
+
+    // Якщо чернетку для цієї пропозиції вже створено (а заява впала) — не створюємо нову
+    var reuse = state.draftId && state.draftOfferId === o.offerId;
+    if (!reuse) state.ukaskoId = generateUlid();
+    order.ukasko_id = state.ukaskoId;
+
+    renderLoading('Створюємо заявку на поліс… Страхова може відповідати до хвилини.');
+    var draftStep = reuse
+      ? Promise.resolve({ id: state.draftId })
+      : api('draft', { order: order }).then(function (draft) {
+          if (!draft || !draft.id) throw new Error('страхова не створила чернетку поліса');
+          state.draftId = draft.id; state.draftOfferId = o.offerId;
+          return draft;
+        });
+    draftStep.then(function (draft) {
+      return api('declare', { order: order, orderId: draft.id, companyName: o.companyNamePublic || o.companyName })
+        .then(function (d) { return { draft: draft, d: d || {} }; });
+    }).then(function (r) {
+      state.draftId = null; state.draftOfferId = null;
+      state.orderId = r.d.id || r.draft.id;
+      state.leadId = r.d.leadId || null;
+      state.otpSent = false; state.invoice = null; state.contractId = null;
+      if (r.d.warningCancelMessage) renderWarning(r.d.warningCancelMessage); else renderStep4();
+    }).catch(function (e) { renderStep3('Не вдалося оформити заявку: ' + e.message); });
+  }
+
+  function renderWarning(msg) {
+    render(
+      '<p class="uw-step-title">Зверніть увагу</p>' +
+      '<div class="uw-warning">' + esc(msg) + '</div>' +
+      '<p class="uw-step-sub">Якщо продовжити, вказаний чинний договір буде припинено.</p>' +
+      '<button class="uw-btn" id="w-yes" type="button">Продовжити оформлення</button>' +
+      '<button class="uw-btn-ghost" id="w-no" type="button">Повернутися до даних</button>', true);
+    $('w-yes').onclick = function () { renderStep4(); };
+    $('w-no').onclick = function () { renderStep3(); };
+  }
+
+  // ═════════ КРОК 4 — OTP ═════════
+  function renderStep4(errMsg, infoMsg) {
+    var email = state.f3 && state.f3.email;
+    render(
+      progress(4) +
+      '<p class="uw-step-title">Підтвердження заявки</p>' +
+      '<p class="uw-step-sub">Ми надіслали одноразовий код на ' + esc(email || 'ваш email') + '. Код замінює ваш підпис на договорі. У тому ж листі — проєкт договору в PDF.</p>' +
+      errBox(errMsg) +
+      (infoMsg ? '<div class="uw-info">' + esc(infoMsg) + '</div>' : '') +
+      '<div class="uw-field"><label>Код підтвердження</label><input id="f-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></div>' +
+      '<button class="uw-btn" id="otp-ok" type="button">Підтвердити</button>' +
+      '<button class="uw-btn-ghost" id="otp-sms" type="button">Надіслати код SMS / Viber</button>' +
+      '<button class="uw-btn-ghost" id="otp-mail" type="button">Надіслати код на email ще раз</button>', true);
+
+    $('otp-ok').onclick = function () {
+      var otp = $('f-otp').value.trim();
+      if (!otp) return renderStep4('Введіть код з повідомлення.');
+      renderLoading('Перевіряємо код…');
+      api('checkOtp', { orderId: state.orderId, otp: otp })
+        .then(function () { renderStep5(); })
+        .catch(function (e) { renderStep4(e.message); });
+    };
+    function resend(type) {
+      renderLoading('Надсилаємо код…');
+      api('sendOtp', { orderId: state.orderId, type: type })
+        .then(function () { renderStep4(null, type === 2 ? 'Код надіслано SMS / Viber.' : 'Код надіслано на email ще раз.'); })
+        .catch(function (e) { renderStep4('Не вдалося надіслати код: ' + e.message); });
+    }
+    $('otp-sms').onclick = function () { resend(2); };
+    $('otp-mail').onclick = function () { resend(1); };
+
+    if (!state.otpSent) {
+      state.otpSent = true;
+      api('sendOtp', { orderId: state.orderId, type: 1 })
+        .catch(function (e) { renderStep4('Не вдалося надіслати код: ' + e.message); });
     }
   }
 
-  submitBtn.addEventListener('click', submitOsago);
-  phoneInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ e.preventDefault(); submitOsago(); }
-  });
-  nameInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
-  });
+  // ═════════ КРОК 5 — оплата ═════════
+  function renderStep5(infoMsg) {
+    if (!state.invoice) {
+      renderLoading('Формуємо рахунок на оплату…');
+      api('invoice', { orderId: state.orderId, resultUrl: location.href.split('#')[0] }).then(function (inv) {
+        if (!inv || !inv.invoiceLink) throw new Error('страхова не повернула посилання на оплату');
+        state.invoice = inv;
+        savePending();
+        renderStep5(infoMsg);
+      }).catch(function (e) {
+        render(progress(5) + '<p class="uw-step-title">Не вдалося сформувати рахунок</p>' + errBox(e.message) +
+          '<button class="uw-btn" id="inv-retry" type="button">Спробувати ще раз</button>', true);
+        $('inv-retry').onclick = function () { renderStep5(); };
+      });
+      return;
+    }
+    var inv = state.invoice, qr = safeQr(inv.qrCode);
+    render(
+      progress(5) +
+      '<p class="uw-step-title">Оплата поліса</p>' +
+      '<p class="uw-step-sub">Оплатіть карткою через LiqPay. Після оплати поверніться на цю сторінку й натисніть «Я оплатив». Неоплачена заявка діє до кінця сьогоднішнього дня.</p>' +
+      (infoMsg ? '<div class="uw-info">' + esc(infoMsg) + '</div>' : '') +
+      (qr ? '<div class="uw-qr"><img src="' + qr + '" alt="QR-код для оплати"></div>' : '') +
+      '<a class="uw-btn uw-btn-link" href="' + safeUrl(inv.invoiceLink) + '" target="_blank" rel="noopener">Перейти до оплати</a>' +
+      '<button class="uw-btn-ghost" id="pay-check" type="button">Я оплатив — перевірити</button>' +
+      '<button class="uw-back" id="pay-restart" type="button" style="margin-top:14px">Почати оформлення заново</button>', true);
+
+    $('pay-check').onclick = function () {
+      renderLoading('Перевіряємо оплату…');
+      var attempt = 0;
+      (function poll() {
+        api('checkInvoice', { orderId: state.orderId }).then(function (r) {
+          if (r && r.paid) { renderStep6(); return; }
+          throw new Error('not paid');
+        }).catch(function () {
+          attempt++;
+          if (attempt < 5) { sleep(3000).then(poll); return; } // Ukasko: мінімум 2 перевірки
+          renderStep5('Оплату ще не зафіксовано. Якщо ви вже оплатили — зачекайте хвилину й перевірте ще раз.');
+        });
+      })();
+    };
+    $('pay-restart').onclick = restart;
+  }
+
+  // ═════════ КРОК 6 — договір ═════════
+  function renderStep6() {
+    renderLoading('Оформлюємо договір…');
+    var chain = state.contractId ? Promise.resolve() : api('confirm', { orderId: state.orderId }).then(function (conf) {
+      if (!conf || !conf.contractId) throw new Error('страхова не підтвердила договір');
+      state.contractId = conf.contractId;
+      savePending();
+    });
+    chain.then(function () {
+      return api('take', { contractId: state.contractId, orderId: state.orderId, leadId: state.leadId });
+    }).then(function (d) {
+      d = d || {};
+      clearPending();
+      var dgo = d.extraFiles && d.extraFiles.contractDgoFile;
+      render(
+        '<div class="uw-success-icon">✓</div>' +
+        '<p class="uw-step-title" style="text-align:center">Поліс оформлено</p>' +
+        '<p class="uw-step-sub" style="text-align:center">' +
+          (d.mtsbuCode ? 'Номер поліса в МТСБУ: <b>' + esc(d.mtsbuCode) + '</b>. ' : '') +
+          'Договір також надіслано на ваш email.</p>' +
+        (d.contract ? '<a class="uw-doc-link" href="' + safeUrl(d.contract) + '" target="_blank" rel="noopener">Завантажити договір (PDF)</a>' : '') +
+        (dgo ? '<a class="uw-doc-link" href="' + safeUrl(dgo) + '" target="_blank" rel="noopener">Договір ДЦВ (PDF)</a>' : '') +
+        (d.mtsbuLink ? '<a class="uw-doc-link" href="' + safeUrl(d.mtsbuLink) + '" target="_blank" rel="noopener">Перевірити поліс на сайті МТСБУ</a>' : ''),
+        true);
+    }).catch(function (e) {
+      render(
+        '<p class="uw-step-title">Оплату отримано</p>' +
+        errBox('Договір не вдалося сформувати автоматично: ' + e.message) +
+        '<p class="uw-step-sub">Не хвилюйтеся — заявку збережено, ми звʼяжемося з вами й завершимо оформлення.</p>' +
+        '<button class="uw-btn" id="fin-retry" type="button">Спробувати ще раз</button>', true);
+      $('fin-retry').onclick = renderStep6;
+    });
+  }
+
+  // ═════════ незавершене оформлення ═════════
+  function restart() {
+    clearPending();
+    state.orderId = null; state.leadId = null; state.invoice = null; state.contractId = null; state.otpSent = false;
+    state.draftId = null; state.draftOfferId = null; state.ukaskoId = null;
+    renderStep1();
+  }
+
+  function renderResume(p) {
+    render(
+      '<p class="uw-step-title">Ви не завершили оформлення поліса</p>' +
+      '<p class="uw-step-sub">Заявку вже підтверджено. Залишилось оплатити або перевірити оплату.</p>' +
+      '<button class="uw-btn" id="res-go" type="button">Продовжити</button>' +
+      '<button class="uw-btn-ghost" id="res-new" type="button">Почати заново</button>');
+    $('res-go').onclick = function () {
+      state.orderId = p.orderId; state.leadId = p.leadId || null;
+      state.invoice = p.invoice || null; state.contractId = p.contractId || null;
+      if (state.contractId) renderStep6(); else renderStep5();
+    };
+    $('res-new').onclick = restart;
+  }
+
+  // ─────────── старт ───────────
+  var pending = loadPending();
+  if (pending) renderResume(pending); else renderStep1();
 })();
 </script>
 
