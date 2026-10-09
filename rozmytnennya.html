@@ -1222,25 +1222,25 @@ async function sendLead(){
       '<p class="uw-step-sub">Введіть держномер — підтягнемо дані авто автоматично. Або заповніть вручну.</p>' +
       errBox(errMsg) +
       '<div class="uw-field"><label>Державний номер</label>' +
-        '<div class="uw-inline"><input id="uw-plate" type="text" placeholder="АА1234ВВ" autocomplete="off" value="' + esc(f.plate) + '">' +
+        '<div class="uw-inline">   <div class="uw-inline"><input aria-label="Державний номер" id="e" type="text" placeholder="АА1234ВВ" autocomplete="off" value="' + esc(f.plate) + '">' +
         '<button class="uw-btn uw-btn-inline" id="uw-lookup" type="button">Знайти</button></div>' +
         '<div class="uw-hint" id="uw-lookup-note"></div></div>' +
-      '<div class="uw-field"><label>Тип транспорту</label><select id="uw-cat">' +
+      '<div class="uw-field"><label for="<select id=">Тип транспорту</label><select id="<select id="uw-cat" aria-label="Тип транспорту">">' +
         CATEGORIES.map(function (c) { return '<option value="' + c[0] + '"' + (c[0] === f.cat ? ' selected' : '') + '>' + c[1] + '</option>'; }).join('') +
       '</select></div>' +
       '<div class="uw-row">' +
-        '<div class="uw-field"><label>Рік випуску</label><input id="uw-year" type="number" inputmode="numeric" placeholder="2015" value="' + esc(f.year) + '"></div>' +
-        '<div class="uw-field"><label>Дата народження водія</label><input id="uw-bday" type="text" inputmode="numeric" placeholder="дд.мм.рррр" value="' + esc(f.bday) + '"></div>' +
+        '<div class="uw-field"><label for="uw-year">Рік випуску</label><input id="uw-year" type="number" inputmode="numeric" placeholder="2015" value="' + esc(f.year) + '"></div>' +
+        '<div class="uw-field"><label for="uw-bday">Дата народження водія</label><input id="uw-bday" type="text" inputmode="numeric" placeholder="дд.мм.рррр" value="' + esc(f.bday) + '"></div>' +
       '</div>' +
       '<div class="uw-hint" style="margin:-8px 0 14px">Якщо водіїв кілька — вкажіть наймолодшого.</div>' +
       '<div class="uw-field"><label>Місто реєстрації авто</label>' +
-        '<input id="uw-city" type="text" placeholder="Почніть вводити назву" autocomplete="off" value="' + esc(state.city ? (state.city.name_full_name_ua || state.city.name_ua) : '') + '">' +
+        '<input id="uw-city" aria-label="Місто реєстрації" type="text" placeholder="Почніть вводити назву" autocomplete="off" value="' + esc(state.city ? (state.city.name_full_name_ua || state.city.name_ua) : '') + '">' +
         '<div class="uw-dropdown" id="uw-city-box"></div></div>' +
       '<div class="uw-row">' +
-        '<div class="uw-field"><label>Реєстрація</label><select id="uw-reg">' +
+        '<div class="uw-field"><label for="uw-reg">Реєстрація</label><select id="uw-reg">' +
           '<option value="1">Постійна</option><option value="2">Тимчасова</option><option value="3">Тимчасовий вʼїзд</option>' +
         '</select></div>' +
-        '<div class="uw-field"><label>Строк</label><select id="uw-period"></select></div>' +
+        '<div class="uw-field"><label for="uw-period">Строк</label><select id="uw-period"></select></div>' +
       '</div>' +
       '<p class="uw-hint" style="margin:-6px 0 16px">Поліс діятиме з ' + fmtDate(tomorrowUTC()) + '.</p>' +
       '<button class="uw-btn" id="uw-calc" type="button">Розрахувати вартість</button>',
@@ -1272,7 +1272,7 @@ async function sendLead(){
       state.car = { number: d.number || n, brand: d.mark || '', model: d.model || '', vin: d.vin || '', params: d.additionalParameters || {} };
       if (d.year) $('uw-year').value = d.year;
       var cat = d.autoCategory || d.type;
-      if (cat && CATEGORIES.some(function (c) { return c[0] === cat; })) $('uw-cat').value = cat;
+      if (cat && CATEGORIES.some(function (c) { return c[0] === cat; })) $('<select id="uw-cat" aria-label="Тип транспорту">').value = cat;
       if (d.city && d.city.id) {
         state.city = { id: d.city.id, zone: d.city.zone, name_ua: d.city.name_ua, name_full_name_ua: d.city.name_full_name_ua };
         $('uw-city').value = d.city.name_full_name_ua || d.city.name_ua || '';
@@ -1288,7 +1288,7 @@ async function sendLead(){
 
   function calculate() {
     var f = state.f1 = {
-      plate: $('uw-plate').value.trim(), cat: $('uw-cat').value, year: $('uw-year').value.trim(),
+      plate: $('uw-plate').value.trim(), cat: $('<select id="uw-cat" aria-label="Тип транспорту">').value, year: $('uw-year').value.trim(),
       bday: $('uw-bday').value.trim(), reg: +$('uw-reg').value, period: +$('uw-period').value
     };
     var cityText = $('uw-city').value.trim();
@@ -1373,7 +1373,7 @@ async function sendLead(){
     var docType = (f.docType && docs.indexOf(f.docType) !== -1) ? f.docType : (docs.indexOf('DOCUMENT_ID_CARD') !== -1 ? 'DOCUMENT_ID_CARD' : docs[0]);
     function v(key, fallback) { return esc(f[key] != null ? f[key] : (fallback != null ? fallback : '')); }
     function input(id, label, key, fallback, attrs) {
-      return '<div class="uw-field"><label>' + label + '</label><input id="' + id + '" type="text" value="' + v(key, fallback) + '"' + (attrs || '') + '></div>';
+      return '<div class="uw-field"><label for="' + id + '">' + label + '</label><input id="' + id + '" type="text" value="' + v(key, fallback) + '"' + (attrs || '') + '></div>';
     }
     var NUM = ' inputmode="numeric"', DATE = ' inputmode="numeric" placeholder="дд.мм.рррр"';
 
@@ -1392,7 +1392,7 @@ async function sendLead(){
       input('f-inn', 'ІПН (РНОКПП)', 'inn', '', NUM + ' maxlength="10"') +
 
       '<p class="uw-section">Документ</p>' +
-      '<div class="uw-field"><label>Тип документа</label><select id="f-doctype">' +
+      '<div class="uw-field"><label for="f-doctype">Тип документа</label><select id="f-doctype">' +
         docs.map(function (k) { return '<option value="' + k + '"' + (k === docType ? ' selected' : '') + '>' + DOC_TYPES[k].label + '</option>'; }).join('') +
       '</select></div>' +
       '<div class="uw-row">' +
@@ -1401,7 +1401,7 @@ async function sendLead(){
       '</div>' +
       '<div class="uw-field"><label id="f-issued-label">Ким виданий</label><input id="f-issued" type="text" value="' + v('issuedBy') + '"></div>' +
       '<div class="uw-row">' + input('f-issuedate', 'Дата видачі', 'issueDate', '', DATE) +
-        '<div class="uw-field" id="f-expiry-wrap"><label>Дійсний до</label><input id="f-expiry" type="text" value="' + v('expiry') + '"' + DATE + '></div>' +
+        '<div class="uw-field" id="f-expiry-wrap"><label for="f-expiry">Дійсний до</label><input id="f-expiry" type="text" value="' + v('expiry') + '"' + DATE + '></div>' +
       '</div>' +
 
       '<p class="uw-section">Адреса реєстрації страхувальника</p>' +
@@ -1567,7 +1567,7 @@ async function sendLead(){
       '<p class="uw-step-sub">Ми надіслали одноразовий код на ' + esc(email || 'ваш email') + '. Код замінює ваш підпис на договорі. У тому ж листі — проєкт договору в PDF.</p>' +
       errBox(errMsg) +
       (infoMsg ? '<div class="uw-info">' + esc(infoMsg) + '</div>' : '') +
-      '<div class="uw-field"><label>Код підтвердження</label><input id="f-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></div>' +
+      '<div class="uw-field"><label for="f-otp">Код підтвердження</label><input id="f-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></div>' +
       '<button class="uw-btn" id="otp-ok" type="button">Підтвердити</button>' +
       '<button class="uw-btn-ghost" id="otp-sms" type="button">Надіслати код SMS / Viber</button>' +
       '<button class="uw-btn-ghost" id="otp-mail" type="button">Надіслати код на email ще раз</button>', true);
