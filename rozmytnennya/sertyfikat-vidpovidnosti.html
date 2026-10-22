@@ -207,6 +207,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<script>(function(){try{var q=location.search.slice(1).split('&').filter(function(x){return /^(utm_|gclid=)/.test(x)}).join('&');if(q)sessionStorage.setItem('bsa_utm',q)}catch(e){}})();</script>
 </head>
 <body>
 
@@ -518,6 +519,7 @@ async function sendLead(){
         'Prefer': 'return=minimal'
       },
       body: JSON.stringify({
+        utm: (function(){try{return sessionStorage.getItem('bsa_utm')||null}catch(e){return null}})(),
         name: name,
         phone: phone,
         email: email || null,
