@@ -48,3 +48,14 @@
   [headers.values]
     Content-Type = "text/markdown; charset=utf-8"
     Cache-Control = "public, max-age=3600, s-maxage=86400"
+
+# --- 3. Службові сторінки не індексуються -----------------------------------
+[[headers]]
+  for = "/crm*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/news-monitor*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

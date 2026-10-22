@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /crm
+Disallow: /news-monitor
 
 Sitemap: https://brokservisavto.com/sitemap.xml

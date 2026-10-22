@@ -254,6 +254,13 @@
     .form-box input::placeholder, .form-box textarea::placeholder { color:#8A93A6 !important; }
   }
 </style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:image" content="https://brokservisavto.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 
@@ -604,7 +611,8 @@
       <textarea id="lead-details" placeholder="Модель, рік, ємність батареї, вартість за інвойсом, звідки ввозите"></textarea>
       <p class="field-hint">Поля з * — обов'язкові. Якщо вже рахували в калькуляторі, ми додамо результат до заявки автоматично.</p>
       <button class="btn-primary" onclick="sendLead()"><i class="ti ti-send"></i>Надіслати заявку</button>
-      <p id="lead-status"></p>
+      <p class="lead-consent" style="font-size:.8rem;color:#5B6478;margin:10px 0 0;line-height:1.5">Надсилаючи заявку, ви погоджуєтесь з <a href="/polityka-konfidentsiynosti" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">політикою конфіденційності</a>.</p>
+<p id="lead-status"></p>
     </div>
   </div>
 </section>
@@ -622,7 +630,8 @@
   </div>
 </section>
 
-<footer><p>© 2026 <span>BROKSERVISAVTO</span> · вул. Бульварно-Кудрявська, 22, Київ · <a href="tel:+380981722342">+38 098 172 23 42</a></p></footer>
+<footer><p>© 2026 <span>BROKSERVISAVTO</span> · вул. Бульварно-Кудрявська, 22, Київ · <a href="tel:+380981722342">+38 098 172 23 42</a></p><div class="footer-extra" style="max-width:1100px;margin:18px auto 0;padding:14px 20px 0;border-top:1px solid rgba(255,255,255,.15);display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.85rem"><a href="/polityka-konfidentsiynosti">Політика конфіденційності</a><span>Юридична допомога після ДТП і в митних спорах — <a href="https://advokat-poruch.com/dtp/" target="_blank" rel="noopener">Адвокат Поруч</a></span></div>
+</footer>
 
 <script>
 /* ═══════════ КАЛЬКУЛЯТОР ЕЛЕКТРОМОБІЛЯ ═══════════ */
