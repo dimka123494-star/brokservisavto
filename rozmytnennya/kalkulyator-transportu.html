@@ -846,7 +846,7 @@ function flt(id){ return parseFloat($(id).value); }
 async function loadRates(){
   const status = $('rateStatus');
   try{
-    const r = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+    const r = await fetch('/api/nbu-rates');
     if(!r.ok) throw new Error('bad response');
     const data = await r.json();
     const e = data.find(function(x){ return x.cc === 'EUR'; });

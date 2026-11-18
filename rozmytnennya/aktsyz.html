@@ -563,7 +563,7 @@ function fmtEur(n){ return new Intl.NumberFormat('uk-UA',{maximumFractionDigits:
 async function loadRates(){
   const status = document.getElementById('rateStatus');
   try{
-    const r = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+    const r = await fetch('/api/nbu-rates');
     if(!r.ok) throw new Error('bad response');
     const data = await r.json();
     const eur = data.find(x => x.cc === 'EUR');
