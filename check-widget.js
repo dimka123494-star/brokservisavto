@@ -54,7 +54,7 @@
       var q = norm(inp.value);
       if (!valid(q)) { err.style.display = "block"; inp.focus(); return; }
       err.style.display = "none";
-      var url = BASE + "?q=" + encodeURIComponent(q) + "&utm_source=brokservisavto&utm_medium=widget&utm_campaign=" + encodeURIComponent(src);
+      var url = BASE + "?q=" + encodeURIComponent(q) + "&utm_source=brokservisavto&utm_medium=referral&utm_campaign=" + encodeURIComponent(src);
       try { if (typeof gtag === "function") gtag("event", "check_auto_click", { source: src }); } catch (x) {}
       var w = window.open(url, "_blank", "noopener");
       if (!w) location.href = url;
